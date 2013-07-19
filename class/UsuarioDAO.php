@@ -11,17 +11,17 @@
 		public function insere($_usuario){
 			try{
 				$this->_conn->beginTransaction();
-				$stmt = $this->_conn->prepare("INSERT INTO usuario ( id
-					                								,login
-																	,senha
-																	,nome
-																	,email
-																	,celular
-																	,telefone
-																	,ativo
-																	,perfil) 
-												VALUES ( :id
-														,:login
+				$stmt = $this->_conn->prepare("INSERT INTO GE_USUARIO (  id_usuario
+						                								,usuario
+																		,senha
+																		,nome
+																		,email
+																		,celular
+																		,telefone
+																		,ativo
+																		,perfil) 
+												VALUES ( :id_usuario
+														,:usuario
 														,:senha
 														,:nome
 														,:email
@@ -30,8 +30,8 @@
 														,:ativo
 														,:perfil)"
 											);				
-				$stmt->bindValue(":id", $_usuario->getId());
-				$stmt->bindValue(":login", $_usuario->getLogin());
+				$stmt->bindValue(":id_usuario", $_usuario->getId());
+				$stmt->bindValue(":usuario", $_usuario->getLogin());
 				$stmt->bindValue(":senha", $_usuario->getSenha());
 				$stmt->bindValue(":nome", $_usuario->getNome());
 				$stmt->bindValue(":email", $_usuario->getEmail());
@@ -57,8 +57,8 @@
 		//função para UPDATE dos dados da tabela usuario
 		public function altera($_usuario){
 			$this->_conn->beginTransaction();
-			$stmt = $this->_conn->prepare("UPDATE usuario
-										   SET login = :login
+			$stmt = $this->_conn->prepare("UPDATE GE_USUARIO
+										   SET usuario = :usuario
 										      ,senha = :senha
 										      ,nome = :nome
 										      ,email = :email
@@ -66,10 +66,10 @@
 										      ,telefone = :telefone
 										      ,ativo = :ativo
 										      ,perfil = :perfil
-										   WHERE id = :id"
+										   WHERE id_usuario = :id_usuario"
 										);
 
-				$stmt->bindValue(":login", $_usuario->getLogin());
+				$stmt->bindValue(":usuario", $_usuario->getUsuario());
 				$stmt->bindValue(":senha", $_usuario->getSenha());
 				$stmt->bindValue(":nome", $_usuario->getNome());
 				$stmt->bindValue(":email", $_usuario->getEmail());
@@ -77,7 +77,7 @@
 				$stmt->bindValue(":telefone", $_usuario->getTelefone());
 				$stmt->bindValue(":ativo", $_usuario->getAtivo());
 				$stmt->bindValue(":perfil", $_usuario->getPerfil());
-				$stmt->bindValue(":id", $_usuario->getId());
+				$stmt->bindValue(":id_usuario", $_usuario->getId());
 				//executa
 				$stmt->execute();	
 				//commita
@@ -87,19 +87,19 @@
 		}
 
 		public function consultaTodos(){
-			$stmt = $this->_conn->query("SELECT * FROM GEOEQUIPE.USUARIO");
+			$stmt = $this->_conn->query("SELECT * FROM GEOEQUIPE.GE_USUARIO");
 			//retornar para cada usuario no banco, um usuario objeto
 			foreach ($stmt as $k => $v) {
-				$usuario = new Usuario($v["id"], $v["login"], $v["senha"], $v["nome"], $v["email"], $v["celular"], $v["telefone"], $v["ativo"], $v["perfil"], $v["ultimoSinal"]);
-				return $usuario;
+				$usuario = new Usuario($v["id_usuario"], $v["usuario"], $v["senha"], $v["nome"], $v["email"], $v["celular"], $v["telefone"], $v["ativo"], $v["id_ultimo_sinal"], $v["perfil"]);
+				$result[$k] = $usuario;
 			}
-			return $stmt;
+			return $result;
 			//fecha conexão
 			$this->_conn->__destruct();
 		}
 
 		public function consultaId($_id){
-		$stmt = $this->_conn->prepare("SELECT * FROM GEOEQUIPE.USUARIO WHERE ID = :id");
+		$stmt = $this->_conn->prepare("SELECT * FROM GEOEQUIPE.GE_USUARIO WHERE ID = :id");
 
 		$stmt->bindValue(":id", $_id);
 
@@ -107,7 +107,7 @@
 
 		//retornar para cada usuario no banco, um usuario objeto
 		foreach ($stmt as $k => $v) {
-			$usuario = new Usuario($v["id"], $v["login"], $v["senha"], $v["nome"], $v["email"], $v["celular"], $v["telefone"], $v["ativo"], $v["perfil"], $v["ultimoSinal"]);
+			$usuario = new Usuario($v["id"], $v["usuario"], $v["senha"], $v["nome"], $v["email"], $v["celular"], $v["telefone"], $v["ativo"], $v["perfil"], $v["ultimoSinal"]);
 			return $usuario;
 		}
 		return $stmt;

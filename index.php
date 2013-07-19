@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Controle Financeiro</title>
+        <title>Geoequipe</title>
         <!-- CSS -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <style>
@@ -22,7 +22,7 @@
         <div class="navbar navbar-inverse navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
-                    <a class="brand" href="index.php">Controle Financeiro</a>
+                    <a class="brand" href="index.php">Geoequipe</a>
                     <div class="nav-collapse collapse">
                         <ul class="nav">
                             <li class="active"><a href="index.php">Início</a></li>

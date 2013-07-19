@@ -1,7 +1,7 @@
 <?php
 	class Usuario{
 		private $_id;
-		private $_login;
+		private $_usuario;
 		private $_senha;
 		private $_nome;
 		private $_email;
@@ -12,9 +12,18 @@
 		private $_perfil;
 
 		//construtor da classe
-		public function __construct($_id, $_login, $_senha, $_nome, $_email, $_celular, $_telefone, $_ativo, $_ultimoSinal, $_perfil){
+		public function __construct($_id = null
+			                       ,$_usuario = null
+			                       ,$_senha = null
+			                       ,$_nome = null
+			                       ,$_email = null
+			                       ,$_celular = null
+			                       ,$_telefone = null
+			                       ,$_ativo = null
+			                       ,$_ultimoSinal = null
+			                       ,$_perfil = null){
 			$this->_id = $_id;
-			$this->_login = $_login;
+			$this->_usuario = $_usuario;
 			$this->_senha = $_senha;
 			$this->_nome = $_nome;
 			$this->_email = $_email;
@@ -34,12 +43,12 @@
 			return $this->_id;
 		}
 
-		public function setLogin($_login){
-			$this->_login = $_login;
+		public function setUsuario($_usuario){
+			$this->_usuario = $_usuario;
 		}
 
-		public function getLogin(){
-			return $this->_login;
+		public function getUsuario(){
+			return $this->_usuario;
 		}
 
 		public function setSenha($_senha){
