@@ -7,9 +7,9 @@
 			$this->_conn = new Conexao();			
 		}
 
-		//função para INSERT dos dados na tabela usuario
-		public function insere($_usuario){
-			try{
+		//função para INSERT dos dados na tabela ge_usuario
+		public function inserir($_usuario){
+			try{				
 				$this->_conn->beginTransaction();
 				$stmt = $this->_conn->prepare("INSERT INTO GE_USUARIO (  id_usuario
 						                								,usuario
@@ -31,7 +31,7 @@
 														,:perfil)"
 											);				
 				$stmt->bindValue(":id_usuario", $_usuario->getId());
-				$stmt->bindValue(":usuario", $_usuario->getLogin());
+				$stmt->bindValue(":usuario", $_usuario->getUsuario());
 				$stmt->bindValue(":senha", $_usuario->getSenha());
 				$stmt->bindValue(":nome", $_usuario->getNome());
 				$stmt->bindValue(":email", $_usuario->getEmail());
@@ -42,20 +42,21 @@
 				//executa
 				$stmt->execute();	
 				//commita
-				$this->_conn->commit();
+				$this->_conn->commit(); 
+				//return $this->_conn->lastInsertId();
 				//fecha conexão
 				$this->_conn->__destruct();
 
-				return $_conn::lastInsertId();
 			}
 			catch(PDOException $_e){
-				$this->_conn->rollback();
+				$this->_conn->rollBack();
 				echo "Erro: ".$_e->getMessage();
 			}
 		}
 
-		//função para UPDATE dos dados da tabela usuario
-		public function altera($_usuario){
+		//função para UPDATE dos dados da tabela ge_usuario
+		public function alterar($_usuario){
+			try{			
 			$this->_conn->beginTransaction();
 			$stmt = $this->_conn->prepare("UPDATE GE_USUARIO
 										   SET usuario = :usuario
@@ -84,33 +85,57 @@
 				$this->_conn->commit();
 				//fecha conexão
 				$this->_conn->__destruct();				
+			}
+			catch(PDOException $_e){
+				$this->_conn->rollback();
+				echo "Erro: ".$_e->getMessage();
+			}
 		}
 
-		public function consultaTodos(){
+		//retorna todos os usuários cadastrados na tabela ge_usuario
+		public function consultarTodos(){
 			$stmt = $this->_conn->query("SELECT * FROM GEOEQUIPE.GE_USUARIO");
-			//retornar para cada usuario no banco, um usuario objeto
-			foreach ($stmt as $k => $v) {
-				$usuario = new Usuario($v["id_usuario"], $v["usuario"], $v["senha"], $v["nome"], $v["email"], $v["celular"], $v["telefone"], $v["ativo"], $v["id_ultimo_sinal"], $v["perfil"]);
-				$result[$k] = $usuario;
+			//retornar para cada linha na tabela ge_usuario, um objeto usuario e insere em um array de usuarios
+			foreach ($stmt as $key => $value) {
+				$usuario = new Usuario($value["id_usuario"]
+					                  ,$value["usuario"]
+					                  ,$value["senha"]
+					                  ,$value["nome"]
+					                  ,$value["email"] 
+					                  ,$value["celular"]
+					                  ,$value["telefone"]
+					                  ,$value["ativo"]
+					                  ,$value["id_ultimo_sinal"]
+					                  ,$value["perfil"]);
+				$usuario_array[$key] = $usuario;
 			}
-			return $result;
+			//retorna um array de usuarios
+			return $usuario_array;
 			//fecha conexão
 			$this->_conn->__destruct();
 		}
 
-		public function consultaId($_id){
-		$stmt = $this->_conn->prepare("SELECT * FROM GEOEQUIPE.GE_USUARIO WHERE ID = :id");
+		public function consultarId($_id){
+		$stmt = $this->_conn->prepare("SELECT * FROM GEOEQUIPE.GE_USUARIO WHERE ID_USUARIO = :id");
 
 		$stmt->bindValue(":id", $_id);
 
 		$stmt->execute();
 
 		//retornar para cada usuario no banco, um usuario objeto
-		foreach ($stmt as $k => $v) {
-			$usuario = new Usuario($v["id"], $v["usuario"], $v["senha"], $v["nome"], $v["email"], $v["celular"], $v["telefone"], $v["ativo"], $v["perfil"], $v["ultimoSinal"]);
+		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			$usuario = new Usuario($row["id_usuario"]
+								  ,$row["usuario"]
+								  ,$row["senha"]
+								  ,$row["nome"]
+								  ,$row["email"]
+								  ,$row["celular"]
+								  ,$row["telefone"]
+								  ,$row["ativo"]
+								  ,$row["id_ultimo_sinal"]
+								  ,$row["perfil"]);
 			return $usuario;
-		}
-		return $stmt;
+		}		
 		//fecha conexão
 		$this->_conn->__destruct();
 		}
