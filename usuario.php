@@ -153,7 +153,16 @@
     }
   }    
 
-  $usuarios = $usuarioDAO->consultarTodos(); 
+  //paginacao do relatorio
+  if(isset($_GET["pag"])){
+    $pag = $_GET["pag"];
+  } else{
+    $pag = 0;
+  }
+
+  $inicio = $pag * 4;
+
+  $usuarios = $usuarioDAO->consultarTodos($inicio,4);
 
 ?>
 <!DOCTYPE html>
@@ -172,23 +181,9 @@
         <script src="js/bootstrap.min.js"></script>
     </head>
     <body>
-        <div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container">
-                    <a class="brand" href="index.php">Geoequipe</a>
-                    <div class="nav-collapse collapse">
-                        <ul class="nav">
-                            <li class="active"><a href="index.php">Início</a></li>
-                            <li><a href="usuario.php">Cad. de Usuarios</a></li>
-                            <li><a href="categoria.php">Cad. de Categoria</a></li>
-                            <li><a href="despesa.php">Lançamento de Despesa</a></li>
-                            <li><a href="relatorio.php">Relatório</a></li>
-                            <li><a href="sair.php">Sair</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!--header-->
+        <?php include_once 'header.php'; ?>
+        <!--body-->
         <div class="container">
             <form class="form-horizontal" method="POST" action="usuario.php">
                 <legend>Cadastro de Usuário <!-- span style="font-size: 10pt">(Todos os campos são obrigatórios)</span--></legend>
@@ -253,7 +248,7 @@
                     </div>
                 </div>
                 <input type="hidden" name="operacao" id="operacao" value="<?php echo empty($id) ? "I" : "A"; ?>" />
-                <input type="hidden" name="id" id="id" value="<?php echo $Usuario->getId(); ?>" />
+                <input type="hidden" name="id" id="id" value="<?php echo $Usuario->getId(); ?>" />                
                 <div class="control-group">
                     <div class="controls">
                         <button type="submit" class="btn btn-primary">Salvar</button>
@@ -272,7 +267,7 @@
             <?php 
             if (sizeof($usuarios) > 0) {
                 ?>
-                <table class="table table-hover" style="width: 500px">
+                <table class="table table-hover" style="width: 100%">
                     <thead>
                         <tr>
                             <th style="text-align:center">Editar</th>
@@ -330,6 +325,14 @@
                 <?php
             }
             ?>
+        <ul class="pager"><?php if ($pag !=  0){?>
+          <li class="previous">
+            <a href="usuario.php?pag=<?php echo $pag - 1; ?>">&larr; Anterior</a>
+          </li><?php } ?>
+          <li class="next">
+            <a href="usuario.php?pag=<?php echo $pag + 1; ?>">Próximo &rarr;</a>
+          </li>
+        </ul>
         </div>
     </body>
 </html>

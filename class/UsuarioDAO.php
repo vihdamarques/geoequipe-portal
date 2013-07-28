@@ -93,29 +93,35 @@
 		}
 
 		//retorna todos os usuários cadastrados na tabela ge_usuario
-		public function consultarTodos(){
-			$stmt = $this->_conn->query("SELECT * FROM GEOEQUIPE.GE_USUARIO");
-			//retornar para cada linha na tabela ge_usuario, um objeto usuario e insere em um array de usuarios
-			foreach ($stmt as $key => $value) {
-				$usuario = new Usuario($value["id_usuario"]
-					                  ,$value["usuario"]
-					                  ,$value["senha"]
-					                  ,$value["nome"]
-					                  ,$value["email"] 
-					                  ,$value["celular"]
-					                  ,$value["telefone"]
-					                  ,$value["ativo"]
-					                  ,$value["id_ultimo_sinal"]
-					                  ,$value["perfil"]);
-				$usuario_array[$key] = $usuario;
+		public function consultarTodos($_ini, $_fin){
+			$_vetor = array();
+			$stmt = $this->_conn->prepare("SELECT * FROM GEOEQUIPE.GE_USUARIO ORDER BY NOME LIMIT :ini,:fin");
+			$stmt->bindValue(":ini", $_ini, PDO::PARAM_INT);
+			$stmt->bindValue(":fin", $_fin, PDO::PARAM_INT);
+			$stmt->execute();
+			//retornar para cada linha na tabela ge_usuario, um objeto usuario e insere em um array de usuarios						
+			$result = $stmt->fetchAll();
+			foreach ($result as $key => $linha){			
+				$usuario = new Usuario($linha["id_usuario"]
+					                  ,$linha["usuario"]
+					                  ,$linha["senha"]
+					                  ,$linha["nome"]
+					                  ,$linha["email"] 
+					                  ,$linha["celular"]
+					                  ,$linha["telefone"]
+					                  ,$linha["ativo"]
+					                  ,$linha["id_ultimo_sinal"]
+					                  ,$linha["perfil"]);
+				$_vetor[$key] = $usuario;				
+				//$count = $count + 1;				
 			}
 			//retorna um array de usuarios
-			return $usuario_array;
+			return $_vetor;
 			//fecha conexão
 			$this->_conn->__destruct();
 		}
 
-		public function consultarId($_id){
+		public function consultarId($_id){			
 		$stmt = $this->_conn->prepare("SELECT * FROM GEOEQUIPE.GE_USUARIO WHERE ID_USUARIO = :id");
 
 		$stmt->bindValue(":id", $_id);
@@ -123,19 +129,19 @@
 		$stmt->execute();
 
 		//retornar para cada usuario no banco, um usuario objeto
-		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-			$usuario = new Usuario($row["id_usuario"]
-								  ,$row["usuario"]
-								  ,$row["senha"]
-								  ,$row["nome"]
-								  ,$row["email"]
-								  ,$row["celular"]
-								  ,$row["telefone"]
-								  ,$row["ativo"]
-								  ,$row["id_ultimo_sinal"]
-								  ,$row["perfil"]);
-			return $usuario;
+		while ($linha = $stmt->fetch()) {
+			$usuario = new Usuario($linha["id_usuario"]
+								  ,$linha["usuario"]
+								  ,$linha["senha"]
+								  ,$linha["nome"]
+								  ,$linha["email"]
+								  ,$linha["celular"]
+								  ,$linha["telefone"]
+								  ,$linha["ativo"]
+								  ,$linha["id_ultimo_sinal"]
+								  ,$linha["perfil"]);
 		}		
+		return $usuario;
 		//fecha conexão
 		$this->_conn->__destruct();
 		}
