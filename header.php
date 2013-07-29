@@ -1,5 +1,4 @@
-<?php 
-?>
+<?php ?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -25,7 +24,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#">Geoequipe</a>
+          <a class="brand" href="index.php">Geoequipe</a>
           <div class="nav-collapse pull-right">
             <ul class="nav">
               <li class="dropdown">
@@ -42,7 +41,7 @@
                 <a href="#contact" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i></i> Cadastros <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                     <li><a href="#">Equipamento</a></li>
-                    <li><a href="#">Usuário</a></li>
+                    <li><a href="usuario.php">Usuário</a></li>
                     <li><a href="#">Local</a></li>
                 </ul>
               </li>
@@ -56,9 +55,9 @@
                 </ul>
               </li>        
               <li class="dropdown">
-                <a href="#contact" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user"></i> Login <b class="caret"></b></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user"></i> Login <b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                  <li><a href="#">Sign Out</a></li>
+                  <li><a href="logout.php">Sign Out</a></li>
                 </ul>
               </li>
             </ul>

@@ -1,9 +1,12 @@
 <?php
-
     include_once 'class/Usuario.php';
     include_once 'class/Conexao.php';
     include_once 'class/UsuarioDAO.php';
-
+    include_once 'class/Autenticacao.php';
+    //Autenticação
+    $auth = new Autenticacao();
+    $auth->autenticar();
+    //declara e inicializa as variáveis
     $id = null;
     $usuario = null;
     $senha = null;
@@ -15,9 +18,8 @@
     $telefone = null;
     $Usuario = new Usuario();
     $usuarioDAO = new UsuarioDAO();
-    $msg = "";
-    
-    //verifica se variavel id existe no array POST
+    $msg = "";   
+    //verifica se a variavel id existe no array POST
     if (isset($_POST["id"])){
         $id = $_POST["id"];
     } elseif (isset($_GET["id"])) {
@@ -25,7 +27,6 @@
     } else {
         $id = null;
     }
-
     //verifica que tipo de operação está sendo passada, A - alterar ou D - deletar
     if (isset($_GET["operacao"])){
         $operacao = $_GET["operacao"];
@@ -42,30 +43,14 @@
         if ($operacao == "A") {
         //atualizar
             try {
-                 if (isset($_POST["usuario"])){
-                    $usuario = $_POST["usuario"];
-                } 
-                if (isset($_POST["senha"])){
-                    $senha = $_POST["senha"];
-                } 
-                if (isset($_POST["nome"])){
-                    $nome = $_POST["nome"];
-                }                 
-                if (isset($_POST["ativo"])){
-                    $ativo = $_POST["ativo"];
-                } 
-                if (isset($_POST["perfil"])){
-                    $perfil = $_POST["perfil"];
-                } 
-                if (isset($_POST["email"])){
-                    $email = $_POST["email"];
-                } 
-                if (isset($_POST["celular"])){
-                    $celular = $_POST["celular"];
-                } 
-                if (isset($_POST["telefone"])){
-                    $telefone = $_POST["telefone"];
-                } 
+                $usuario = (isset($_POST["usuario"])) ? $_POST["usuario"] : "";                
+                $senha = (isset($_POST["senha"])) ? $_POST["senha"] : "";
+                $nome = (isset($_POST["nome"])) ? $_POST["nome"] : "";
+                $ativo = (isset($_POST["ativo"])) ? $_POST["ativo"] : "";
+                $perfil = (isset($_POST["perfil"])) ? $_POST["perfil"] : "";
+                $email = (isset($_POST["email"])) ? $_POST["email"] : "";
+                $celular = (isset($_POST["celular"])) ? $_POST["celular"] : "";
+                $telefone = (isset($_POST["telefone"])) ? $_POST["telefone"] : "";
 
                 $Usuario->setUsuario($usuario);
                 $Usuario->setSenha($senha);
@@ -102,57 +87,42 @@
         }
     } else {       
         if ($operacao == "I") {
-        try {   
-                if (isset($_POST["usuario"])){
-                    $usuario = $_POST["usuario"];
-                } 
-                if (isset($_POST["senha"])){
-                    $senha = $_POST["senha"];
-                } 
-                if (isset($_POST["nome"])){
-                    $nome = $_POST["nome"];
-                }                 
-                if (isset($_POST["ativo"])){
-                    $ativo = $_POST["ativo"];
-                } 
-                if (isset($_POST["perfil"])){
-                    $perfil = $_POST["perfil"];
-                } 
-                if (isset($_POST["email"])){
-                    $email = $_POST["email"];
-                } 
-                if (isset($_POST["celular"])){
-                    $celular = $_POST["celular"];
-                } 
-                if (isset($_POST["telefone"])){
-                    $telefone = $_POST["telefone"];
-                } 
-                $Usuario->setUsuario($usuario);
-                $Usuario->setSenha($senha);
-                $Usuario->setNome($nome);
-                $Usuario->setAtivo($ativo);
-                $Usuario->setPerfil($perfil);
-                $Usuario->setEmail($email);
-                $Usuario->setCelular($celular);
-                $Usuario->setTelefone($telefone);
-                $usuarioDAO->inserir($Usuario); 
-                $msg = "
-                            <div class=\"alert alert-success\">
-                                <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
-                                <span class=\"text-success\"><strong>Inserido com sucesso!</strong></span>
-                            </div>
-                       ";
-        } catch (Exception $e) {
-            $msg = "
-                        <div class=\"alert alert-error\">
-                            <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
-                            <span class=\"text-success\"><strong>" . $e->getMessage() . "</strong></span>
-                        </d/*iv>
-                   "; 
-     }
-    }
-  }    
+            //inserir
+            try {   
+                    $usuario = (isset($_POST["usuario"])) ? $_POST["usuario"] : "";                
+                    $senha = (isset($_POST["senha"])) ? $_POST["senha"] : "";
+                    $nome = (isset($_POST["nome"])) ? $_POST["nome"] : "";
+                    $ativo = (isset($_POST["ativo"])) ? $_POST["ativo"] : "";
+                    $perfil = (isset($_POST["perfil"])) ? $_POST["perfil"] : "";
+                    $email = (isset($_POST["email"])) ? $_POST["email"] : "";
+                    $celular = (isset($_POST["celular"])) ? $_POST["celular"] : "";
+                    $telefone = (isset($_POST["telefone"])) ? $_POST["telefone"] : "";
 
+                    $Usuario->setUsuario($usuario);
+                    $Usuario->setSenha($senha);
+                    $Usuario->setNome($nome);
+                    $Usuario->setAtivo($ativo);
+                    $Usuario->setPerfil($perfil);
+                    $Usuario->setEmail($email);
+                    $Usuario->setCelular($celular);
+                    $Usuario->setTelefone($telefone);
+                    $usuarioDAO->inserir($Usuario); 
+                    $msg = "
+                                <div class=\"alert alert-success\">
+                                    <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
+                                    <span class=\"text-success\"><strong>Inserido com sucesso!</strong></span>
+                                </div>
+                           "; 
+            } catch (Exception $e) {
+                $msg = "
+                            <div class=\"alert alert-error\">
+                                <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
+                                <span class=\"text-success\"><strong>" . $e->getMessage() . "</strong></span>
+                            </d/*iv>
+                       "; 
+            }
+        }
+    }    
   //paginacao do relatorio
   if(isset($_GET["pag"])){
     $pag = $_GET["pag"];
@@ -181,11 +151,11 @@
         <script src="js/bootstrap.min.js"></script>
     </head>
     <body>
-        <!--header-->
+        <!--Cabeçalho-->
         <?php include_once 'header.php'; ?>
-        <!--body-->
+        <!--Corpo-->
         <div class="container">
-            <form class="form-horizontal" method="POST" action="usuario.php">
+            <form id="formUsuario" class="form-horizontal" method="POST" action="usuario.php">
                 <legend>Cadastro de Usuário <!-- span style="font-size: 10pt">(Todos os campos são obrigatórios)</span--></legend>
                 <div class="control-group">
                     <div class="controls">
@@ -325,10 +295,16 @@
                 <?php
             }
             ?>
-        <ul class="pager"><?php if ($pag !=  0){?>
+        <ul class="pager">
+        <?php 
+            if ($pag !=  0){
+        ?>
           <li class="previous">
             <a href="usuario.php?pag=<?php echo $pag - 1; ?>">&larr; Anterior</a>
-          </li><?php } ?>
+          </li>
+          <?php 
+            } 
+          ?>
           <li class="next">
             <a href="usuario.php?pag=<?php echo $pag + 1; ?>">Próximo &rarr;</a>
           </li>
