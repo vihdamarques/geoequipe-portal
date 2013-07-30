@@ -40,7 +40,7 @@
         <script src="js/bootstrap.min.js"></script>
     </head>
     <body>
-        <div class="navbar navbar-fixed-top"> <!-- menu preto: navbar-inverse-->
+        <div class="navbar navbar-fixed-top navbar-inverse"> <!-- menu preto: navbar-inverse-->
           <div class="navbar-inner">
             <div class="container-fluid">
               <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">

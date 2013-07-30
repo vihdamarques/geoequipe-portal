@@ -16,7 +16,7 @@
       <script src="js/bootstrap.min.js"></script>
   </head>
   <body>
-    <div class="navbar navbar-fixed-top"> <!-- menu preto: navbar-inverse-->
+    <div class="navbar navbar-fixed-top navbar-inverse"> <!-- menu preto: navbar-inverse-->
       <div class="navbar-inner">
         <div class="container-fluid">
           <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -28,7 +28,7 @@
           <div class="nav-collapse pull-right">
             <ul class="nav">
               <li class="dropdown">
-                <a href="#contact" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-globe"></i> Gerenciar <b class="caret"></b></a> <!-- icone branco: icon-white-->
+                <a href="#contact" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-globe icon-white"></i> Gerenciar <b class="caret"></b></a> <!-- icone branco: icon-white-->
                 <ul class="dropdown-menu">
                     <li><a href="#">Monitoramento</a></li>
                     <li><a href="#">Rastro</a></li>
@@ -38,7 +38,7 @@
                 </ul>
               </li>
               <li class="dropdown">
-                <a href="#contact" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i></i> Cadastros <b class="caret"></b></a>
+                <a href="#contact" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog icon-white"></i></i> Cadastros <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                     <li><a href="#">Equipamento</a></li>
                     <li><a href="usuario.php">Usuário</a></li>
@@ -46,7 +46,7 @@
                 </ul>
               </li>
               <li class="dropdown">
-                <a href="#contact" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-file"></i> Relatórios <b class="caret"></b></a>
+                <a href="#contact" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-file icon-white"></i> Relatórios <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                     <li><a href="#">Exemplo</a></li>
                     <li><a href="#">Exemplo</a></li>
@@ -55,9 +55,9 @@
                 </ul>
               </li>        
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user"></i> Login <b class="caret"></b></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i> Login <b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                  <li><a href="logout.php">Sign Out</a></li>
+                  <li><a href="logout.php">Sair</a></li>
                 </ul>
               </li>
             </ul>

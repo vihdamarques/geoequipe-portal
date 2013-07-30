@@ -59,14 +59,30 @@
                 $Usuario->setPerfil($perfil);
                 $Usuario->setEmail($email);
                 $Usuario->setCelular($celular);
-                $Usuario->setTelefone($telefone);;                
+                $Usuario->setTelefone($telefone);          
                 $usuarioDAO->alterar($Usuario);
-                $msg = "Atualizado com sucesso!";
+                $msg ="
+                         <div class=\"alert alert-success\">
+                            <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
+                            <span class=\"text-success\"><strong>Atualizado com sucesso!</strong></span>
+                        </div>
+                           ";       
+
+                $Usuario->setUsuario(null);
+                $Usuario->setSenha(null);
+                $Usuario->setNome(null);
+                $Usuario->setAtivo(null);
+                $Usuario->setPerfil(null);
+                $Usuario->setEmail(null);
+                $Usuario->setCelular(null);
+                $Usuario->setTelefone(null);            
+                $Usuario->setId(null);
+                $id = null;
             } catch (Exception $e) {
                 $msg = "
                         <div class=\"alert alert-error\">
                             <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
-                            <span class=\"text-success\"><strong>" . $e->getMessage() . "</strong></span>
+                            <span class=\"text-error\"><strong>" . $e->getMessage() . "</strong></span>
                         </div>
                        ";
             }
@@ -74,13 +90,28 @@
         } elseif ($operacao == "D") {
           //deletar
             try {
-                $usuarioDAO->excluir($usuario);
-                $msg = "Deletado com sucesso!";
+                $usuarioDAO->excluir($id);
+                $msg ="
+                        <div class=\"alert alert-error\">
+                            <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
+                            <span class=\"text-error\"><strong>Deletado com sucesso!</strong></span>
+                        </div>
+                         "; 
+                $Usuario->setUsuario(null);
+                $Usuario->setSenha(null);
+                $Usuario->setNome(null);
+                $Usuario->setAtivo(null);
+                $Usuario->setPerfil(null);
+                $Usuario->setEmail(null);
+                $Usuario->setCelular(null);
+                $Usuario->setTelefone(null);            
+                $Usuario->setId(null);
+                $id = null;
             } catch (Exception $e) {
                 $msg = "
                         <div class=\"alert alert-error\">
                             <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
-                            <span class=\"text-success\"><strong>" . $e->getMessage() . "</strong></span>
+                            <span class=\"text-error\"><strong>" . $e->getMessage() . "</strong></span>
                         </div>
                        ";
             }
@@ -108,16 +139,26 @@
                     $Usuario->setTelefone($telefone);
                     $usuarioDAO->inserir($Usuario); 
                     $msg = "
-                                <div class=\"alert alert-success\">
-                                    <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
-                                    <span class=\"text-success\"><strong>Inserido com sucesso!</strong></span>
-                                </div>
+                            <div class=\"alert alert-success\">
+                                <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
+                                <span class=\"text-success\"><strong>Inserido com sucesso!</strong></span>
+                            </div>
                            "; 
+
+                    $Usuario->setUsuario(null);
+                    $Usuario->setSenha(null);
+                    $Usuario->setNome(null);
+                    $Usuario->setAtivo(null);
+                    $Usuario->setPerfil(null);
+                    $Usuario->setEmail(null);
+                    $Usuario->setCelular(null);
+                    $Usuario->setTelefone(null);  
+                    $Usuario->setId(null);
             } catch (Exception $e) {
-                $msg = "
+                    $msg = "
                             <div class=\"alert alert-error\">
                                 <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
-                                <span class=\"text-success\"><strong>" . $e->getMessage() . "</strong></span>
+                                <span class=\"text-error\"><strong>" . $e->getMessage() . "</strong></span>
                             </d/*iv>
                        "; 
             }
@@ -129,10 +170,11 @@
   } else{
     $pag = 0;
   }
-
-  $inicio = $pag * 4;
-
-  $usuarios = $usuarioDAO->consultarTodos($inicio,4);
+  $usuarios_pag = 4;
+  $inicio = $pag * $usuarios_pag;
+  $total_usuarios = (int) $usuarioDAO->totalUsuarios();
+  $total_pag = ceil($total_usuarios/$usuarios_pag);
+  $usuarios = $usuarioDAO->consultarTodos($inicio,$usuarios_pag);
 
 ?>
 <!DOCTYPE html>
@@ -153,7 +195,7 @@
     <body>
         <!--Cabeçalho-->
         <?php include_once 'header.php'; ?>
-        <!--Corpo-->
+        <!--Formulário-->
         <div class="container">
             <form id="formUsuario" class="form-horizontal" method="POST" action="usuario.php">
                 <legend>Cadastro de Usuário <!-- span style="font-size: 10pt">(Todos os campos são obrigatórios)</span--></legend>
@@ -226,7 +268,7 @@
                         <?php
                         if ($Usuario->getId() != null) {
                             ?>
-                            <button type="button" class="btn btn-danger" onclick="if(confirm('Deseja realmente excluir?')) window.location='usuario.php?operacao=D&id=<?php echo $id; ?>'">Excluir</button>;
+                            <button type="button" class="btn btn-danger" onclick="if(confirm('Deseja realmente excluir?')) window.location='usuario.php?operacao=D&id=<?php echo $id; ?>'">Excluir</button>
                             <?php
                         }
                         ?>
@@ -234,6 +276,7 @@
                 </div>
             </form>
             <br />
+            <!--Relatório-->
             <?php 
             if (sizeof($usuarios) > 0) {
                 ?>
@@ -291,10 +334,11 @@
                         }
                         ?>
                     </tbody>
-                </table>
+                </table>                
                 <?php
-            }
+                }
             ?>
+        <!--Paginação do Relatório-->    
         <ul class="pager">
         <?php 
             if ($pag !=  0){
@@ -304,10 +348,14 @@
           </li>
           <?php 
             } 
+            if ($pag <= $total_pag){
           ?>
           <li class="next">
-            <a href="usuario.php?pag=<?php echo $pag + 1; ?>">Próximo &rarr;</a>
+            <a href="usuario.php?pag=<?php echo $pag + 1; ?>"> Próximo &rarr;</a>
           </li>
+          <?php
+        }
+        ?>
         </ul>
         </div>
     </body>

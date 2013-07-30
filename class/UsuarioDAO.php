@@ -92,6 +92,29 @@
 			}
 		}
 
+		public function excluir($_id){
+			try{
+				$this->_conn->beginTransaction();
+				$stmt = $this->_conn->prepare("DELETE FROM GEOEQUIPE.GE_USUARIO WHERE ID_USUARIO = :id");
+				$stmt->bindValue(":id", $_id);
+				//executa
+				$stmt->execute();
+				//commita
+				$this->_conn->commit();
+				//fecha conexao
+				$this->_conn->__destruct();
+			} catch(PDOException $_e){
+				$this->_conn->rollback();
+				echo "Erro: ".$_e->getMessage();
+			}
+		}
+
+		//retorna o numero total de usuarios na tabela ge_usuario
+		public function totalUsuarios(){
+			$stmt = $this->_conn->query("SELECT COUNT(*) CONT FROM GEOEQUIPE.GE_USUARIO");
+			return $resultado = $stmt->fetch();			
+		}
+
 		//retorna todos os usuários cadastrados na tabela ge_usuario
 		public function consultarTodos($_ini, $_fin){
 			$_vetor = array();
