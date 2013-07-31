@@ -40,7 +40,7 @@
               <li class="dropdown">
                 <a href="#contact" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog icon-white"></i></i> Cadastros <b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                    <li><a href="#">Equipamento</a></li>
+                    <li><a href="equipamento.php">Equipamento</a></li>
                     <li><a href="usuario.php">Usuário</a></li>
                     <li><a href="#">Local</a></li>
                 </ul>

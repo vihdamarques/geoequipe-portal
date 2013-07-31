@@ -47,6 +47,11 @@
 			}
 		}
 
+		public function hashSenha($string){
+			$hash = sha1("wnhg9".$string."fwj98");
+			return $hash;
+		}
+
 		public function logout(){
 			session_start();
 			session_unset();

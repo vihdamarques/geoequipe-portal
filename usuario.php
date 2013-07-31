@@ -44,7 +44,7 @@
         //atualizar
             try {
                 $usuario = (isset($_POST["usuario"])) ? $_POST["usuario"] : "";                
-                $senha = (isset($_POST["senha"])) ? $_POST["senha"] : "";
+                $senha = $auth->hashSenha(isset($_POST["senha"]) ? $_POST["senha"] : "");
                 $nome = (isset($_POST["nome"])) ? $_POST["nome"] : "";
                 $ativo = (isset($_POST["ativo"])) ? $_POST["ativo"] : "";
                 $perfil = (isset($_POST["perfil"])) ? $_POST["perfil"] : "";
@@ -121,7 +121,7 @@
             //inserir
             try {   
                     $usuario = (isset($_POST["usuario"])) ? $_POST["usuario"] : "";                
-                    $senha = (isset($_POST["senha"])) ? $_POST["senha"] : "";
+                    $senha = $auth->hashSenha(isset($_POST["senha"]) ? $_POST["senha"] : "");
                     $nome = (isset($_POST["nome"])) ? $_POST["nome"] : "";
                     $ativo = (isset($_POST["ativo"])) ? $_POST["ativo"] : "";
                     $perfil = (isset($_POST["perfil"])) ? $_POST["perfil"] : "";
@@ -170,7 +170,7 @@
   } else{
     $pag = 0;
   }
-  $usuarios_pag = 4;
+  $usuarios_pag = 10; //usuários por página
   $inicio = $pag * $usuarios_pag;
   $total_usuarios = (int) $usuarioDAO->totalUsuarios();
   $total_pag = ceil($total_usuarios/$usuarios_pag);
@@ -213,7 +213,7 @@
                 <div class="control-group">
                     <label class="control-label" for="senha">Senha</label>
                     <div class="controls">
-                        <input type="text" value="<?php echo $Usuario->getSenha(); ?>" name="senha" id="senha" placeholder="Digite a senha">
+                        <input type="password" value="<?php echo $Usuario->getSenha(); ?>" name="senha" id="senha" placeholder="Digite a senha">
                     </div>    
                 </div>
                 <div class="control-group">
@@ -348,7 +348,7 @@
           </li>
           <?php 
             } 
-            if ($pag <= $total_pag){
+            if ($pag < $total_pag){
           ?>
           <li class="next">
             <a href="usuario.php?pag=<?php echo $pag + 1; ?>"> Próximo &rarr;</a>
