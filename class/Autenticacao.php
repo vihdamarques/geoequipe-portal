@@ -33,9 +33,9 @@
         			return true;				
 				}
 				
-				} else {
-					return false;
-				}
+			} else {
+				return false;
+			}
 			}
 
 		public function autenticar(){
@@ -50,6 +50,17 @@
 		public function hashSenha($string){
 			$hash = sha1("wnhg9".$string."fwj98");
 			return $hash;
+		}
+
+		public function encriptaId($string){
+			$cod = base64_encode($string);
+			return $cod;
+		}
+
+		public function decriptaId($string){
+			$cod = base64_decode($string);
+			//$cod = str_replace("abcde","",$cod);
+			return $cod;
 		}
 
 		public function logout(){

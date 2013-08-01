@@ -42,7 +42,7 @@
                 <ul class="dropdown-menu">
                     <li><a href="equipamento.php">Equipamento</a></li>
                     <li><a href="usuario.php">Usuário</a></li>
-                    <li><a href="#">Local</a></li>
+                    <li><a href="local.php">Local</a></li>
                 </ul>
               </li>
               <li class="dropdown">

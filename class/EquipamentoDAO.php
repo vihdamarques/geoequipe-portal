@@ -51,17 +51,13 @@
 			try{			
 			$this->_conn->beginTransaction();
 			$stmt = $this->_conn->prepare("UPDATE GE_EQUIPAMENTO
-										   SET 	 id_equipamento = :id_equipamento
-	            								,id_ultimo_sinal = :id_ultimo_sinal
-												,des_equipamento = :des_equipamento
+										   SET 	 des_equipamento = :des_equipamento
 												,imei = :imei
 												,numero = :numero
 												,ativo = :ativo
 										   WHERE id_equipamento = :id_equipamento"
 										);
-
-				$stmt->bindValue(":id_equipamento", $_equipamento->getId());
-				$stmt->bindValue(":id_ultimo_sinal", $_equipamento->getUltimoSinal());
+				
 				$stmt->bindValue(":des_equipamento", $_equipamento->getDescricao());
 				$stmt->bindValue(":imei", $_equipamento->getImei());
 				$stmt->bindValue(":numero", $_equipamento->getNumero());

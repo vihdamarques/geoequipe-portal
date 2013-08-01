@@ -49,8 +49,7 @@
                 $Equipamento->setImei($imei);
                 $Equipamento->setAtivo($ativo);
                 $equipamentoDAO->alterar($Equipamento);              
-                $msg ="
-                         <div class=\"alert alert-success\">
+                $msg ="<div class=\"alert alert-success\">
                             <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
                             <span class=\"text-success\"><strong>Atualizado com sucesso!</strong></span>
                         </div>
@@ -63,8 +62,7 @@
                 $Equipamento->setId(null);
                 $id = null;
             } catch (Exception $e) {
-                $msg = "
-                        <div class=\"alert alert-error\">
+                $msg = " <div class=\"alert alert-error\">
                             <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
                             <span class=\"text-error\"><strong>" . $e->getMessage() . "</strong></span>
                         </div>
@@ -129,7 +127,7 @@
                             <div class=\"alert alert-error\">
                                 <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
                                 <span class=\"text-error\"><strong>" . $e->getMessage() . "</strong></span>
-                            </d/*iv>
+                            </div>
                        "; 
             }
         }
@@ -140,12 +138,12 @@
   } else{
     $pag = 0;
   }
-  $usuarios_pag = 10; //usuários por página
-  $inicio = $pag * $usuarios_pag;
-  $total_usuarios = (int) $equipamentoDAO->totalEquipamentos();
-  $total_pag = ceil($total_usuarios/$usuarios_pag);
+  $equipamento_pag = 10; //equipamentos por página
+  $inicio = $pag * $equipamento_pag; 
+  $total_equipamento = (int) $equipamentoDAO->totalEquipamentos();
+  $total_pag = ceil($total_equipamento/$equipamento_pag);
   
-  $equipamentos = $equipamentoDAO->consultarTodos($inicio,$usuarios_pag);
+  $equipamentos = $equipamentoDAO->consultarTodos($inicio,$equipamento_pag);
 
 ?>
 <!DOCTYPE html>
@@ -269,14 +267,14 @@
             if ($pag !=  0){
         ?>
           <li class="previous">
-            <a href="usuario.php?pag=<?php echo $pag - 1; ?>">&larr; Anterior</a>
+            <a href="equipamento.php?pag=<?php echo $pag - 1; ?>">&larr; Anterior</a>
           </li>
           <?php 
             } 
             if ($pag < $total_pag){
           ?>
           <li class="next">
-            <a href="usuario.php?pag=<?php echo $pag + 1; ?>"> Próximo &rarr;</a>
+            <a href="equipamento.php?pag=<?php echo $pag + 1; ?>"> Próximo &rarr;</a>
           </li>
           <?php
         }
