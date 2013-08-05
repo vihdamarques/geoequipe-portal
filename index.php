@@ -3,7 +3,7 @@
     include_once 'class/Autenticacao.php';
     //Autenticação
     $auth = new Autenticacao();
-    $auth->autenticar();
+    $auth->autenticar();    
 ?>
 <!DOCTYPE html>
 <html>

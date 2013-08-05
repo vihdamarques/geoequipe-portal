@@ -51,13 +51,13 @@
 			try{			
 			$this->_conn->beginTransaction();
 			$stmt = $this->_conn->prepare("UPDATE GE_EQUIPAMENTO
-										   SET 	 des_equipamento = :des_equipamento
-												,imei = :imei
-												,numero = :numero
-												,ativo = :ativo
-										   WHERE id_equipamento = :id_equipamento"
+										   	  SET des_equipamento = :des_equipamento
+												  ,imei = :imei
+												  ,numero = :numero
+												  ,ativo = :ativo
+										    WHERE id_equipamento = :id_equipamento"
 										);
-				
+				$stmt->bindValue(":id_equipamento", $_equipamento->getId());
 				$stmt->bindValue(":des_equipamento", $_equipamento->getDescricao());
 				$stmt->bindValue(":imei", $_equipamento->getImei());
 				$stmt->bindValue(":numero", $_equipamento->getNumero());
@@ -94,14 +94,14 @@
 
 		//retorna o numero total de usuarios na tabela ge_usuario
 		public function totalEquipamentos(){
-			$stmt = $this->_conn->query("SELECT COUNT(*) CONT FROM GEOEQUIPE.GE_EQUIPAMENTO");
+			$stmt = $this->_conn->query("SELECT COUNT(*) CONT FROM GE_EQUIPAMENTO");
 			return $resultado = $stmt->fetch();			
 		}
 
 		//retorna todos os usuários cadastrados na tabela ge_usuario
 		public function consultarTodos($_ini, $_fin){
 			$_vetor = array();
-			$stmt = $this->_conn->prepare("SELECT * FROM GEOEQUIPE.GE_EQUIPAMENTO ORDER BY NUMERO LIMIT :ini,:fin");
+			$stmt = $this->_conn->prepare("SELECT * FROM GE_EQUIPAMENTO ORDER BY NUMERO LIMIT :ini,:fin");
 			$stmt->bindValue(":ini", $_ini, PDO::PARAM_INT);
 			$stmt->bindValue(":fin", $_fin, PDO::PARAM_INT);
 			$stmt->execute();
@@ -125,7 +125,7 @@
 		}
 
 		public function consultarId($_id){			
-		$stmt = $this->_conn->prepare("SELECT * FROM GEOEQUIPE.GE_EQUIPAMENTO WHERE ID_EQUIPAMENTO = :id");
+		$stmt = $this->_conn->prepare("SELECT * FROM GE_EQUIPAMENTO WHERE ID_EQUIPAMENTO = :id");
 
 		$stmt->bindValue(":id", $_id);
 

@@ -21,16 +21,7 @@
 			$this->_imei = $_imei;
 			$this->_numero = $_numero;
 			$this->_ativo = $_ativo; 			
-		}
-		//destrutor da classe
-		/*(public function __destruct(){
-			unset($this->_id = $_id);
-			unset($this->_ultimoSinal = $_ultimoSinal);
-			unset($this->_descricao = $_descricao);
-			unset($this->_imei = $_imei);
-			unset($this->_numero = $_numero);
-			unset($this->_ativo = $_ativo); 
-		}*/
+		}		
 
 		//geters e seters
 		public function setId($_id){

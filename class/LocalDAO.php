@@ -83,23 +83,23 @@
 			try{			
 			$this->_conn->beginTransaction();
 			$stmt = $this->_conn->prepare("UPDATE GE_LOCAL
-										   SET   nome = :nome
-												,descricao = :descricao
-												,ativo = :ativo
-												,latitude = :latitude
-												,longitude = :longitude
-												,coordenada = :coordenada
-												,logradouro = :logradouro
-												,numero = :numero
-												,bairro = :bairro
-												,cidade = :cidade
-												,estado = :estado
-												,pais = :pais
-												,cep = :cep
-												,telefone_1 = :telefone_1
-												,telefone_2 = :telefone_2
-												,email = :email
-										   WHERE id_local = :id_local"
+										      SET nome = :nome
+												  ,descricao = :descricao
+												  ,ativo = :ativo
+												  ,latitude = :latitude
+												  ,longitude = :longitude
+												  ,coordenada = :coordenada
+												  ,logradouro = :logradouro
+												  ,numero = :numero
+												  ,bairro = :bairro
+												  ,cidade = :cidade
+												  ,estado = :estado
+												  ,pais = :pais
+												  ,cep = :cep
+												  ,telefone_1 = :telefone_1
+												  ,telefone_2 = :telefone_2
+												  ,email = :email
+										    WHERE id_local = :id_local"
 										);
 				
 				$stmt->bindValue(":id_local", $_local->getId());
@@ -135,7 +135,7 @@
 		public function excluir($_id){
 			try{
 				$this->_conn->beginTransaction();
-				$stmt = $this->_conn->prepare("DELETE FROM GEOEQUIPE.GE_LOCAL WHERE ID_LOCAL = :id");
+				$stmt = $this->_conn->prepare("DELETE FROM GE_LOCAL WHERE ID_LOCAL = :id");
 				$stmt->bindValue(":id", $_id);
 				//executa
 				$stmt->execute();
@@ -151,14 +151,14 @@
 
 		//retorna o numero total de usuarios na tabela ge_usuario
 		public function totalLocal(){
-			$stmt = $this->_conn->query("SELECT COUNT(*) CONT FROM GEOEQUIPE.GE_LOCAL");
+			$stmt = $this->_conn->query("SELECT COUNT(*) CONT FROM GE_LOCAL");
 			return $resultado = $stmt->fetch();			
 		}
 
 		//retorna todos os usuários cadastrados na tabela ge_usuario
 		public function consultarTodos($_ini, $_fin){
 			$_vetor = array();
-			$stmt = $this->_conn->prepare("SELECT * FROM GEOEQUIPE.GE_LOCAL ORDER BY NOME LIMIT :ini,:fin");
+			$stmt = $this->_conn->prepare("SELECT * FROM GE_LOCAL ORDER BY NOME LIMIT :ini,:fin");
 			$stmt->bindValue(":ini", $_ini, PDO::PARAM_INT);
 			$stmt->bindValue(":fin", $_fin, PDO::PARAM_INT);
 			$stmt->execute();
@@ -192,7 +192,7 @@
 		}
 
 		public function consultarId($_id){			
-		$stmt = $this->_conn->prepare("SELECT * FROM GEOEQUIPE.GE_LOCAL WHERE ID_LOCAL = :id");
+		$stmt = $this->_conn->prepare("SELECT * FROM GE_LOCAL WHERE ID_LOCAL = :id");
 
 		$stmt->bindValue(":id", $_id);
 

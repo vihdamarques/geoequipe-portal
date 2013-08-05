@@ -19,6 +19,7 @@
     $Usuario = new Usuario();
     $usuarioDAO = new UsuarioDAO();
     $msg = "";   
+    $busca = (isset($_GET["busca"])) ? $_GET["busca"] : ""; echo $busca;
     //verifica se a variavel id existe no array POST
     if (isset($_POST["id"])){
         $id = $_POST["id"];
@@ -174,7 +175,8 @@
   $inicio = $pag * $usuarios_pag;
   $total_usuarios = (int) $usuarioDAO->totalUsuarios();
   $total_pag = ceil($total_usuarios/$usuarios_pag);
-  $usuarios = $usuarioDAO->consultarTodos($inicio,$usuarios_pag);
+
+  $usuarios = $usuarioDAO->consultarTodos($inicio, $usuarios_pag, $busca);
 
 ?>
 <!DOCTYPE html>
@@ -191,6 +193,24 @@
         </style>
         <!-- Scripts -->
         <script src="js/bootstrap.min.js"></script>
+        <script>
+            var req;
+            function consulta(){
+                if(window.XMLHttpRequest) { 
+                    req = new XMLHttpRequest(); 
+                } else if(window.ActiveXObject) { 
+                    req = new ActiveXObject("Microsoft.XMLHTTP"); 
+                }
+                var string = $('#busca').val();
+                var url = "usuario.php?busca=" + string;
+                req.open("Get", url, true);
+                req.onreadystatechange = function(){
+                    var resposta = req.responseText;   
+                    document.getElementById('relatorio').innerHTML = resposta;
+                }
+            }
+
+        </script>        
     </head>
     <body>
         <!--Cabeçalho-->
@@ -276,11 +296,17 @@
                 </div>
             </form>
             <br />
+            <!--Busca-->
+            <div class="controls"> 
+                <input type="text"  class="span5 search-query" name="busca" id="busca" autocomplete="off" placeholder="BUSCA" tabindex="1" >
+                <button type="button" class="btn" onclick="consulta()"><i class="icon-search icon-large"></i></button>
+            </div>
+            <br />
             <!--Relatório-->
-            <?php 
-            if (sizeof($usuarios) > 0) {
-                ?>
-                <table class="table table-hover" style="width: 100%">
+            <?php                
+                if (sizeof($usuarios) > 0) {
+            ?>
+                <table class="table table-hover" style="width: 100%" id="relatorio">
                     <thead>
                         <tr>
                             <th style="text-align:center">Editar</th>
@@ -336,7 +362,7 @@
                     </tbody>
                 </table>                
                 <?php
-                }
+                }                
             ?>
         <!--Paginação do Relatório-->    
         <ul class="pager">

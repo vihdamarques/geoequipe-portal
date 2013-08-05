@@ -1,6 +1,7 @@
 <?php 
     include_once 'class/Conexao.php';
     include_once 'class/Autenticacao.php';
+    include_once 'class/Usuario.php';
     //declara e inicializa as variaveis
     $usuario = null;
     $senha = null;
