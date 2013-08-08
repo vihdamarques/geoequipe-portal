@@ -3,9 +3,11 @@
     include_once 'class/Conexao.php';
     include_once 'class/EquipamentoDAO.php';
     include_once 'class/Autenticacao.php';
+    
     //Autenticação
     $auth = new Autenticacao();
     $auth->autenticar();
+    
     //declara e inicializa as variáveis
     $id = null;
     $numero = null;
@@ -14,15 +16,17 @@
     $ativo = null;    
     $Equipamento = new Equipamento();
     $equipamentoDAO = new EquipamentoDAO();
-    $msg = "";   
+    $msg = null;   
+    
     //verifica se a variavel id existe no array POST
     if (isset($_POST["id"])){
         $id = $_POST["id"];
     } elseif (isset($_GET["id"])) {
-        $id = $_GET["id"];
+        $id = $auth->decripta($_GET["id"]); //decripta id passado por GET
     } else {
         $id = null;
     }
+
     //verifica que tipo de operação está sendo passada, A - alterar ou D - deletar
     if (isset($_GET["operacao"])){
         $operacao = $_GET["operacao"];
@@ -36,8 +40,7 @@
 
     if (!empty($id)) { 
         $Equipamento = $equipamentoDAO->consultarId($id);
-        if ($operacao == "A") {
-        //atualizar
+        if ($operacao == "A") {        
             try {
                 $numero = (isset($_POST["numero"])) ? $_POST["numero"] : "";
                 $descricao = (isset($_POST["descricao"])) ? $_POST["descricao"] : "";
@@ -48,12 +51,12 @@
                 $Equipamento->setDescricao($descricao);
                 $Equipamento->setImei($imei);
                 $Equipamento->setAtivo($ativo);
+                //atualizar
                 $equipamentoDAO->alterar($Equipamento);              
                 $msg ="<div class=\"alert alert-success\">
                             <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
                             <span class=\"text-success\"><strong>Atualizado com sucesso!</strong></span>
-                        </div>
-                           ";       
+                        </div>";       
 
                 $Equipamento->setNumero(null);
                 $Equipamento->setDescricao(null);
@@ -65,20 +68,17 @@
                 $msg = " <div class=\"alert alert-error\">
                             <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
                             <span class=\"text-error\"><strong>" . $e->getMessage() . "</strong></span>
-                        </div>
-                       ";
+                        </div>";
             }
 
-        } elseif ($operacao == "D") {
-          //deletar
+        } elseif ($operacao == "D") {          
             try {
+                //deletar
                 $equipamentoDAO->excluir($id);
-                $msg ="
-                        <div class=\"alert alert-error\">
+                $msg ="<div class=\"alert alert-error\">
                             <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
                             <span class=\"text-error\"><strong>Deletado com sucesso!</strong></span>
-                        </div>
-                         "; 
+                        </div>"; 
                 
                 $Equipamento->setNumero(null);
                 $Equipamento->setDescricao(null);
@@ -87,17 +87,14 @@
                 $Equipamento->setId(null);
                 $id = null;
             } catch (Exception $e) {
-                $msg = "
-                        <div class=\"alert alert-error\">
+                $msg = "<div class=\"alert alert-error\">
                             <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
                             <span class=\"text-error\"><strong>" . $e->getMessage() . "</strong></span>
-                        </div>
-                       ";
+                        </div>";
             }
         }
     } else {       
-        if ($operacao == "I") {
-            //inserir
+        if ($operacao == "I") {            
             try {   
                     $numero = (isset($_POST["numero"])) ? $_POST["numero"] : "";                
                     $descricao = (isset($_POST["descricao"])) ? $_POST["descricao"] : "";
@@ -107,14 +104,13 @@
                     $Equipamento->setNumero($numero);
                     $Equipamento->setDescricao($descricao);
                     $Equipamento->setImei($imei);
-                    $Equipamento->setAtivo($ativo);                
+                    $Equipamento->setAtivo($ativo);
+                    //inserir
                     $equipamentoDAO->inserir($Equipamento); 
-                    $msg = "
-                            <div class=\"alert alert-success\">
+                    $msg = "<div class=\"alert alert-success\">
                                 <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
                                 <span class=\"text-success\"><strong>Inserido com sucesso!</strong></span>
-                            </div>
-                           "; 
+                            </div>"; 
 
                     $Equipamento->setNumero(null);
                     $Equipamento->setDescricao(null);
@@ -123,28 +119,20 @@
                     $Equipamento->setId(null);
                     $id = null;
             } catch (Exception $e) {
-                    $msg = "
-                            <div class=\"alert alert-error\">
+                    $msg = "<div class=\"alert alert-error\">
                                 <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
                                 <span class=\"text-error\"><strong>" . $e->getMessage() . "</strong></span>
-                            </div>
-                       "; 
+                            </div>"; 
             }
         }
     }    
-  //paginacao do relatorio
-  if(isset($_GET["pag"])){
-    $pag = $_GET["pag"];
-  } else{
-    $pag = 0;
-  }
+  //paginacao do relatorio  
+  $pag = (isset($_GET["pag"])) ? $_GET["pag"] : 0;
   $equipamento_pag = 10; //equipamentos por página
   $inicio = $pag * $equipamento_pag; 
   $total_equipamento = (int) $equipamentoDAO->totalEquipamentos();
-  $total_pag = ceil($total_equipamento/$equipamento_pag);
-  
+  $total_pag = ceil($total_equipamento/$equipamento_pag);  
   $equipamentos = $equipamentoDAO->consultarTodos($inicio,$equipamento_pag);
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -209,7 +197,7 @@
                         <?php
                         if ($Equipamento->getId() != null) {
                             ?>
-                            <button type="button" class="btn btn-danger" onclick="if(confirm('Deseja realmente excluir?')) window.location='equipamento.php?operacao=D&id=<?php echo $id; ?>'">Excluir</button>
+                            <button type="button" class="btn btn-danger" onclick="if(confirm('Deseja realmente excluir?')) window.location='equipamento.php?operacao=D&id=<?php echo $auth->encripta($id); ?>'">Excluir</button>
                             <?php
                         }
                         ?>
@@ -237,7 +225,7 @@
                         foreach ($equipamentos as $key => $eqp) {
                             ?>
                             <tr>
-                                <td style="text-align:center"><a href="equipamento.php?id=<?php echo $eqp->getId(); ?>"><i class="icon-pencil"></i></a></td>
+                                <td style="text-align:center"><a href="equipamento.php?id=<?php echo $auth->encripta($eqp->getId()); ?>"><i class="icon-pencil"></i></a></td>
                                 <td><?php echo $eqp->getId(); ?></td>
                                 <td><?php echo $eqp->getNumero(); ?></td>
                                 <td><?php echo $eqp->getDescricao(); ?></td>

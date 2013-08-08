@@ -4,7 +4,7 @@
 		private $_local;
 		private $_usuario;
 		private $_descricao;
-		private $_data_criacao;				
+		private $_data_criacao;
 
 		//construtor da classe
 		public function __construct($_id = null

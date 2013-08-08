@@ -7,7 +7,7 @@
 			$this->_conn = new Conexao();			
 		}
 
-		//função para INSERT dos dados na tabela ge_usuario
+		//função para INSERT dos dados na tabela ge_tarefa
 		public function inserir($_tarefa){
 			try{				
 				$this->_conn->beginTransaction();
@@ -32,8 +32,7 @@
 				//executa
 				$stmt->execute();	
 				//commita
-				$this->_conn->commit(); 
-				//return $this->_conn->lastInsertId();
+				$this->_conn->commit(); 				
 				//fecha conexão
 				$this->_conn->__destruct();
 			}
@@ -43,7 +42,7 @@
 			}
 		}
 
-		//função para UPDATE dos dados da tabela ge_usuario
+		//função para UPDATE dos dados da tabela ge_tarefa
 		public function alterar($_tarefa){
 			try{			
 			$this->_conn->beginTransaction();
@@ -72,6 +71,7 @@
 			}
 		}
 
+		//função para DELETE dos dados da tabela ge_tarefa
 		public function excluir($_id){
 			try{
 				$this->_conn->beginTransaction();
@@ -89,13 +89,13 @@
 			}
 		}
 
-		//retorna o numero total de usuarios na tabela ge_usuario
+		//retorna o numero total de tarefas na tabela ge_tarefa
 		public function totalTarefas(){
 			$stmt = $this->_conn->query("SELECT COUNT(*) CONT FROM GE_TAREFA");
 			return $resultado = $stmt->fetch();			
 		}
 
-		//retorna todos os usuários cadastrados na tabela ge_tarefa
+		//retorna todos as tarefas cadastrados na tabela ge_tarefa
 		public function consultarTodos($_ini, $_fin){
 			$_vetor = array();
 			$stmt = $this->_conn->prepare("SELECT * FROM GE_TAREFA ORDER BY id_tarefa LIMIT :ini,:fin");
@@ -111,8 +111,7 @@
 					                  ,$linha["data_cricao"]
 					                  ,$linha["descricao"] 					                  
 					                  );
-				$_vetor[$key] = $tarefa;		
-				//$count = $count + 1;				
+				$_vetor[$key] = $tarefa;							
 			}
 			//retorna um array de tarefas
 			return $_vetor;
@@ -120,14 +119,12 @@
 			$this->_conn->__destruct();
 		}
 
+		//retona uma tarefa consultando po ID
 		public function consultarId($_id){			
 		$stmt = $this->_conn->prepare("SELECT * FROM GE_TAREFA WHERE id_tarefa = :id");
-
 		$stmt->bindValue(":id", $_id);
-
 		$stmt->execute();
-
-		//retornar para cada tarefa no banco, uma tarefa objeto
+		//retornar para cada tarefa no banco, um objeto tarefa
 		while ($linha = $stmt->fetch()) {
 			$tarefa = new Tarefa ($linha["id_tarefa"]
 				                  ,$linha["id_local"]

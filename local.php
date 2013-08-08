@@ -3,9 +3,11 @@
     include_once 'class/Conexao.php';
     include_once 'class/LocalDAO.php';
     include_once 'class/Autenticacao.php';
+    
     //Autenticação
     $auth = new Autenticacao();
     $auth->autenticar();
+    
     //declara e inicializa as variáveis
     $id = null;       
     $nome = null;
@@ -26,15 +28,17 @@
     $email = null;
     $Local = new Local();
     $localDAO = new LocalDAO();
-    $msg = "";   
+    $msg = null;   
+    
     //verifica se a variavel id existe no array POST
     if (isset($_POST["id"])){
         $id = $_POST["id"];
     } elseif (isset($_GET["id"])) {
-        $id = $_GET["id"];
+        $id = $auth->decripta($_GET["id"]); //decripta id passado por GET
     } else {
         $id = null;
     }
+    
     //verifica que tipo de operação está sendo passada, A - alterar ou D - deletar
     if (isset($_GET["operacao"])){
         $operacao = $_GET["operacao"];
@@ -48,8 +52,7 @@
 
     if (!empty($id)) {
         $Local = $localDAO->consultarId($id);
-        if ($operacao == "A") {
-        //atualizar
+        if ($operacao == "A") {        
             try {
                 $nome = (isset($_POST["nome"])) ? $_POST["nome"] : "";                
                 $descricao = (isset($_POST["descricao"])) ? $_POST["descricao"] : "";
@@ -84,13 +87,12 @@
                 $Local->setTelefone_1($telefone_1);
                 $Local->setTelefone_2($telefone_2);      
                 $Local->setEmail($email);      
-
+                //atualizar
                 $localDAO->alterar($Local);
                 $msg = "<div class=\"alert alert-success\">
                             <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
                             <span class=\"text-success\"><strong>Atualizado com sucesso!</strong></span>
-                        </div>
-                           ";       
+                        </div>";       
 
                 $Local->setNome(null);
                 $Local->setDescricao(null);
@@ -114,19 +116,17 @@
                 $msg = "<div class=\"alert alert-error\">
                             <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
                             <span class=\"text-error\"><strong>" . $e->getMessage() . "</strong></span>
-                        </div>
-                       ";
+                        </div>";
             }
 
-        } elseif ($operacao == "D") {
-          //deletar
+        } elseif ($operacao == "D") {          
             try {
+                //deletar
                 $localDAO->excluir($id);
                 $msg ="<div class=\"alert alert-error\">
                             <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
                             <span class=\"text-error\"><strong>Deletado com sucesso!</strong></span>
-                        </div>
-                         "; 
+                        </div>"; 
                 
                 $Local->setNome(null);
                 $Local->setDescricao(null);
@@ -150,13 +150,11 @@
                 $msg = "<div class=\"alert alert-error\">
                             <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
                             <span class=\"text-error\"><strong>" . $e->getMessage() . "</strong></span>
-                        </div>
-                       ";
+                        </div>";
             }
         }
     } else {       
-        if ($operacao == "I") {
-            //inserir
+        if ($operacao == "I") {            
             try {   $nome = (isset($_POST["nome"])) ? $_POST["nome"] : "";                
                     $descricao = (isset($_POST["descricao"])) ? $_POST["descricao"] : "";
                     $ativo = (isset($_POST["ativo"])) ? $_POST["ativo"] : "";
@@ -190,12 +188,12 @@
                     $Local->setTelefone_1($telefone_1);
                     $Local->setTelefone_2($telefone_2);      
                     $Local->setEmail($email);    
+                    //inserir
                     $localDAO->inserir($Local); 
                     $msg = "<div class=\"alert alert-success\">
                                 <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
                                 <span class=\"text-success\"><strong>Inserido com sucesso!</strong></span>
-                            </div>
-                           "; 
+                            </div>"; 
 
                     $Local->setNome(null);
                     $Local->setDescricao(null);
@@ -219,22 +217,16 @@
                     $msg = "<div class=\"alert alert-error\">
                                 <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
                                 <span class=\"text-error\"><strong>" . $e->getMessage() . "</strong></span>
-                            </d/*iv>
-                       "; 
+                            </div>"; 
             }
         }
     }    
   //paginacao do relatorio
-  if(isset($_GET["pag"])){
-    $pag = $_GET["pag"];
-  } else{
-    $pag = 0;
-  }
+  $pag = (isset($_GET["pag"])) ? $_GET["pag"] : 0;
   $local_pag = 10; //usuários por página
   $inicio = $pag * $local_pag;
   $total_local = (int) $localDAO->totalLocal();
-  $total_pag = ceil($total_local/$local_pag);
-  
+  $total_pag = ceil($total_local/$local_pag);  
   $locais = $localDAO->consultarTodos($inicio,$local_pag);
 
 ?>
@@ -320,7 +312,7 @@
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label" for="telefone_1">Eelefone 1</label>
+                    <label class="control-label" for="telefone_1">Telefone 1</label>
                     <div class="controls">
                         <input type="text" value="<?php echo $Local->getTelefone_1(); ?>" name="telefone_1" id="telefone_1" placeholder="Digite o telefone 1">
                     </div>
@@ -355,7 +347,7 @@
                         <?php
                         if ($Local->getId() != null) {
                             ?>
-                            <button type="button" class="btn btn-danger" onclick="if(confirm('Deseja realmente excluir?')) window.location='local.php?operacao=D&id=<?php echo $id; ?>'">Excluir</button>
+                            <button type="button" class="btn btn-danger" onclick="if(confirm('Deseja realmente excluir?')) window.location='local.php?operacao=D&id=<?php echo $auth->encripta($id); ?>'">Excluir</button>
                             <?php
                         }
                         ?>
@@ -387,7 +379,7 @@
                         foreach ($locais as $key => $loc) {
                             ?>
                             <tr>
-                                <td style="text-align:center"><a href="local.php?id=<?php echo $loc->getId(); ?>"><i class="icon-pencil"></i></a></td>
+                                <td style="text-align:center"><a href="local.php?id=<?php echo $auth->encripta($loc->getId()); ?>"><i class="icon-pencil"></i></a></td>
                                 <td><?php echo $loc->getId(); ?></td>
                                 <td><?php echo $loc->getNome(); ?></td>
                                 <td><?php echo $loc->getDescricao(); ?></td>

@@ -42,8 +42,7 @@
 				//executa
 				$stmt->execute();	
 				//commita
-				$this->_conn->commit(); 
-				//return $this->_conn->lastInsertId();
+				$this->_conn->commit(); 				
 				//fecha conexão
 				$this->_conn->__destruct();
 
@@ -92,6 +91,7 @@
 			}
 		}
 
+		//função para DELETE dos dados da tabela ge_usuario
 		public function excluir($_id){
 			try{
 				$this->_conn->beginTransaction();
@@ -142,8 +142,7 @@
 					                  ,$linha["ativo"]
 					                  ,$linha["id_ultimo_sinal"]
 					                  ,$linha["perfil"]);
-				$_vetor[$key] = $usuario;				
-				//$count = $count + 1;				
+				$_vetor[$key] = $usuario;								
 			}
 			//retorna um array de usuarios
 			return $_vetor;
@@ -151,13 +150,11 @@
 			$this->_conn->__destruct();
 		}
 
+		//retorna um usuario consultando po ID
 		public function consultarId($_id){
-			$stmt = $this->_conn->prepare("SELECT * FROM GE_USUARIO WHERE ID_USUARIO = :id");
-
+			$stmt = $this->_conn->prepare("SELECT * FROM GEOEQUIPE.GE_USUARIO WHERE ID_USUARIO = :id");
 			$stmt->bindValue(":id", $_id);
-
 			$stmt->execute();
-
 			//retornar para cada usuario no banco, um usuario objeto
 			while ($linha = $stmt->fetch()) {
 				$usuario = new Usuario($linha["id_usuario"]
@@ -170,7 +167,7 @@
 									  ,$linha["ativo"]
 									  ,$linha["id_ultimo_sinal"]
 									  ,$linha["perfil"]);
-			}		
+			}
 			return $usuario;
 			//fecha conexão
 			$this->_conn->__destruct();

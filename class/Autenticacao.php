@@ -30,15 +30,15 @@
 				foreach ($valida as $value) {
 
 					$usuario = new Usuario($value["id_usuario"]
-								  ,$value["usuario"]
-								  ,$value["senha"]
-								  ,$value["nome"]
-								  ,$value["email"]
-								  ,$value["celular"]
-								  ,$value["telefone"]
-								  ,$value["ativo"]
-								  ,$value["id_ultimo_sinal"]
-								  ,$value["perfil"]);
+										  ,$value["usuario"]
+										  ,$value["senha"]
+										  ,$value["nome"]
+										  ,$value["email"]
+										  ,$value["celular"]
+										  ,$value["telefone"]
+										  ,$value["ativo"]
+										  ,$value["id_ultimo_sinal"]
+										  ,$value["perfil"]);
 					
 					$string = serialize($usuario); //serializa objeto em uma string					
 					session_start();
@@ -84,15 +84,15 @@
 			return $hash;
 		}
 
-		public function encriptaId($string){
-			$cod = base64_encode($string);
-			return $cod;
+		public function encripta($string){
+			$codigo = base64_encode("983459834598345098345".$string);
+			return $codigo;
 		}
 
-		public function decriptaId($string){
-			$cod = base64_decode($string);
-			//$cod = str_replace("abcde","",$cod);
-			return $cod;
+		public function decripta($string){			
+			$codigo = trim(str_replace("983459834598345098345","",base64_decode($string)));
+			//$codigo = str_replace("h48fehge84thdih09duafsduf9g","", $codigo);
+			return $codigo;
 		}
 
 		public function logout(){
