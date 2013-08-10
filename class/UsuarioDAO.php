@@ -173,6 +173,38 @@
 			$this->_conn->__destruct();
 		}
 
+		//cria uma tag select com todos os usuarios cadastrados
+		public function selecionar(){
+			$_vetor = array();			
+			$stmt = $this->_conn->prepare("SELECT * FROM GE_USUARIO ORDER BY NOME");
+			$stmt->execute();
+			//retornar para cada linha na tabela ge_usuario, um objeto usuario e insere em um array de usuarios		
+			$result = $stmt->fetchAll();
+			foreach ($result as $key => $linha){			
+				$usuario = new Usuario($linha["id_usuario"]
+				                  ,$linha["usuario"]
+				                  ,$linha["senha"]
+				                  ,$linha["nome"]
+				                  ,$linha["email"] 
+				                  ,$linha["celular"]
+				                  ,$linha["telefone"]
+				                  ,$linha["ativo"]
+				                  ,$linha["id_ultimo_sinal"]
+				                  ,$linha["perfil"]);
+			$_vetor[$key] = $usuario;								
+			}
+			$html = "<select name='usuario' id='usuario'>\n";
+			foreach ($_vetor as $usuario) {				
+				$id = $usuario->getId();
+				$nome = $usuario->getNome();
+				$html .= "<option value=".$id.">".$nome."</option>\n";
+			}
+			$html .= "</select>\n";	
+			return $html;
+			//fecha conexão
+			$this->_conn->__destruct();
+		}
+
 		/*public function busca($nome){
 			$stmt = $this->_conn->prepare("SELECT * FROM GE_USUARIO WHERE NOME LIKE '%:nome%'");
 

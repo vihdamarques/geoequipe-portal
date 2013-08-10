@@ -20,21 +20,25 @@
 												VALUES ( :id_tarefa
 														,:id_local
 														,:id_usuario
-														,:data_cricao
+														,now()
 														,:descricao														
 														)"
 											);
 				$stmt->bindValue(":id_tarefa", $_tarefa->getId());
 				$stmt->bindValue(":id_local", $_tarefa->getLocal());
 				$stmt->bindValue(":id_usuario", $_tarefa->getUsuario());
-				$stmt->bindValue(":data_cricao", $_tarefa->getData());
+				//$stmt->bindValue(":data_criacao", "now()"/*$_tarefa->getData()*/);
 				$stmt->bindValue(":descricao", $_tarefa->getDescricao());
 				//executa
 				$stmt->execute();	
+				//pega o id inserido
+				$lastId = $this->_conn->lastInsertId();				
 				//commita
-				$this->_conn->commit(); 				
-				//fecha conexão
-				$this->_conn->__destruct();
+				$this->_conn->commit();
+				//retorna id inserido
+				return $lastId;
+				//fecha conexão				
+				$this->_conn->__destruct();							
 			}
 			catch(PDOException $_e){
 				$this->_conn->rollBack();
@@ -49,8 +53,8 @@
 			$stmt = $this->_conn->prepare("UPDATE GE_TAREFA
 										   	  SET id_local = :id_local
 												  ,id_usuario = :id_usuario
-												  ,data_cricao = :data_cricao
-												  ,ddescricao = :descricao
+												  ,data_criacao = :data_criacao
+												  ,descricao = :descricao
 										    WHERE id_tarefa = :id_tarefa"
 										);
 				$stmt->bindValue(":id_tarefa", $_tarefa->getId());

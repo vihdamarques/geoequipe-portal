@@ -140,5 +140,34 @@
 		//fecha conexão
 		$this->_conn->__destruct();
 		}
+
+		//cria uma tag select com todos os equipamentos cadastrados
+		public function selecionar(){
+				$_vetor = array();			
+				$stmt = $this->_conn->prepare("SELECT * FROM GE_EQUIPAMENTO ORDER BY NUMERO");
+				$stmt->execute();
+				//retornar para cada linha na tabela ge_equipamento, um objeto equipamento e insere em um array de equipamentos
+				$result = $stmt->fetchAll();
+				foreach ($result as $key => $linha){			
+				$equipamento = new Equipamento($linha["id_equipamento"]
+							                  ,$linha["id_ultimo_sinal"]
+							                  ,$linha["des_equipamento"]
+							                  ,$linha["imei"]
+							                  ,$linha["numero"] 
+							                  ,$linha["ativo"]
+							                  );
+				$_vetor[$key] = $equipamento;		
+				}
+				$html = "<select name='equipamento' id='equipamento'>\n";
+				foreach ($_vetor as $equipamento) {				
+					$id = $equipamento->getId();
+					$numero = $equipamento->getNumero();
+					$html .= "<option value=".$id.">".$numero."</option>\n";
+				}
+				$html .= "</select>\n";	
+				return $html;
+				//fecha conexão
+				$this->_conn->__destruct();
+				}
 	}
 ?>

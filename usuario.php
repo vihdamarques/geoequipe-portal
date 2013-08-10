@@ -208,6 +208,11 @@
         <?php include_once 'header.php'; ?>
         <!--Formulário-->
         <div class="container">
+            <?php
+              $auth = new Autenticacao();
+              $perfil = $auth->autenticarCadUsua();
+              if ($perfil == "G"){
+            ?>
             <form id="formUsuario" class="form-horizontal" method="POST" action="usuario.php">
                 <legend>Cadastro de Usuário <!-- span style="font-size: 10pt">(Todos os campos são obrigatórios)</span--></legend>
                 <div class="control-group">
@@ -286,6 +291,9 @@
                     </div>
                 </div>
             </form>
+            <?php
+              }
+            ?>
             <br />
             <!--Busca-->
             <div class="controls"> 
@@ -300,7 +308,13 @@
                 <table class="table table-hover" style="width: 100%" id="relatorio">
                     <thead>
                         <tr>
+                            <?php                            
+                              if ($perfil == "G"){
+                            ?>
                             <th style="text-align:center">Editar</th>
+                            <?php
+                              }
+                            ?>
                             <th>#</th>
                             <th>Nome</th>
                             <th>Usuario</th>
@@ -316,7 +330,13 @@
                         foreach ($usuarios as $key => $usr) {
                             ?>
                             <tr>
+                                <?php                            
+                                  if ($perfil == "G"){
+                                ?>
                                 <td style="text-align:center"><a href="usuario.php?id=<?php echo $auth->encripta($usr->getId()); ?>"><i class="icon-pencil"></i></a></td>
+                                <?php
+                                  }
+                                ?>
                                 <td><?php echo $usr->getId(); ?></td>
                                 <td><?php echo $usr->getNome(); ?></td>
                                 <td><?php echo $usr->getUsuario(); ?></td>

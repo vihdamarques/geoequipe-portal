@@ -43,15 +43,7 @@
                 <a href="#contact" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog icon-white"></i></i> Cadastros <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                     <li><a href="equipamento.php">Equipamento</a></li>
-                    <?php
-                      $auth = new Autenticacao();
-                      $perfil = $auth->autenticarCadUsua();
-                      if ($perfil == "G"){
-                    ?>
                     <li><a href="usuario.php">Usuário</a></li>
-                    <?php
-                      }
-                    ?>
                     <li><a href="local.php">Local</a></li>
                 </ul>
               </li>

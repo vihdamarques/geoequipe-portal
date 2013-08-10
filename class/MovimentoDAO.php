@@ -1,0 +1,146 @@
+<?php
+	class MovimentoDAO{
+		private $_conn;
+
+		//construtor
+		public function __construct(){
+			$this->_conn = new Conexao();			
+		}
+
+		//função para INSERT dos dados na tabela ge_tarefa_movto
+		public function inserir($_movimento){
+			try{				
+				$this->_conn->beginTransaction();
+				$stmt = $this->_conn->prepare("INSERT INTO GE_TAREFA_MOVTO ( id_tarefa
+																			,id_usuario
+																			,data																		
+																			,apontamento
+																			,status
+																			,ordem)														
+
+												VALUES ( :id_tarefa
+														,:id_usuario
+														,now()														
+														,:apontamento
+														,:status
+														,:ordem	)"
+											);
+				
+				$stmt->bindValue(":id_tarefa", $_movimento->getTarefa());
+				$stmt->bindValue(":id_usuario", $_movimento->getUsuario());
+				//$stmt->bindValue(":data", "now()"/*$_movimento->getData()*/);
+				$stmt->bindValue(":apontamento", $_movimento->getApontamento());
+				$stmt->bindValue(":status", $_movimento->getStatus());
+				$stmt->bindValue(":ordem", $_movimento->getOrdem());
+				//executa
+				$stmt->execute();	
+				//commita
+				$this->_conn->commit();
+				//fecha conexão
+				$this->_conn->__destruct();
+			}
+			catch(PDOException $_e){
+				$this->_conn->rollBack();
+				echo "Erro: ".$_e->getMessage();
+			}
+		}
+
+		//função para UPDATE dos dados da tabela ge_tarefa_movto
+		/*public function alterar($_movimento){
+			try{			
+			$this->_conn->beginTransaction();
+			$stmt = $this->_conn->prepare("UPDATE GE_TAREFA_MOVTO
+										   	  SET id_usuario = :id_usuario
+												  ,data = :data
+												  ,apontamento = :apontamento
+												  ,status = :status
+												  ,ordem = :ordem
+										    WHERE id_tarefa = :id_tarefa"
+										);
+				$stmt->bindValue(":id_tarefa", $_movimento->getTarefa());
+				$stmt->bindValue(":id_usuario", $_movimento->getUsuario());
+				$stmt->bindValue(":data", $_movimento->getData());
+				$stmt->bindValue(":apontamento", $_movimento->getApontamento());
+				$stmt->bindValue(":status", $_movimento->getStatus());
+				$stmt->bindValue(":ordem", $_movimento->getOrdem());
+				//executa
+				$stmt->execute();
+				//commita
+				$this->_conn->commit();
+				//fecha conexão
+				$this->_conn->__destruct();				
+			}
+			catch(PDOException $_e){
+				$this->_conn->rollback();
+				echo "Erro: ".$_e->getMessage();
+			}
+		}
+
+		//função para DELETE dos dados da tabela ge_tarefa_movto
+		public function excluir($_id){
+			try{
+				$this->_conn->beginTransaction();
+				$stmt = $this->_conn->prepare("DELETE FROM GE_TAREFA_MOVTO WHERE id_tarefa_movto = :id");
+				$stmt->bindValue(":id", $_id);
+				//executa
+				$stmt->execute();
+				//commita
+				$this->_conn->commit();
+				//fecha conexao
+				$this->_conn->__destruct();
+			} catch(PDOException $_e){
+				$this->_conn->rollback();
+				echo "Erro: ".$_e->getMessage();
+			}
+		}
+
+		//retorna o numero total de tarefas na tabela ge_tarefa
+		public function totalTarefas(){
+			$stmt = $this->_conn->query("SELECT COUNT(*) CONT FROM GE_TAREFA");
+			return $resultado = $stmt->fetch();			
+		}*/
+
+		
+		public function consultarTodos($_id_tarefa){
+			$_vetor = array();
+			$stmt = $this->_conn->prepare("SELECT * FROM GE_TAREFA_MOVTO WHERE id_tarefa = :id_tarefa ORDER BY id_tarefa_movto");		
+			$stmt->bindValue(":id_tarefa", $_id_tarefa, PDO::PARAM_INT);
+			$stmt->execute();
+		
+			$result = $stmt->fetchAll();
+			foreach ($result as $key => $linha){			
+				$_movimento = new Movimento ($linha["id_tarefa_movto"]
+						                    ,$linha["id_tarefa"]
+						                    ,$linha["id_usuario"]
+						                    ,$linha["data"]
+						                    ,$linha["apontamento"] 					                  
+						                    ,$linha["status"] 	
+						                   ,$linha["ordem"] 	
+					                       );
+				$_vetor[$key] = $_movimento;
+			}		
+			return $_vetor;
+			//fecha conexão
+			$this->_conn->__destruct();
+		}
+
+		//retona uma tarefa consultando po ID
+		/*public function consultarId($_id){			
+		$stmt = $this->_conn->prepare("SELECT * FROM GE_TAREFA WHERE id_tarefa = :id");
+		$stmt->bindValue(":id", $_id);
+		$stmt->execute();
+		//retornar para cada tarefa no banco, um objeto tarefa
+		while ($linha = $stmt->fetch()) {
+			$tarefa = new Tarefa ($linha["id_tarefa"]
+				                  ,$linha["id_local"]
+				                  ,$linha["id_usuario"]
+				                  ,$linha["data_cricao"]
+				                  ,$linha["descricao"] 					                  
+				                  );
+		}			
+		return $tarefa;
+		//fecha conexão
+		$this->_conn->__destruct();
+		}*/
+	}
+?>

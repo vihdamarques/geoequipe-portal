@@ -1,5 +1,6 @@
 <?php	
-	include_once('class/Usuario.php');
+	include_once 'class/Usuario.php';
+	
 	class Autenticacao{
 		private $_conn;
 		//construtor
@@ -77,6 +78,15 @@
 			$usuario = unserialize($string);
 			$perfil = $usuario->getPerfil();
 			return $perfil;
+		}
+
+		public function autenticarCadTarefa(){
+			//session_start();
+			$string = isset($_SESSION["usuario"]) ? $_SESSION["usuario"]: "" ;
+			$usuario = new Usuario();
+			$usuario = unserialize($string);
+			$id = $usuario->getId();
+			return $id;
 		}
 
 		public function hashSenha($string){

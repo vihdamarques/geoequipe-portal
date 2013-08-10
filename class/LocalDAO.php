@@ -258,6 +258,5 @@
 			//fecha conexão
 			$this->_conn->__destruct();
 		}
-
 	}
 ?>
