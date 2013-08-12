@@ -164,25 +164,26 @@
                 <div class="control-group">
                     <label class="control-label" for="numero">Número</label>
                     <div class="controls">
-                        <input type="text" value="<?php echo $Equipamento->getNumero(); ?>" name="numero" id="numero" placeholder="Digite o número">
+                        <input type="text" value="<?php echo $Equipamento->getNumero(); ?>" name="numero" id="numero" placeholder="Digite o número" maxlength="20">
                     </div>
                 </div>    
                 <div class="control-group">
                     <label class="control-label" for="descricao">Descrição</label>
                     <div class="controls">
-                        <input type="text" value="<?php echo $Equipamento->getDescricao();?>" name="descricao" id="descricao" placeholder="Digite a descrição">
+                        <!--<input type="text" value="<?php echo $Equipamento->getDescricao();?>" name="descricao" id="descricao" placeholder="Digite a descrição">-->
+                        <textarea name="descricao" id="descricao" placeholder="Digite a descrição do equipamento"><?php echo $Equipamento->getDescricao(); ?></textarea>    
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="imei">IMEI</label>
                     <div class="controls">
-                        <input type="text" value="<?php echo $Equipamento->getImei(); ?>" name="imei" id="imei" placeholder="Digite o IMEI">
+                        <input type="text" value="<?php echo $Equipamento->getImei(); ?>" name="imei" id="imei" placeholder="Digite o IMEI"maxlength="25">
                     </div>    
                 </div>                        
                 <div class="control-group">
                     <label class="control-label" for="inputAtivo">Ativo</label>
                     <div class="controls">
-                        <select name="ativo" id="inputAtivo">
+                        <select class="input-small" name="ativo" id="inputAtivo">
                             <option value="S" <?php echo $Equipamento->getAtivo() == "S" ? "selected=\"selected\"" :  "" ?> >Sim</option>
                             <option value="N" <?php echo $Equipamento->getAtivo() == "N" ? "selected=\"selected\"" : "" ?> >Não</option>
                         </select>

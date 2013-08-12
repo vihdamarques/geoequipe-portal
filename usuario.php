@@ -223,7 +223,7 @@
                 <div class="control-group">
                     <label class="control-label" for="usuario">Usuário</label>
                     <div class="controls">
-                        <input type="text" value="<?php echo $Usuario->getUsuario();?>" name="usuario" id="usuario" placeholder="Digite o usuário">
+                        <input type="text" value="<?php echo $Usuario->getUsuario();?>" name="usuario" id="usuario" placeholder="Digite o usuário" maxlength="20">
                     </div>
                 </div>
                 <div class="control-group">
@@ -235,31 +235,31 @@
                 <div class="control-group">
                     <label class="control-label" for="nome">Nome</label>
                     <div class="controls">
-                        <input type="text" value="<?php echo $Usuario->getNome(); ?>" name="nome" id="nome" placeholder="Digite o nome">
+                        <input class="input-xlarge" type="text" value="<?php echo $Usuario->getNome(); ?>" name="nome" id="nome" placeholder="Digite o nome" maxlength="50">
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="email">Email</label>
                     <div class="controls">
-                        <input type="text" value="<?php echo $Usuario->getEmail(); ?>" name="email" id="email" placeholder="Digite o email">
+                        <input class="input-xlarge" type="text" value="<?php echo $Usuario->getEmail(); ?>" name="email" id="email" placeholder="Digite o email" maxlength="90">
                     </div>
                 </div>
                  <div class="control-group">
                     <label class="control-label" for="celular">Celular</label>
                     <div class="controls">
-                        <input type="text" value="<?php echo $Usuario->getCelular(); ?>" name="celular" id="celular" placeholder="Digite o celular">
+                        <input class="input-medium" type="text" value="<?php echo $Usuario->getCelular(); ?>" name="celular" id="celular" placeholder="Digite o celular" maxlength="20">
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="telefone">Telefone</label>
                     <div class="controls">
-                        <input type="text" value="<?php echo $Usuario->getTelefone(); ?>" name="telefone" id="telefone" placeholder="Digite o telefone">
+                        <input class="input-medium" type="text" value="<?php echo $Usuario->getTelefone(); ?>" name="telefone" id="telefone" placeholder="Digite o telefone" maxlength="20">
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="inputAtivo">Ativo</label>
                     <div class="controls">
-                        <select name="ativo" id="inputAtivo">
+                        <select class="input-small" name="ativo" id="inputAtivo">
                             <option value="S" <?php echo $Usuario->getAtivo() == "S" ? "selected=\"selected\"" :  "" ?> >Sim</option>
                             <option value="N" <?php echo $Usuario->getAtivo() == "N" ? "selected=\"selected\"" : "" ?> >Não</option>
                         </select>
@@ -268,7 +268,7 @@
                 <div class="control-group">
                     <label class="control-label" for="inputAtivo">Perfil</label>
                     <div class="controls">
-                        <select name="perfil" id="inputAtivo">
+                        <select class="input-small" name="perfil" id="inputAtivo">
                             <option value="E" <?php echo $Usuario->getPerfil() == "E" ? "selected=\"selected\"" :  "" ?> >Externo</option>
                             <option value="I" <?php echo $Usuario->getPerfil() == "I" ? "selected=\"selected\"" : "" ?> >Interno</option>
                             <option value="G" <?php echo $Usuario->getPerfil() == "G" ? "selected=\"selected\"" : "" ?> >Gestor</option>

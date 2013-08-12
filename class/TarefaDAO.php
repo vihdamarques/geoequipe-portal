@@ -32,7 +32,7 @@
 				//executa
 				$stmt->execute();	
 				//pega o id inserido
-				$lastId = $this->_conn->lastInsertId();				
+				$lastId = $this->_conn->lastInsertId();		
 				//commita
 				$this->_conn->commit();
 				//retorna id inserido
@@ -57,17 +57,17 @@
 												  ,descricao = :descricao
 										    WHERE id_tarefa = :id_tarefa"
 										);
-				$stmt->bindValue(":id_tarefa", $_tarefa->getId());
-				$stmt->bindValue(":id_local", $_tarefa->getLocal());
-				$stmt->bindValue(":id_usuario", $_tarefa->getUsuario());
-				$stmt->bindValue(":data_cricao", $_tarefa->getData());
-				$stmt->bindValue(":descricao", $_tarefa->getDescricao());
-				//executa
-				$stmt->execute();
-				//commita
-				$this->_conn->commit();
-				//fecha conexão
-				$this->_conn->__destruct();				
+			$stmt->bindValue(":id_tarefa", $_tarefa->getId());
+			$stmt->bindValue(":id_local", $_tarefa->getLocal());
+			$stmt->bindValue(":id_usuario", $_tarefa->getUsuario());
+			$stmt->bindValue(":data_criacao", $_tarefa->getData());
+			$stmt->bindValue(":descricao", $_tarefa->getDescricao());
+			//executa
+			$stmt->execute();
+			//commita
+			$this->_conn->commit();
+			//fecha conexão
+			$this->_conn->__destruct();				
 			}
 			catch(PDOException $_e){
 				$this->_conn->rollback();
@@ -109,11 +109,11 @@
 			//retornar para cada linha na tabela ge_tarefa, um objeto tarefa e insere em um array de tarefa	
 			$result = $stmt->fetchAll();
 			foreach ($result as $key => $linha){			
-				$tarefa = new Tarefa ($linha["id_tarefa"]
+				$tarefa = new Tarefa ( $linha["id_tarefa"]
 					                  ,$linha["id_local"]
 					                  ,$linha["id_usuario"]
-					                  ,$linha["data_cricao"]
-					                  ,$linha["descricao"] 					                  
+					                  ,$linha["descricao"]
+					                  ,$linha["data_criacao"] 		//strftime("%d/%m/%Y %H:%M:%S", strtotime($mov->getData()));			                  
 					                  );
 				$_vetor[$key] = $tarefa;							
 			}
@@ -124,22 +124,24 @@
 		}
 
 		//retona uma tarefa consultando po ID
-		public function consultarId($_id){			
+		public function consultarId($_id){
 		$stmt = $this->_conn->prepare("SELECT * FROM GE_TAREFA WHERE id_tarefa = :id");
 		$stmt->bindValue(":id", $_id);
 		$stmt->execute();
 		//retornar para cada tarefa no banco, um objeto tarefa
 		while ($linha = $stmt->fetch()) {
-			$tarefa = new Tarefa ($linha["id_tarefa"]
+			$tarefa = new Tarefa ( $linha["id_tarefa"]
 				                  ,$linha["id_local"]
 				                  ,$linha["id_usuario"]
-				                  ,$linha["data_cricao"]
-				                  ,$linha["descricao"] 					                  
+				                  ,$linha["descricao"]
+				                  ,$linha["data_criacao"] 					                  
 				                  );
 		}			
 		return $tarefa;
 		//fecha conexão
 		$this->_conn->__destruct();
 		}
+
+
 	}
 ?>

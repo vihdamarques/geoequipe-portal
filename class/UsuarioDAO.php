@@ -152,7 +152,7 @@
 
 		//retorna um usuario consultando po ID
 		public function consultarId($_id){
-			$stmt = $this->_conn->prepare("SELECT * FROM GEOEQUIPE.GE_USUARIO WHERE ID_USUARIO = :id");
+			$stmt = $this->_conn->prepare("SELECT * FROM GE_USUARIO WHERE ID_USUARIO = :id");
 			$stmt->bindValue(":id", $_id);
 			$stmt->execute();
 			//retornar para cada usuario no banco, um usuario objeto

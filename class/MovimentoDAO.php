@@ -99,12 +99,11 @@
 			$stmt = $this->_conn->query("SELECT COUNT(*) CONT FROM GE_TAREFA");
 			return $resultado = $stmt->fetch();			
 		}*/
-
 		
-		public function consultarTodos($_id_tarefa){
+		public function consultarTodos($id_tarefa){
 			$_vetor = array();
 			$stmt = $this->_conn->prepare("SELECT * FROM GE_TAREFA_MOVTO WHERE id_tarefa = :id_tarefa ORDER BY id_tarefa_movto");		
-			$stmt->bindValue(":id_tarefa", $_id_tarefa, PDO::PARAM_INT);
+			$stmt->bindValue(":id_tarefa", $id_tarefa, PDO::PARAM_INT);
 			$stmt->execute();
 		
 			$result = $stmt->fetchAll();
@@ -115,8 +114,8 @@
 						                    ,$linha["data"]
 						                    ,$linha["apontamento"] 					                  
 						                    ,$linha["status"] 	
-						                   ,$linha["ordem"] 	
-					                       );
+  						                    ,$linha["ordem"] 	
+ 					                       );
 				$_vetor[$key] = $_movimento;
 			}		
 			return $_vetor;

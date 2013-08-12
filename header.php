@@ -35,7 +35,7 @@
                     <li><a href="#">Monitoramento</a></li>
                     <li><a href="#">Rastro</a></li>
                     <li><a href="#">Histórico</a></li>
-                    <li><a href="#">Tarefas</a></li>
+                    <li><a href="tarefas.php">Tarefas</a></li>
                     <li><a href="#">Agendamento</a></li>
                 </ul>
               </li>

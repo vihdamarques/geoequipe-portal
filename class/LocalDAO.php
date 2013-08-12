@@ -221,7 +221,7 @@
 		}
 
 	//cria uma tag select com todos os locais cadastrados
-	public function selecionar(){
+	public function selecionar($id_local){
 			$_vetor = array();			
 			$stmt = $this->_conn->prepare("SELECT * FROM GE_LOCAL ORDER BY NOME");
 			$stmt->execute();
@@ -246,14 +246,17 @@
 				                  ,$linha["telefone_2"]
 				                  ,$linha["email"]);
 				$_vetor[$key] = $local;				
-			}
-			$html = "<select name='local' id='local'>\n";
+			}			
+			$html = "<option value='0'>"."Selecione um local"."</option>\n";
 			foreach ($_vetor as $local) {				
 				$id = $local->getId();
 				$nome = $local->getNome();
-				$html .= "<option value=".$id.">".$nome."</option>\n";
-			}
-			$html .= "</select>\n";	
+				$html .= "<option value=".$id;
+				if($id == $id_local){ 
+					$html .= " selected";
+				}
+				$html .= " >".$nome."</option>\n";
+			}				
 			return $html;
 			//fecha conexão
 			$this->_conn->__destruct();

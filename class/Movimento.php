@@ -51,11 +51,11 @@
 		}
 
 		public function setData($_data_criacao){
-			$this->_data_criacao = $_data_criacao;
+			$this->_data_criacao = $_data;
 		}
 
 		public function getData(){
-			return $this->_data_criacao;
+			return $this->_data;
 		}
 
 		public function setApontamento($_apontamento){

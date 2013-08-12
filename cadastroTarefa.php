@@ -5,6 +5,8 @@
     include_once 'class/TarefaDAO.php';
     include_once 'class/Movimento.php';    
     include_once 'class/MovimentoDAO.php';
+    include_once 'class/Usuario.php';    
+    include_once 'class/UsuarioDAO.php';
 
     //Autenticação
     $auth = new Autenticacao();
@@ -20,6 +22,8 @@
     $tarefaDAO = new TarefaDAO();
     $Movimento = new Movimento();
     $movimentoDAO = new MovimentoDAO();
+    $Usuario = new Usuario();
+    $usuarioDAO = new UsuarioDAO();
     $movimentos = null;
     $msg = null;   
 
@@ -44,22 +48,22 @@
     }        
 
     if (!empty($id)) {         
-        $Tarefa = $tarefaDAO->consultarId($id);        
-        $movimentos = $movimentoDAO->consultaTodos();
+        $Tarefa = $tarefaDAO->consultarId($id);
+        
         if ($operacao == "A") {
             try {
                 $local = (isset($_POST["local"])) ? $_POST["local"] : "";
                 $descricao = (isset($_POST["descricao"])) ? $_POST["descricao"] : "";
-                //pegar usuario da sessão
-                $usuario = $auth->autenticarCadTarefa();
+                
+                //$usuario = (isset($_POST["usuario"])) ? $_POST["usuario"] : "";
                 
                 //atualizar tarefa
                 $Tarefa->setLocal($local);
                 $Tarefa->setDescricao($descricao);                
-                $Tarefa->setUsuario($usuario);                
-                $idTarefa = $tarefaDAO->alterar($Tarefa);
+                //$Tarefa->setUsuario($usuario); 
+                $tarefaDAO->alterar($Tarefa);
                 //inserir movimento
-                $Movimento->setTarefa($idTarefa);
+                $Movimento->setTarefa($id);
                 $Movimento->setUsuario($usuario);                
                 $movimentoDAO->inserir($Movimento);
 
@@ -72,6 +76,7 @@
                 $Tarefa->setDescricao(null);                    
                 $Tarefa->setUsuario(null);                
                 $Tarefa->setId(null);
+                $Tarefa->setData(null);
                 $Movimento->setTarefa(null);
                 $Movimento->setUsuario(null);
                 $Movimento->setStatus(null);
@@ -101,6 +106,7 @@
                 $Tarefa->setDescricao(null);                    
                 $Tarefa->setUsuario(null);                
                 $Tarefa->setId(null);
+                $Tarefa->setData(null);
                 $Movimento->setTarefa(null);
                 $Movimento->setUsuario(null);
                 $Movimento->setStatus(null);
@@ -152,7 +158,7 @@
             }
         }
     }    
-
+    $movimentos = $movimentoDAO->consultarTodos($id);
 ?>
 <!DOCTYPE html>
 <html>
@@ -184,54 +190,49 @@
                 <!--Código-->
                 <?php if ($Tarefa->getId() != null){ ?>
                 <div class="control-group">
-                    <label class="control-label" for="numero">Código</label>
+                    <label class="control-label" for="codigo">Código</label>
                     <div class="controls">
-                        <input type="text" value="<?php echo $Tarefa->getId();?>" name="codigo" id="codigo" placeholder="Digite o código">
+                        <input class="input-mini" type="text" value="<?php echo $Tarefa->getId();?>" name="codigo" id="codigo" readonly="true" placeholder="Digite o código">
                     </div>
                 </div>    
                 <?php } ?>
                 <!--Local-->
                 <div class="control-group">
-                    <label class="control-label" for="numero">Local</label>
+                    <label class="control-label" for="local">Local</label>
                     <div class="controls">
-                <?php                    
-                   include_once 'class/LocalDAO.php';
-                   include_once 'class/Local.php';
-                   $localDAO = new LocalDAO;
-                   echo $localDAO->selecionar();
-                ?>
+                        <select name="local" id="local">
+                            <?php
+                               include_once 'class/LocalDAO.php';
+                               include_once 'class/Local.php';
+                               $localDAO = new LocalDAO;                   
+                               echo $localDAO->selecionar($Tarefa->getLocal());
+                            ?>
+                        </select>
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label" for="descricao">Descrição</label>
+                    <label class="control-label" for="descricao">Descrição da tarefa</label>
                     <div class="controls">
-                        <input type="text" value="<?php echo $Tarefa->getDescricao();?>" name="descricao" id="descricao" placeholder="Digite a descrição">
+                        <textarea name="descricao" id="descricao" placeholder="Digite a descrição da tarefa"><?php echo $Tarefa->getDescricao(); ?></textarea>    
                     </div>
                 </div>
                 <!--Data Abertura-->
                 <?php if ($Tarefa->getData() != null){ ?>
                 <div class="control-group">
-                    <label class="control-label" for="imei">Data Abertura</label>
+                    <label class="control-label" for="data">Data abertura</label>
                     <div class="controls">
-                        <input type="text" value="<?php echo $Tarefa->getData(); ?>" name="data" id="data" placeholder="Digite a data de abertura">
+                        <input type="text" value="<?php echo strftime("%d/%m/%Y %H:%M:%S", strtotime($Tarefa->getData())); ?>" name="data" id="data" placeholder="Digite a data de abertura" readonly="true">
                     </div>    
                 </div>
                 <?php } ?>
                 <!--Usuario-->
-                <?php if ($Tarefa->getData() != null){ ?>
-                <div class="control-group">
-                    <label class="control-label" for="imei">Usuário Abertura</label>
-                    <div class="controls">
-                        <input type="text" value="<?php echo $Tarefa->getUsuario(); ?>" name="usuario" id="usuario" placeholder="Digite o usuário de abertura">
-                    </div>    
-                </div>    
-                <?php } ?>            
+                 <input type="hidden" value="<?php echo $Tarefa->getUsuario(); ?>" name="usuario" id="usuario" />           
                 <input type="hidden" name="operacao" id="operacao" value="<?php echo empty($id) ? "I" : "A"; ?>" />
                 <input type="hidden" name="id" id="id" value="<?php echo $Tarefa->getId(); ?>" />                
                 <div class="control-group">
                     <div class="controls">
                         <button type="submit" class="btn btn-primary">Salvar</button>
-                        <button type="button" class="btn" onclick="window.location='cadastroTarefa.php'">Cancelar</button>
+                        <button type="button" class="btn" onclick="window.location='tarefas.php'">Cancelar</button>
                         <?php
                         if ($Tarefa->getId() != null) {
                         ?>
@@ -261,9 +262,29 @@
                         foreach ($movimentos as $key => $mov) {
                             ?>
                             <tr>                            
-                                <td><?php echo $mov->getStatus(); ?></td>
-                                <td><?php echo $mov->getData(); ?></td>                                
-                                <td><?php echo $mov->getUsuario(); ?></td>
+                                <td><?php switch ($mov->getStatus()) {
+                                    case "A":
+                                        echo "Aberto";
+                                        break;
+                                    case "C":
+                                        echo "Cancelado";
+                                        break;
+                                    case "G":
+                                        echo "Agendado";
+                                        break;
+                                    case "T":
+                                        echo "Atendido";
+                                        break;
+                                    case "N":
+                                        echo "Não Atendido";
+                                        break;                                                                                                                                                            
+                                    default:                                        
+                                        break;
+                                } ; ?></td>
+                                <td><?php echo strftime("%d/%m/%Y %H:%M:%S", strtotime($mov->getData())); ?></td>                                
+                                <td><?php $nome_usuario = $usuarioDAO->consultarId($mov->getUsuario());
+                                          echo $nome_usuario->getNome(); ?>
+                                </td>
                                 <td><?php echo $mov->getApontamento(); ?></td>                                
                             </tr>
                             <?php
