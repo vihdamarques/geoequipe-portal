@@ -11,7 +11,7 @@
 		public function inserir($_local){
 			try{				
 				$this->_conn->beginTransaction();
-				$stmt = $this->_conn->prepare("INSERT INTO GE_LOCAL(id_local		
+				$stmt = $this->_conn->prepare("INSERT INTO ge_local(id_local		
 																	,nome
 																	,descricao
 																	,ativo
@@ -81,7 +81,7 @@
 		public function alterar($_local){
 			try{			
 			$this->_conn->beginTransaction();
-			$stmt = $this->_conn->prepare("UPDATE GE_LOCAL
+			$stmt = $this->_conn->prepare("UPDATE ge_local
 										      SET nome = :nome
 												  ,descricao = :descricao
 												  ,ativo = :ativo
@@ -135,7 +135,7 @@
 		public function excluir($_id){
 			try{
 				$this->_conn->beginTransaction();
-				$stmt = $this->_conn->prepare("DELETE FROM GE_LOCAL WHERE ID_LOCAL = :id");
+				$stmt = $this->_conn->prepare("DELETE FROM ge_local WHERE id_local = :id");
 				$stmt->bindValue(":id", $_id);
 				//executa
 				$stmt->execute();
@@ -151,14 +151,14 @@
 
 		//retorna o numero total de locais na tabela ge_local
 		public function totalLocal(){
-			$stmt = $this->_conn->query("SELECT COUNT(*) CONT FROM GE_LOCAL");
-			return $resultado = $stmt->fetch();			
+			$stmt = $this->_conn->query("SELECT count(*) CONT FROM ge_local");
+			return $resultado = $stmt->fetch();
 		}
 
 		//retorna todos os locais cadastrados na tabela ge_local
 		public function consultarTodos($_ini, $_fin){
 			$_vetor = array();
-			$stmt = $this->_conn->prepare("SELECT * FROM GE_LOCAL ORDER BY NOME LIMIT :ini,:fin");
+			$stmt = $this->_conn->prepare("SELECT * FROM ge_local ORDER BY nome LIMIT :ini,:fin");
 			$stmt->bindValue(":ini", $_ini, PDO::PARAM_INT);
 			$stmt->bindValue(":fin", $_fin, PDO::PARAM_INT);
 			$stmt->execute();
@@ -192,7 +192,7 @@
 
 		//retorna um local consultando po ID
 		public function consultarId($_id){			
-		$stmt = $this->_conn->prepare("SELECT * FROM GE_LOCAL WHERE ID_LOCAL = :id");
+		$stmt = $this->_conn->prepare("SELECT * FROM ge_local WHERE id_local = :id");
 		$stmt->bindValue(":id", $_id);
 		$stmt->execute();
 		//retornar para cada local no banco, um objeto local
@@ -223,7 +223,7 @@
 	//cria uma tag select com todos os locais cadastrados
 	public function selecionar($id_local){
 			$_vetor = array();			
-			$stmt = $this->_conn->prepare("SELECT * FROM GE_LOCAL ORDER BY NOME");
+			$stmt = $this->_conn->prepare("SELECT * FROM ge_local ORDER BY nome");
 			$stmt->execute();
 			//retornar para cada linha na tabela ge_local, um objeto local e insere em um array de locais		
 			$result = $stmt->fetchAll();

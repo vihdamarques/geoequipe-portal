@@ -79,7 +79,7 @@
                             <th>Local</th>
                             <th>Usuário abertura</th>
                             <th>Detalhes</th>
-                            <th>Ações</th>                            
+                            <th></th>                            
                         </tr>
                     </thead>
                     <tbody>
@@ -99,7 +99,17 @@
                                           echo $nome_usuario->getNome(); ?>
                                 </td>
                                 <td>Detalhes</td>
-                                <td>Ações</td>
+                                <td>
+                                    <div class="controls">
+                                        <select name="operacao" class="input-medium">
+                                            <option value="0">Selecione</option>
+                                            <option value="G">Agendar</option>
+                                            <option value="C">Cancelar</option>
+                                            <option value="F">Concluir</option>
+                                            <option value="A">Adiar</option>
+                                        </select>
+                                    </div>
+                                </td>
                             </tr>
                             <?php
                         }
@@ -129,5 +139,15 @@
         ?>
         </ul>
         </div>
+    <!--Selecionar ação-->    
+    <script type="text/javascript">
+        $(function(){
+            $("select[name='operacao']").change(function() {
+                if ($(this).val() !== "0") {
+                    window.open('operacao_teste.php?operacao=' + $(this).val(), '', 'width=650,height=400');
+                }
+            });
+        });
+    </script>        
     </body>
 </html>

@@ -11,7 +11,7 @@
 		public function inserir($_usuario){
 			try{				
 				$this->_conn->beginTransaction();
-				$stmt = $this->_conn->prepare("INSERT INTO GE_USUARIO (  id_usuario
+				$stmt = $this->_conn->prepare("INSERT INTO ge_usuario (  id_usuario
 						                								,usuario
 																		,senha
 																		,nome
@@ -57,7 +57,7 @@
 		public function alterar($_usuario){
 			try{			
 			$this->_conn->beginTransaction();
-			$stmt = $this->_conn->prepare("UPDATE GE_USUARIO
+			$stmt = $this->_conn->prepare("UPDATE ge_usuario
 										   SET usuario = :usuario
 										      ,senha = :senha
 										      ,nome = :nome
@@ -95,7 +95,7 @@
 		public function excluir($_id){
 			try{
 				$this->_conn->beginTransaction();
-				$stmt = $this->_conn->prepare("DELETE FROM GE_USUARIO WHERE ID_USUARIO = :id");
+				$stmt = $this->_conn->prepare("DELETE FROM ge_usuario WHERE id_usuario = :id");
 				$stmt->bindValue(":id", $_id);
 				//executa
 				$stmt->execute();
@@ -111,7 +111,7 @@
 
 		//retorna o numero total de usuarios na tabela ge_usuario
 		public function totalUsuarios(){
-			$stmt = $this->_conn->query("SELECT COUNT(*) CONT FROM GE_USUARIO");
+			$stmt = $this->_conn->query("SELECT count(*) CONT FROM ge_usuario");
 			return $resultado = $stmt->fetch();			
 		}
 
@@ -119,11 +119,11 @@
 		public function consultarTodos($_ini, $_fin, $_busca){
 			$_vetor = array();			
 			if($_busca == null){
-				$stmt = $this->_conn->prepare("SELECT * FROM GE_USUARIO ORDER BY NOME LIMIT :ini,:fin");	
+				$stmt = $this->_conn->prepare("SELECT * FROM ge_usuario ORDER BY nome LIMIT :ini,:fin");	
 				$stmt->bindValue(":ini", $_ini, PDO::PARAM_INT);
 				$stmt->bindValue(":fin", $_fin, PDO::PARAM_INT);				
 			} else {
-				$stmt = $this->_conn->prepare("SELECT * FROM GE_USUARIO WHERE UPPER(NOME) LIKE UPPER(:busca) ORDER BY NOME LIMIT :ini,:fin");	
+				$stmt = $this->_conn->prepare("SELECT * FROM ge_usuario WHERE upper(nome) LIKE upper(:busca) ORDER BY nome LIMIT :ini,:fin");	
 				$stmt->bindValue(":ini", $_ini, PDO::PARAM_INT);
 				$stmt->bindValue(":fin", $_fin, PDO::PARAM_INT);
 				$stmt->bindValue(":busca", "%".addslashes($_busca)."%");			
@@ -152,7 +152,7 @@
 
 		//retorna um usuario consultando po ID
 		public function consultarId($_id){
-			$stmt = $this->_conn->prepare("SELECT * FROM GE_USUARIO WHERE ID_USUARIO = :id");
+			$stmt = $this->_conn->prepare("SELECT * FROM ge_usuario WHERE id_usuario = :id");
 			$stmt->bindValue(":id", $_id);
 			$stmt->execute();
 			//retornar para cada usuario no banco, um usuario objeto
@@ -176,21 +176,21 @@
 		//cria uma tag select com todos os usuarios cadastrados
 		public function selecionar(){
 			$_vetor = array();			
-			$stmt = $this->_conn->prepare("SELECT * FROM GE_USUARIO ORDER BY NOME");
+			$stmt = $this->_conn->prepare("SELECT * FROM ge_usuario ORDER BY nome");
 			$stmt->execute();
 			//retornar para cada linha na tabela ge_usuario, um objeto usuario e insere em um array de usuarios		
 			$result = $stmt->fetchAll();
 			foreach ($result as $key => $linha){			
 				$usuario = new Usuario($linha["id_usuario"]
-				                  ,$linha["usuario"]
-				                  ,$linha["senha"]
-				                  ,$linha["nome"]
-				                  ,$linha["email"] 
-				                  ,$linha["celular"]
-				                  ,$linha["telefone"]
-				                  ,$linha["ativo"]
-				                  ,$linha["id_ultimo_sinal"]
-				                  ,$linha["perfil"]);
+					                  ,$linha["usuario"]
+					                  ,$linha["senha"]
+					                  ,$linha["nome"]
+					                  ,$linha["email"] 
+					                  ,$linha["celular"]
+					                  ,$linha["telefone"]
+					                  ,$linha["ativo"]
+					                  ,$linha["id_ultimo_sinal"]
+					                  ,$linha["perfil"]);
 			$_vetor[$key] = $usuario;								
 			}
 			$html = "<select name='usuario' id='usuario'>\n";

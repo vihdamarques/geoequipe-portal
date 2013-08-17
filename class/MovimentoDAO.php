@@ -11,7 +11,7 @@
 		public function inserir($_movimento){
 			try{				
 				$this->_conn->beginTransaction();
-				$stmt = $this->_conn->prepare("INSERT INTO GE_TAREFA_MOVTO ( id_tarefa
+				$stmt = $this->_conn->prepare("INSERT INTO ge_tarefa_movto ( id_tarefa
 																			,id_usuario
 																			,data																		
 																			,apontamento
@@ -49,7 +49,7 @@
 		/*public function alterar($_movimento){
 			try{			
 			$this->_conn->beginTransaction();
-			$stmt = $this->_conn->prepare("UPDATE GE_TAREFA_MOVTO
+			$stmt = $this->_conn->prepare("UPDATE ge_tarefa_movto
 										   	  SET id_usuario = :id_usuario
 												  ,data = :data
 												  ,apontamento = :apontamento
@@ -80,7 +80,7 @@
 		public function excluir($_id){
 			try{
 				$this->_conn->beginTransaction();
-				$stmt = $this->_conn->prepare("DELETE FROM GE_TAREFA_MOVTO WHERE id_tarefa_movto = :id");
+				$stmt = $this->_conn->prepare("DELETE FROM ge_tarefa_movto WHERE id_tarefa_movto = :id");
 				$stmt->bindValue(":id", $_id);
 				//executa
 				$stmt->execute();
@@ -96,13 +96,13 @@
 
 		//retorna o numero total de tarefas na tabela ge_tarefa
 		public function totalTarefas(){
-			$stmt = $this->_conn->query("SELECT COUNT(*) CONT FROM GE_TAREFA");
+			$stmt = $this->_conn->query("SELECT count(*) CONT FROM ge_tarefa");
 			return $resultado = $stmt->fetch();			
 		}*/
 		
 		public function consultarTodos($id_tarefa){
 			$_vetor = array();
-			$stmt = $this->_conn->prepare("SELECT * FROM GE_TAREFA_MOVTO WHERE id_tarefa = :id_tarefa ORDER BY id_tarefa_movto");		
+			$stmt = $this->_conn->prepare("SELECT * FROM ge_tarefa_movto WHERE id_tarefa = :id_tarefa ORDER BY id_tarefa_movto");		
 			$stmt->bindValue(":id_tarefa", $id_tarefa, PDO::PARAM_INT);
 			$stmt->execute();
 		

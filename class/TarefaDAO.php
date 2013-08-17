@@ -11,7 +11,7 @@
 		public function inserir($_tarefa){
 			try{				
 				$this->_conn->beginTransaction();
-				$stmt = $this->_conn->prepare("INSERT INTO GE_TAREFA (  id_tarefa
+				$stmt = $this->_conn->prepare("INSERT INTO ge_tarefa (  id_tarefa
 						                								,id_local
 																		,id_usuario
 																		,data_criacao																		
@@ -50,7 +50,7 @@
 		public function alterar($_tarefa){
 			try{			
 			$this->_conn->beginTransaction();
-			$stmt = $this->_conn->prepare("UPDATE GE_TAREFA
+			$stmt = $this->_conn->prepare("UPDATE ge_tarefa
 										   	  SET id_local = :id_local
 												  ,id_usuario = :id_usuario
 												  ,data_criacao = :data_criacao
@@ -79,7 +79,7 @@
 		public function excluir($_id){
 			try{
 				$this->_conn->beginTransaction();
-				$stmt = $this->_conn->prepare("DELETE FROM GE_TAREFA WHERE id_tarefa = :id");
+				$stmt = $this->_conn->prepare("DELETE FROM ge_tarefa WHERE id_tarefa = :id");
 				$stmt->bindValue(":id", $_id);
 				//executa
 				$stmt->execute();
@@ -95,14 +95,14 @@
 
 		//retorna o numero total de tarefas na tabela ge_tarefa
 		public function totalTarefas(){
-			$stmt = $this->_conn->query("SELECT COUNT(*) CONT FROM GE_TAREFA");
+			$stmt = $this->_conn->query("SELECT count(*) CONT FROM ge_tarefa");
 			return $resultado = $stmt->fetch();			
 		}
 
 		//retorna todos as tarefas cadastrados na tabela ge_tarefa
 		public function consultarTodos($_ini, $_fin){
 			$_vetor = array();
-			$stmt = $this->_conn->prepare("SELECT * FROM GE_TAREFA ORDER BY id_tarefa LIMIT :ini,:fin");
+			$stmt = $this->_conn->prepare("SELECT * FROM ge_tarefa ORDER BY id_tarefa LIMIT :ini,:fin");
 			$stmt->bindValue(":ini", $_ini, PDO::PARAM_INT);
 			$stmt->bindValue(":fin", $_fin, PDO::PARAM_INT);
 			$stmt->execute();
@@ -113,7 +113,7 @@
 					                  ,$linha["id_local"]
 					                  ,$linha["id_usuario"]
 					                  ,$linha["descricao"]
-					                  ,$linha["data_criacao"] 		//strftime("%d/%m/%Y %H:%M:%S", strtotime($mov->getData()));			                  
+					                  ,$linha["data_criacao"]
 					                  );
 				$_vetor[$key] = $tarefa;							
 			}
@@ -125,7 +125,7 @@
 
 		//retona uma tarefa consultando po ID
 		public function consultarId($_id){
-		$stmt = $this->_conn->prepare("SELECT * FROM GE_TAREFA WHERE id_tarefa = :id");
+		$stmt = $this->_conn->prepare("SELECT * FROM ge_tarefa WHERE id_tarefa = :id");
 		$stmt->bindValue(":id", $_id);
 		$stmt->execute();
 		//retornar para cada tarefa no banco, um objeto tarefa

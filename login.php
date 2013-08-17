@@ -11,10 +11,10 @@
     if($_SERVER["REQUEST_METHOD"]  == "POST"){
         $usuario = (isset($_POST['usuario'])) ? $_POST['usuario'] : "";
         $senha = $auth->hashSenha(isset($_POST['senha']) ? $_POST['senha'] : "");       
-        $valida = $auth->login($usuario, $senha);
+        $valida = $auth->login($usuario, $senha); 
 
         if ($valida == true){
-            header("Location: index.php"); 
+            header("Location: index.php");
         } else {
             //redireciona para pagina de login com mensagem
             $msg = "<div class=\"alert alert-error\">

@@ -9,7 +9,7 @@
 		}
 
 		public function consultarLogin($usuario, $senha){
-			$stmt = $this->_conn->prepare("SELECT * FROM GEOEQUIPE.GE_USUARIO WHERE USUARIO = :usuario AND SENHA = :senha");
+			$stmt = $this->_conn->prepare("SELECT * FROM ge_usuario WHERE usuario = :usuario AND senha = :senha");
 			$stmt->bindValue(":usuario", $usuario);
 			$stmt->bindValue(":senha", $senha);
 			$stmt->execute();
@@ -18,7 +18,7 @@
 		}
 
 		public function consultarId($id){
-			$stmt = $this->_conn->prepare("SELECT * FROM GEOEQUIPE.GE_USUARIO WHERE ID_USUARIO = :id");
+			$stmt = $this->_conn->prepare("SELECT * FROM ge_usuario WHERE id_usuario = :id");
 			$stmt->bindValue(":id", $id);		
 			$stmt->execute();
 			$resultado = $stmt->fetchAll();
@@ -46,12 +46,11 @@
 					$_SESSION["usuario"] = $string; //salva a string na sessão
 					//$_SESSION["usuarioID"] = isset($value["id_usuario"]) ? $value["id_usuario"] : "";
         			//$_SESSION["usuarioNome"] = isset($value["usuario"]) ? $value["usuario"] : "";	
-        			return true;				
-				}
-				
+        			return true;
+    			}			
 			} else {
 				return false;
-			}
+				}
 			}
 
 		public function autenticar(){
