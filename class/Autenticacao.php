@@ -29,7 +29,6 @@
 			$valida = $this->consultarLogin($usuario, $senha);
 			if (count($valida) == 1){
 				foreach ($valida as $value) {
-
 					$usuario = new Usuario($value["id_usuario"]
 										  ,$value["usuario"]
 										  ,$value["senha"]
@@ -54,20 +53,27 @@
 			}
 
 		public function autenticar(){
-			session_start();
-			$string = isset($_SESSION["usuario"]) ? $_SESSION["usuario"]: "" ;
-			if ($string == null){
-				header("Location: login.php");
-			} else {
-				$usuario = new Usuario();
-				$usuario = unserialize($string);
-				$usuario_session_id = $usuario->getId();
-				$valida = $this->consultarId($usuario_session_id);;
-				if (count($valida) == 0){
+			try{
+				//session_start();
+				if(!isset($_SESSION)){
+				    session_start();
+				} 
+				$string = isset($_SESSION["usuario"]) ? $_SESSION["usuario"]: "" ;
+				if ($string == null){
 					header("Location: login.php");
+				} else {
+					$usuario = new Usuario();
+					$usuario = unserialize($string);
+					$usuario_session_id = $usuario->getId();
+					$valida = $this->consultarId($usuario_session_id);;
+					if (count($valida) == 0){
+						header("Location: login.php");
+					}	
 				}	
 			}
-			
+			catch(Exception $e){
+				echo ($e->getMessage());
+			}					
 		}
 
 		public function autenticarCadUsua(){
@@ -99,8 +105,7 @@
 		}
 
 		public function decripta($string){			
-			$codigo = trim(str_replace("983459834598345098345","",base64_decode($string)));
-			//$codigo = str_replace("h48fehge84thdih09duafsduf9g","", $codigo);
+			$codigo = trim(str_replace("983459834598345098345","",base64_decode($string)));			
 			return $codigo;
 		}
 
@@ -110,5 +115,5 @@
 			session_destroy(); //destroí a sessão
 		}
 
-		}		
+	}		
 ?>

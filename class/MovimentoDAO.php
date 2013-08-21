@@ -122,24 +122,25 @@
 			//fecha conexão
 			$this->_conn->__destruct();
 		}
-
-		//retona uma tarefa consultando po ID
-		/*public function consultarId($_id){			
-		$stmt = $this->_conn->prepare("SELECT * FROM GE_TAREFA WHERE id_tarefa = :id");
-		$stmt->bindValue(":id", $_id);
+		
+		public function consultarUltimoStatus($id_tarefa){			
+		$stmt = $this->_conn->prepare("SELECT * FROM ge_tarefa_movto WHERE id_tarefa_movto = (SELECT MAX(id_tarefa_movto) FROM ge_tarefa_movto where id_tarefa = :id_tarefa)");
+		$stmt->bindValue(":id_tarefa", $id_tarefa);
 		$stmt->execute();
 		//retornar para cada tarefa no banco, um objeto tarefa
 		while ($linha = $stmt->fetch()) {
-			$tarefa = new Tarefa ($linha["id_tarefa"]
-				                  ,$linha["id_local"]
-				                  ,$linha["id_usuario"]
-				                  ,$linha["data_cricao"]
-				                  ,$linha["descricao"] 					                  
-				                  );
+				$_movimento = new Movimento ($linha["id_tarefa_movto"]
+						                    ,$linha["id_tarefa"]
+						                    ,$linha["id_usuario"]
+						                    ,$linha["data"]
+						                    ,$linha["apontamento"] 					                  
+						                    ,$linha["status"] 	
+  						                    ,$linha["ordem"] 	
+ 					                       );
 		}			
-		return $tarefa;
+		return $_movimento;
 		//fecha conexão
 		$this->_conn->__destruct();
-		}*/
+		}
 	}
 ?>

@@ -71,16 +71,8 @@
                         <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
                         <span class=\"text-success\"><strong>Atualizado com sucesso!</strong></span>
                        </div>";  
-
-                $Usuario->setUsuario(null);
-                $Usuario->setSenha(null);
-                $Usuario->setNome(null);
-                $Usuario->setAtivo(null);
-                $Usuario->setPerfil(null);
-                $Usuario->setEmail(null);
-                $Usuario->setCelular(null);
-                $Usuario->setTelefone(null);            
-                $Usuario->setId(null);
+                //destrói objeto
+                $Usuario = null;
                 $id = null;
             } catch (Exception $e) {
                 $msg = "<div class=\"alert alert-error\">
@@ -98,15 +90,8 @@
                          <span class=\"text-error\"><strong>Deletado com sucesso!</strong></span>
                         </div>"; 
 
-                $Usuario->setUsuario(null);
-                $Usuario->setSenha(null);
-                $Usuario->setNome(null);
-                $Usuario->setAtivo(null);
-                $Usuario->setPerfil(null);
-                $Usuario->setEmail(null);
-                $Usuario->setCelular(null);
-                $Usuario->setTelefone(null);            
-                $Usuario->setId(null);
+                //destrói objeto
+                $Usuario = null;
                 $id = null;
             } catch (Exception $e) {
                 $msg = "<div class=\"alert alert-error\">
@@ -142,15 +127,9 @@
                          <span class=\"text-success\"><strong>Inserido com sucesso!</strong></span>
                         </div>"; 
 
-                $Usuario->setUsuario(null);
-                $Usuario->setSenha(null);
-                $Usuario->setNome(null);
-                $Usuario->setAtivo(null);
-                $Usuario->setPerfil(null);
-                $Usuario->setEmail(null);
-                $Usuario->setCelular(null);
-                $Usuario->setTelefone(null);  
-                $Usuario->setId(null);
+                //destrói objeto
+                $Usuario = null;
+                $id = null;
             } catch (Exception $e) {
                     $msg = "<div class=\"alert alert-error\">
                              <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
@@ -223,45 +202,45 @@
                 <div class="control-group">
                     <label class="control-label" for="usuario">Usuário</label>
                     <div class="controls">
-                        <input type="text" value="<?php echo $Usuario->getUsuario();?>" name="usuario" id="usuario" placeholder="Digite o usuário" maxlength="20">
+                        <input type="text" value="<?php echo ($Usuario) ? $Usuario->getUsuario() : "";?>" name="usuario" id="usuario" placeholder="Digite o usuário" maxlength="20">
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="senha">Senha</label>
                     <div class="controls">
-                        <input type="password" value="<?php echo $Usuario->getSenha(); ?>" name="senha" id="senha" placeholder="Digite a senha">
+                        <input type="password" value="<?php echo ($Usuario) ? $Usuario->getSenha() : "";?>" name="senha" id="senha" placeholder="Digite a senha">
                     </div>    
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="nome">Nome</label>
                     <div class="controls">
-                        <input class="input-xlarge" type="text" value="<?php echo $Usuario->getNome(); ?>" name="nome" id="nome" placeholder="Digite o nome" maxlength="50">
+                        <input class="input-xlarge" type="text" value="<?php echo ($Usuario) ? $Usuario->getNome() : ""; ?>" name="nome" id="nome" placeholder="Digite o nome" maxlength="50">
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="email">Email</label>
                     <div class="controls">
-                        <input class="input-xlarge" type="text" value="<?php echo $Usuario->getEmail(); ?>" name="email" id="email" placeholder="Digite o email" maxlength="90">
+                        <input class="input-xlarge" type="text" value="<?php echo ($Usuario) ? $Usuario->getEmail() : ""; ?>" name="email" id="email" placeholder="Digite o email" maxlength="90">
                     </div>
                 </div>
                  <div class="control-group">
                     <label class="control-label" for="celular">Celular</label>
                     <div class="controls">
-                        <input class="input-medium" type="text" value="<?php echo $Usuario->getCelular(); ?>" name="celular" id="celular" placeholder="Digite o celular" maxlength="20">
+                        <input class="input-medium" type="text" value="<?php echo ($Usuario) ? $Usuario->getCelular() : ""; ?>" name="celular" id="celular" placeholder="Digite o celular" maxlength="20">
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="telefone">Telefone</label>
                     <div class="controls">
-                        <input class="input-medium" type="text" value="<?php echo $Usuario->getTelefone(); ?>" name="telefone" id="telefone" placeholder="Digite o telefone" maxlength="20">
+                        <input class="input-medium" type="text" value="<?php echo ($Usuario) ? $Usuario->getTelefone() : ""; ?>" name="telefone" id="telefone" placeholder="Digite o telefone" maxlength="20">
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="inputAtivo">Ativo</label>
                     <div class="controls">
                         <select class="input-small" name="ativo" id="inputAtivo">
-                            <option value="S" <?php echo $Usuario->getAtivo() == "S" ? "selected=\"selected\"" :  "" ?> >Sim</option>
-                            <option value="N" <?php echo $Usuario->getAtivo() == "N" ? "selected=\"selected\"" : "" ?> >Não</option>
+                            <option value="S" <?php echo ($Usuario) ? $Usuario->getAtivo() == "S" ? "selected=\"selected\"" : "" : ""?> >Sim</option>
+                            <option value="N" <?php echo ($Usuario) ? $Usuario->getAtivo() == "N" ? "selected=\"selected\"" : "" : ""?> >Não</option>
                         </select>
                     </div>
                 </div>
@@ -269,20 +248,20 @@
                     <label class="control-label" for="inputAtivo">Perfil</label>
                     <div class="controls">
                         <select class="input-small" name="perfil" id="inputAtivo">
-                            <option value="E" <?php echo $Usuario->getPerfil() == "E" ? "selected=\"selected\"" :  "" ?> >Externo</option>
-                            <option value="I" <?php echo $Usuario->getPerfil() == "I" ? "selected=\"selected\"" : "" ?> >Interno</option>
-                            <option value="G" <?php echo $Usuario->getPerfil() == "G" ? "selected=\"selected\"" : "" ?> >Gestor</option>
+                            <option value="E" <?php echo ($Usuario) ? $Usuario->getPerfil() == "E" ? "selected=\"selected\"" : "" : "" ?> >Externo</option>
+                            <option value="I" <?php echo ($Usuario) ? $Usuario->getPerfil() == "I" ? "selected=\"selected\"" : "" : ""?> >Interno</option>
+                            <option value="G" <?php echo ($Usuario) ? $Usuario->getPerfil() == "G" ? "selected=\"selected\"" : "" : ""?> >Gestor</option>
                         </select>
                     </div>
                 </div>
                 <input type="hidden" name="operacao" id="operacao" value="<?php echo empty($id) ? "I" : "A"; ?>" />
-                <input type="hidden" name="id" id="id" value="<?php echo $Usuario->getId(); ?>" />                
+                <input type="hidden" name="id" id="id" value="<?php echo ($Usuario) ? $Usuario->getId() : ""; ?>" />                
                 <div class="control-group">
                     <div class="controls">
                         <button type="submit" class="btn btn-primary">Salvar</button>
                         <button type="button" class="btn" onclick="window.location='usuario.php'">Cancelar</button>
                         <?php
-                        if ($Usuario->getId() != null) {
+                        if ($id != null) {
                             ?>
                             <button type="button" class="btn btn-danger" onclick="if(confirm('Deseja realmente excluir?')) window.location='usuario.php?operacao=D&id=<?php echo $auth->encripta($id); ?>'">Excluir</button>
                             <?php

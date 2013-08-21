@@ -57,12 +57,8 @@
                             <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
                             <span class=\"text-success\"><strong>Atualizado com sucesso!</strong></span>
                         </div>";       
-
-                $Equipamento->setNumero(null);
-                $Equipamento->setDescricao(null);
-                $Equipamento->setImei(null);
-                $Equipamento->setAtivo(null);
-                $Equipamento->setId(null);
+                //destrói objeto
+                $Equipamento = null;
                 $id = null;
             } catch (Exception $e) {
                 $msg = " <div class=\"alert alert-error\">
@@ -79,12 +75,8 @@
                             <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
                             <span class=\"text-error\"><strong>Deletado com sucesso!</strong></span>
                         </div>"; 
-                
-                $Equipamento->setNumero(null);
-                $Equipamento->setDescricao(null);
-                $Equipamento->setImei(null);
-                $Equipamento->setAtivo(null);               
-                $Equipamento->setId(null);
+                //destrói objeto
+                $Equipamento = null;
                 $id = null;
             } catch (Exception $e) {
                 $msg = "<div class=\"alert alert-error\">
@@ -111,12 +103,8 @@
                                 <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
                                 <span class=\"text-success\"><strong>Inserido com sucesso!</strong></span>
                             </div>"; 
-
-                    $Equipamento->setNumero(null);
-                    $Equipamento->setDescricao(null);
-                    $Equipamento->setImei(null);
-                    $Equipamento->setAtivo(null);
-                    $Equipamento->setId(null);
+                    //destrói objeto
+                    $Equipamento = null;
                     $id = null;
             } catch (Exception $e) {
                     $msg = "<div class=\"alert alert-error\">
@@ -164,39 +152,38 @@
                 <div class="control-group">
                     <label class="control-label" for="numero">Número</label>
                     <div class="controls">
-                        <input type="text" value="<?php echo $Equipamento->getNumero(); ?>" name="numero" id="numero" placeholder="Digite o número" maxlength="20">
+                        <input type="text" value="<?php echo ($Equipamento) ? $Equipamento->getNumero() : ""; ?>" name="numero" id="numero" placeholder="Digite o número" maxlength="20">
                     </div>
                 </div>    
                 <div class="control-group">
                     <label class="control-label" for="descricao">Descrição</label>
-                    <div class="controls">
-                        <!--<input type="text" value="<?php echo $Equipamento->getDescricao();?>" name="descricao" id="descricao" placeholder="Digite a descrição">-->
-                        <textarea name="descricao" id="descricao" placeholder="Digite a descrição do equipamento"><?php echo $Equipamento->getDescricao(); ?></textarea>    
+                    <div class="controls">                        
+                        <textarea name="descricao" id="descricao" placeholder="Digite a descrição do equipamento"><?php echo ($Equipamento) ? $Equipamento->getDescricao() : ""; ?></textarea>    
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="imei">IMEI</label>
                     <div class="controls">
-                        <input type="text" value="<?php echo $Equipamento->getImei(); ?>" name="imei" id="imei" placeholder="Digite o IMEI"maxlength="25">
+                        <input type="text" value="<?php echo ($Equipamento) ? $Equipamento->getImei() : "" ; ?>" name="imei" id="imei" placeholder="Digite o IMEI"maxlength="25">
                     </div>    
                 </div>                        
                 <div class="control-group">
                     <label class="control-label" for="inputAtivo">Ativo</label>
                     <div class="controls">
                         <select class="input-small" name="ativo" id="inputAtivo">
-                            <option value="S" <?php echo $Equipamento->getAtivo() == "S" ? "selected=\"selected\"" :  "" ?> >Sim</option>
-                            <option value="N" <?php echo $Equipamento->getAtivo() == "N" ? "selected=\"selected\"" : "" ?> >Não</option>
+                            <option value="S" <?php echo  ($Equipamento) ? $Equipamento->getAtivo() == "S" ? "selected=\"selected\"" : "" : ""?> >Sim</option>
+                            <option value="N" <?php echo  ($Equipamento) ? $Equipamento->getAtivo() == "N" ? "selected=\"selected\"" : "" : ""?> >Não</option>
                         </select>
                     </div>
                 </div>                
                 <input type="hidden" name="operacao" id="operacao" value="<?php echo empty($id) ? "I" : "A"; ?>" />
-                <input type="hidden" name="id" id="id" value="<?php echo $Equipamento->getId(); ?>" />                
+                <input type="hidden" name="id" id="id" value="<?php echo ($Equipamento) ? $Equipamento->getId() : ""; ?>" />                
                 <div class="control-group">
                     <div class="controls">
                         <button type="submit" class="btn btn-primary">Salvar</button>
                         <button type="button" class="btn" onclick="window.location='equipamento.php'">Cancelar</button>
                         <?php
-                        if ($Equipamento->getId() != null) {
+                        if ($id != null) {
                             ?>
                             <button type="button" class="btn btn-danger" onclick="if(confirm('Deseja realmente excluir?')) window.location='equipamento.php?operacao=D&id=<?php echo $auth->encripta($id); ?>'">Excluir</button>
                             <?php

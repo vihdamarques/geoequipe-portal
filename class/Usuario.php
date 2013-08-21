@@ -33,6 +33,20 @@
 			$this->_ultimoSinal = $_ultimoSinal; 
 			$this->_perfil = $_perfil;
 		}
+
+		//destrutor da classe
+		function __destruct(){
+			$this->_id = null;
+			$this->_usuario = null;
+			$this->_senha = null;
+			$this->_nome = null;
+			$this->_email = null;
+			$this->_celular = null;
+			$this->_telefone = null;
+			$this->_ativo = null;
+			$this->_ultimoSinal = null;
+			$this->_perfil = null;
+		}
 	
 		//geters e seters
 		public function setId($_id){

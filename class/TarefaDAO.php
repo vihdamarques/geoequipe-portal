@@ -11,7 +11,7 @@
 		public function inserir($_tarefa){
 			try{				
 				$this->_conn->beginTransaction();
-				$stmt = $this->_conn->prepare("INSERT INTO ge_tarefa (  id_tarefa
+				$stmt = $this->_conn->prepare("INSERT INTO ge_tarefa ( id_tarefa
 						                								,id_local
 																		,id_usuario
 																		,data_criacao																		
@@ -26,8 +26,7 @@
 											);
 				$stmt->bindValue(":id_tarefa", $_tarefa->getId());
 				$stmt->bindValue(":id_local", $_tarefa->getLocal());
-				$stmt->bindValue(":id_usuario", $_tarefa->getUsuario());
-				//$stmt->bindValue(":data_criacao", "now()"/*$_tarefa->getData()*/);
+				$stmt->bindValue(":id_usuario", $_tarefa->getUsuario());				
 				$stmt->bindValue(":descricao", $_tarefa->getDescricao());
 				//executa
 				$stmt->execute();	
@@ -51,16 +50,12 @@
 			try{			
 			$this->_conn->beginTransaction();
 			$stmt = $this->_conn->prepare("UPDATE ge_tarefa
-										   	  SET id_local = :id_local
-												  ,id_usuario = :id_usuario
-												  ,data_criacao = :data_criacao
+										   	  SET id_local = :id_local												  
 												  ,descricao = :descricao
 										    WHERE id_tarefa = :id_tarefa"
 										);
 			$stmt->bindValue(":id_tarefa", $_tarefa->getId());
-			$stmt->bindValue(":id_local", $_tarefa->getLocal());
-			$stmt->bindValue(":id_usuario", $_tarefa->getUsuario());
-			$stmt->bindValue(":data_criacao", $_tarefa->getData());
+			$stmt->bindValue(":id_local", $_tarefa->getLocal());			
 			$stmt->bindValue(":descricao", $_tarefa->getDescricao());
 			//executa
 			$stmt->execute();

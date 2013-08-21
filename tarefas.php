@@ -7,6 +7,8 @@
     include_once 'class/UsuarioDAO.php';
     include_once 'class/Local.php';    
     include_once 'class/LocalDAO.php';
+    include_once 'class/Movimento.php';    
+    include_once 'class/MovimentoDAO.php';
 
     //Autenticação
     $auth = new Autenticacao();
@@ -21,7 +23,8 @@
     $Tarefa = new Tarefa();
     $tarefaDAO = new TarefaDAO();    
     $usuarioDAO = new UsuarioDAO();    
-    $localDAO = new LocalDAO();
+    $localDAO = new LocalDAO();    
+    $movimentoDAO = new MovimentoDAO();
     $msg = null;   
     
     //verifica se a variavel id existe no array POST
@@ -39,6 +42,7 @@
   $inicio = $pag * $tarefa_pag;
   $total_tarefa = (int) $tarefaDAO->totalTarefas();
   $total_pag = ceil($total_tarefa/$tarefa_pag);  
+
   $tarefas = $tarefaDAO->consultarTodos($inicio,$tarefa_pag);
 
 ?>
@@ -63,7 +67,9 @@
         <!--Formulário-->        
         <div class="controls">
             <button type="button" class="btn" onclick="window.location='cadastroTarefa.php'">Criar</button>
+            <input type="hidden" name="id" id="id" value="" />
         </div>
+
             <!--Relatório-->
             <?php 
             if (sizeof($tarefas) > 0) {
@@ -71,7 +77,7 @@
                 <table class="table table-hover" style="width: 100%">
                     <thead>
                         <tr>
-                            <th style="text-align:center">Editar</th>
+                            <th style="text-align:center">Editar</th>                            
                             <th>#</th>
                             <th>Descrição</th>
                             <th>Status</th>
@@ -79,7 +85,7 @@
                             <th>Local</th>
                             <th>Usuário abertura</th>
                             <th>Detalhes</th>
-                            <th></th>                            
+                            <th>Ação</th>                            
                         </tr>
                     </thead>
                     <tbody>
@@ -88,27 +94,47 @@
                             ?>
                             <tr>
                                 <td style="text-align:center"><a href="cadastroTarefa.php?id=<?php echo $auth->encripta($tar->getId()); ?>"><i class="icon-pencil"></i></a></td>
+                                <td class="id" style="display:none;"><?php echo $auth->encripta($tar->getId()); ?></td>
                                 <td><?php echo $tar->getId();?></td>                                
                                 <td><?php echo $tar->getDescricao();?></td>
-                                <td>Status</td>
+                                <td><?php $status = $movimentoDAO->consultarUltimoStatus($tar->getId());                                          
+                                    switch ($status->getStatus()) {
+                                    case "A":
+                                        echo "Aberto";
+                                        break;
+                                    case "C":
+                                        echo "Cancelado";
+                                        break;
+                                    case "G":
+                                        echo "Agendado";
+                                        break;
+                                    case "T":
+                                        echo "Atendido";
+                                        break;
+                                    case "N":
+                                        echo "Não Atendido";
+                                        break;                                                                                                                                                            
+                                    default:                                        
+                                        break;
+                                    } ?>
+                                </td>
                                 <td><?php echo strftime("%d/%m/%Y %H:%M:%S", strtotime($tar->getData()));?></td>
                                 <td><?php $nome_local = $localDAO->consultarId($tar->getLocal());
                                           echo $nome_local->getNome(); ?>
                                 </td>
+
                                 <td><?php $nome_usuario = $usuarioDAO->consultarId($tar->getUsuario());
                                           echo $nome_usuario->getNome(); ?>
                                 </td>
                                 <td>Detalhes</td>
-                                <td>
-                                    <div class="controls">
-                                        <select name="operacao" class="input-medium">
-                                            <option value="0">Selecione</option>
-                                            <option value="G">Agendar</option>
-                                            <option value="C">Cancelar</option>
-                                            <option value="F">Concluir</option>
-                                            <option value="A">Adiar</option>
-                                        </select>
-                                    </div>
+                                <td>                                    
+                                    <select name="acao" class="input-medium">
+                                        <option value="0">Selecione</option>
+                                        <option value="AG">Agendar</option>
+                                        <option value="CA">Cancelar</option>
+                                        <option value="CO">Concluir</option>
+                                        <option value="AD">Adiar</option>
+                                    </select>
                                 </td>
                             </tr>
                             <?php
@@ -137,14 +163,15 @@
           <?php
         }
         ?>
-        </ul>
-        </div>
+        </ul>       
     <!--Selecionar ação-->    
     <script type="text/javascript">
         $(function(){
-            $("select[name='operacao']").change(function() {
-                if ($(this).val() !== "0") {
-                    window.open('operacao_teste.php?operacao=' + $(this).val(), '', 'width=650,height=400');
+            $("select[name='acao']").change(function() {
+                if ($(this).val() !== "0") {                         
+                    var id = $(this).closest('tr').find('.id').text();
+                    var acao = $(this).val();                    
+                    window.location = "acoes_tarefas.php?id="+id+"&acao="+acao;
                 }
             });
         });

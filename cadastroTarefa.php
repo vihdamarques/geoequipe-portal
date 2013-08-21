@@ -7,7 +7,9 @@
     include_once 'class/MovimentoDAO.php';
     include_once 'class/Usuario.php';    
     include_once 'class/UsuarioDAO.php';
-
+    include_once 'class/LocalDAO.php';
+    include_once 'class/Local.php';
+   
     //Autenticação
     $auth = new Autenticacao();
     $auth->autenticar();
@@ -24,6 +26,7 @@
     $movimentoDAO = new MovimentoDAO();
     $Usuario = new Usuario();
     $usuarioDAO = new UsuarioDAO();
+    $localDAO = new LocalDAO; 
     $movimentos = null;
     $msg = null;   
 
@@ -45,27 +48,22 @@
     }
     else{
         $operacao = "";
-    }        
+    }           
 
     if (!empty($id)) {         
-        $Tarefa = $tarefaDAO->consultarId($id);
-        
+        $Tarefa = $tarefaDAO->consultarId($id);        
         if ($operacao == "A") {
             try {
                 $local = (isset($_POST["local"])) ? $_POST["local"] : "";
-                $descricao = (isset($_POST["descricao"])) ? $_POST["descricao"] : "";
-                
-                //$usuario = (isset($_POST["usuario"])) ? $_POST["usuario"] : "";
-                
+                $descricao = (isset($_POST["descricao"])) ? $_POST["descricao"] : "";                
                 //atualizar tarefa
-                $Tarefa->setLocal($local);
-                $Tarefa->setDescricao($descricao);                
-                //$Tarefa->setUsuario($usuario); 
+                $Tarefa->setLocal($local); 
+                $Tarefa->setDescricao($descricao);                                
                 $tarefaDAO->alterar($Tarefa);
                 //inserir movimento
-                $Movimento->setTarefa($id);
-                $Movimento->setUsuario($usuario);                
-                $movimentoDAO->inserir($Movimento);
+                //$Movimento->setTarefa($id);
+                //$Movimento->setUsuario($usuario);                
+                //$movimentoDAO->inserir($Movimento);
 
                 $msg ="<div class=\"alert alert-success\">
                             <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
@@ -77,9 +75,9 @@
                 $Tarefa->setUsuario(null);                
                 $Tarefa->setId(null);
                 $Tarefa->setData(null);
-                $Movimento->setTarefa(null);
-                $Movimento->setUsuario(null);
-                $Movimento->setStatus(null);
+                //$Movimento->setTarefa(null);
+                //$Movimento->setUsuario(null);
+                //$Movimento->setStatus(null);
                 $id = null;
             } catch (Exception $e) {
                 $msg = "<div class=\"alert alert-error\">
@@ -88,36 +86,7 @@
                         </div>";
             }
 
-        } elseif ($operacao == "D") {          
-            try {
-                //deletar
-                $tarefaDAO->excluir($id);
-
-                $Movimento->setTarefa($idTarefa);
-                $Movimento->setUsuario($usuario);                
-                $movimentoDAO->inserir($Movimento);
-
-                $msg ="<div class=\"alert alert-error\">
-                            <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
-                            <span class=\"text-error\"><strong>Deletado com sucesso!</strong></span>
-                        </div>"; 
-                
-                $Tarefa->setLocal(null);
-                $Tarefa->setDescricao(null);                    
-                $Tarefa->setUsuario(null);                
-                $Tarefa->setId(null);
-                $Tarefa->setData(null);
-                $Movimento->setTarefa(null);
-                $Movimento->setUsuario(null);
-                $Movimento->setStatus(null);
-                $id = null;
-            } catch (Exception $e) {
-                $msg = "<div class=\"alert alert-error\">
-                            <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
-                            <span class=\"text-error\"><strong>" . $e->getMessage() . "</strong></span>
-                        </div>";
-            }
-        }
+        } //deleta tarefa retirado
     } else {       
         if ($operacao == "I") {
             try {   
@@ -125,12 +94,11 @@
                     $descricao = (isset($_POST["descricao"])) ? $_POST["descricao"] : "";                    
                     //pegar usuario da sessão
                     $usuario = $auth->autenticarCadTarefa();
-
                     //inserir tarefa
                     $Tarefa->setLocal($local); 
                     $Tarefa->setDescricao($descricao);                    
                     $Tarefa->setUsuario($usuario);                    
-                    $idTarefa = $tarefaDAO->inserir($Tarefa);
+                    $idTarefa = $tarefaDAO->inserir($Tarefa); //retorna id da tarefa inserida
                     //inserir movimento
                     $Movimento->setTarefa($idTarefa);
                     $Movimento->setUsuario($usuario);                           
@@ -158,6 +126,7 @@
             }
         }
     }    
+
     $movimentos = $movimentoDAO->consultarTodos($id);
 ?>
 <!DOCTYPE html>
@@ -180,7 +149,7 @@
         <?php include_once 'header.php'; ?>
         <!--Formulário-->
         <div class="container">
-            <form id="formUsuario" class="form-horizontal" method="POST" action="cadastroTarefa.php">
+            <form id="formTarefa" class="form-horizontal" method="POST" action="cadastroTarefa.php">
                 <legend>Cadastro de Tarefas <!-- span style="font-size: 10pt">(Todos os campos são obrigatórios)</span--></legend>
                 <div class="control-group">
                     <div class="controls">
@@ -201,15 +170,13 @@
                     <label class="control-label" for="local">Local</label>
                     <div class="controls">
                         <select name="local" id="local">
-                            <?php
-                               include_once 'class/LocalDAO.php';
-                               include_once 'class/Local.php';
-                               $localDAO = new LocalDAO;                   
+                            <?php                  
                                echo $localDAO->selecionar($Tarefa->getLocal());
                             ?>
                         </select>
                     </div>
                 </div>
+                <!--Descrição-->
                 <div class="control-group">
                     <label class="control-label" for="descricao">Descrição da tarefa</label>
                     <div class="controls">
@@ -224,19 +191,23 @@
                         <input type="text" value="<?php echo strftime("%d/%m/%Y %H:%M:%S", strtotime($Tarefa->getData())); ?>" name="data" id="data" placeholder="Digite a data de abertura" readonly="true">
                     </div>    
                 </div>
-                <?php } ?>
+                <?php } ?>                                        
                 <!--Usuario-->
-                 <input type="hidden" value="<?php echo $Tarefa->getUsuario(); ?>" name="usuario" id="usuario" />           
+                <input type="hidden" value="<?php echo $Tarefa->getUsuario(); ?>" name="usuario" id="usuario" />           
+                <!--Operação-->
                 <input type="hidden" name="operacao" id="operacao" value="<?php echo empty($id) ? "I" : "A"; ?>" />
+                <!--ID-->
                 <input type="hidden" name="id" id="id" value="<?php echo $Tarefa->getId(); ?>" />                
                 <div class="control-group">
                     <div class="controls">
+                        <!--Botão Submitar-->
                         <button type="submit" class="btn btn-primary">Salvar</button>
+                        <!--Botão Cancelar-->
                         <button type="button" class="btn" onclick="window.location='tarefas.php'">Cancelar</button>
                         <?php
                         if ($Tarefa->getId() != null) {
-                        ?>
-                            <button type="button" class="btn btn-danger" onclick="if(confirm('Deseja realmente excluir?')) window.location='cadastroTarefa.php?operacao=D&id=<?php echo $auth->encripta($id); ?>'">Excluir</button>
+                        ?>  <!--Botão Delete-->
+                            <!--<button type="button" class="btn btn-danger" onclick="if(confirm('Deseja realmente excluir?')) window.location='cadastroTarefa.php?operacao=D&id=<?php echo $auth->encripta($id); ?>'">Excluir</button>-->
                         <?php
                             }
                         ?>
@@ -280,7 +251,7 @@
                                         break;                                                                                                                                                            
                                     default:                                        
                                         break;
-                                } ; ?></td>
+                                }  ?></td>
                                 <td><?php echo strftime("%d/%m/%Y %H:%M:%S", strtotime($mov->getData())); ?></td>                                
                                 <td><?php $nome_usuario = $usuarioDAO->consultarId($mov->getUsuario());
                                           echo $nome_usuario->getNome(); ?>

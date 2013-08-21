@@ -223,7 +223,7 @@
 	//cria uma tag select com todos os locais cadastrados
 	public function selecionar($id_local){
 			$_vetor = array();			
-			$stmt = $this->_conn->prepare("SELECT * FROM ge_local ORDER BY nome");
+			$stmt = $this->_conn->prepare("SELECT * FROM ge_local WHERE ativo = 'S' ORDER BY nome");
 			$stmt->execute();
 			//retornar para cada linha na tabela ge_local, um objeto local e insere em um array de locais		
 			$result = $stmt->fetchAll();

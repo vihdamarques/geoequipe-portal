@@ -93,24 +93,8 @@
                             <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
                             <span class=\"text-success\"><strong>Atualizado com sucesso!</strong></span>
                         </div>";       
-
-                $Local->setNome(null);
-                $Local->setDescricao(null);
-                $Local->setAtivo(null);
-                $Local->setLatitude(null);
-                $Local->setLongitude(null);
-                $Local->setCoordenada(null);
-                $Local->setLogradouro(null);
-                $Local->setNumero(null);
-                $Local->setBairro(null);
-                $Local->setCidade(null);
-                $Local->setEstado(null);
-                $Local->setPais(null);
-                $Local->setCep(null);
-                $Local->setTelefone_1(null);
-                $Local->setTelefone_2(null);
-                $Local->setEmail(null);
-                $Local->setId(null);
+                //destrói objeto
+                $Local = null;
                 $id = null;
             } catch (Exception $e) {
                 $msg = "<div class=\"alert alert-error\">
@@ -127,24 +111,8 @@
                             <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
                             <span class=\"text-error\"><strong>Deletado com sucesso!</strong></span>
                         </div>"; 
-                
-                $Local->setNome(null);
-                $Local->setDescricao(null);
-                $Local->setAtivo(null);
-                $Local->setLatitude(null);
-                $Local->setLongitude(null);
-                $Local->setCoordenada(null);
-                $Local->setLogradouro(null);
-                $Local->setNumero(null);
-                $Local->setBairro(null);
-                $Local->setCidade(null);
-                $Local->setEstado(null);
-                $Local->setPais(null);
-                $Local->setCep(null);
-                $Local->setTelefone_1(null);
-                $Local->setTelefone_2(null);
-                $Local->setEmail(null);
-                $Local->setId(null);
+                //destrói objeto
+                $Local = null;
                 $id = null;
             } catch (Exception $e) {
                 $msg = "<div class=\"alert alert-error\">
@@ -194,24 +162,8 @@
                                 <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
                                 <span class=\"text-success\"><strong>Inserido com sucesso!</strong></span>
                             </div>"; 
-
-                    $Local->setNome(null);
-                    $Local->setDescricao(null);
-                    $Local->setAtivo(null);
-                    $Local->setLatitude(null);
-                    $Local->setLongitude(null);
-                    $Local->setCoordenada(null);
-                    $Local->setLogradouro(null);
-                    $Local->setNumero(null);
-                    $Local->setBairro(null);
-                    $Local->setCidade(null);
-                    $Local->setEstado(null);
-                    $Local->setPais(null);
-                    $Local->setCep(null);
-                    $Local->setTelefone_1(null);
-                    $Local->setTelefone_2(null);
-                    $Local->setEmail(null);
-                    $Local->setId(null);
+                    //destrói objeto
+                    $Local = null;
                     $id = null;
             } catch (Exception $e) {
                     $msg = "<div class=\"alert alert-error\">
@@ -260,93 +212,92 @@
                 <div class="control-group">
                     <label class="control-label" for="nome">Nome</label>
                     <div class="controls">
-                        <input class="input-xlarge" type="text" value="<?php echo $Local->getNome();?>" name="nome" id="nome" placeholder="Digite o local">
+                        <input class="input-xlarge" type="text" value="<?php echo ($Local) ? $Local->getNome() : "";?>" name="nome" id="nome" placeholder="Digite o local" maxlength="60">
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="descricao">Descrição</label>
-                    <div class="controls">
-                       <!-- <input type="text" value="<?php echo $Local->getDescricao(); ?>" name="descricao" id="descricao" placeholder="Digite a descrição"> -->
-                       <textarea name="descricao" id="descricao" placeholder="Digite a descrição do local"><?php echo $Local->getDescricao(); ?></textarea>    
+                    <div class="controls">                      
+                       <textarea name="descricao" id="descricao" placeholder="Digite a descrição do local"><?php echo ($Local) ? $Local->getDescricao() : ""; ?></textarea>    
                     </div>    
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="logradouro">Logradouro</label>
                     <div class="controls">
-                        <input class="input-xlarge" type="text" value="<?php echo $Local->getLogradouro(); ?>" name="logradouro" id="logradouro" placeholder="Digite o logradouro" maxlength="300">
+                        <input class="input-xlarge" type="text" value="<?php echo ($Local) ? $Local->getLogradouro() : ""; ?>" name="logradouro" id="logradouro" placeholder="Digite o logradouro" maxlength="300">
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="numero">Numero</label>
                     <div class="controls">
-                        <input class="input-small" type="text" value="<?php echo $Local->getNumero(); ?>" name="numero" id="numero" placeholder="Digite o nº" maxlength="8">
+                        <input class="input-small" type="text" value="<?php echo ($Local) ? $Local->getNumero() : ""; ?>" name="numero" id="numero" placeholder="Digite o nº" maxlength="8">
                     </div>
                 </div>
                  <div class="control-group">
                     <label class="control-label" for="bairro">Bairro</label>
                     <div class="controls">
-                        <input type="text" value="<?php echo $Local->getBairro(); ?>" name="bairro" id="bairro" placeholder="Digite o bairro" maxlength="60">
+                        <input type="text" value="<?php echo ($Local) ? $Local->getBairro() : ""; ?>" name="bairro" id="bairro" placeholder="Digite o bairro" maxlength="60">
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="cidade">Cidade</label>
                     <div class="controls">
-                        <input type="text" value="<?php echo $Local->getCidade(); ?>" name="cidade" id="cidade" placeholder="Digite a cidade" maxlength="60">
+                        <input type="text" value="<?php echo ($Local) ? $Local->getCidade() : ""; ?>" name="cidade" id="cidade" placeholder="Digite a cidade" maxlength="60">
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="estado">Estado</label>
                     <div class="controls">
-                        <input class="input-medium" type="text" value="<?php echo $Local->getEstado(); ?>" name="estado" id="estado" placeholder="Digite o estado" maxlength="20">
+                        <input class="input-medium" type="text" value="<?php echo ($Local) ? $Local->getEstado() : ""; ?>" name="estado" id="estado" placeholder="Digite o estado" maxlength="20">
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="pais">País</label>
                     <div class="controls">
-                        <input class="input-medium" type="text" value="<?php echo $Local->getPais(); ?>" name="pais" id="pais" placeholder="Digite o país" maxlength="60">
+                        <input class="input-medium" type="text" value="<?php echo ($Local) ? $Local->getPais() : ""; ?>" name="pais" id="pais" placeholder="Digite o país" maxlength="60">
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="cep">CEP</label>
                     <div class="controls">
-                        <input class="input-small" type="text" value="<?php echo $Local->getCep(); ?>" name="cep" id="cep" placeholder="Digite o CEP" maxlength="9">
+                        <input class="input-small" type="text" value="<?php echo ($Local) ? $Local->getCep() : ""; ?>" name="cep" id="cep" placeholder="Digite o CEP" maxlength="9">
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="telefone_1">Telefone 1</label>
                     <div class="controls">
-                        <input class="input-medium" type="text" value="<?php echo $Local->getTelefone_1(); ?>" name="telefone_1" id="telefone_1" placeholder="Digite o telefone 1" maxlength="20">
+                        <input class="input-medium" type="text" value="<?php echo ($Local) ? $Local->getTelefone_1() : ""; ?>" name="telefone_1" id="telefone_1" placeholder="Digite o telefone 1" maxlength="20">
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="telefone_2">Telefone 2</label>
                     <div class="controls">
-                        <input class="input-medium" type="text" value="<?php echo $Local->getTelefone_2(); ?>" name="telefone_2" id="telefone_2" placeholder="Digite o telefone 2" maxlength="20">
+                        <input class="input-medium" type="text" value="<?php echo ($Local) ? $Local->getTelefone_2() : ""; ?>" name="telefone_2" id="telefone_2" placeholder="Digite o telefone 2" maxlength="20">
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="email">Email</label>
                     <div class="controls">
-                        <input class="input-xlarge" type="text" value="<?php echo $Local->getEmail(); ?>" name="email" id="email" placeholder="Digite o email">
+                        <input class="input-xlarge" type="text" value="<?php echo ($Local) ? $Local->getEmail() : ""; ?>" name="email" id="email" placeholder="Digite o email" maxlength="70">
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="inputAtivo">Ativo</label>
                     <div class="controls">
                         <select class="input-small" name="ativo" id="inputAtivo">
-                            <option value="S" <?php echo $Local->getAtivo() == "S" ? "selected=\"selected\"" :  "" ?> >Sim</option>
-                            <option value="N" <?php echo $Local->getAtivo() == "N" ? "selected=\"selected\"" : "" ?> >Não</option>
+                            <option value="S" <?php echo ($Local) ? $Local->getAtivo() == "S" ? "selected=\"selected\"" : "" : ""?> >Sim</option>
+                            <option value="N" <?php echo ($Local) ? $Local->getAtivo() == "N" ? "selected=\"selected\"" : "" : ""?> >Não</option>
                         </select>
                     </div>
                 </div>                
                 <input type="hidden" name="operacao" id="operacao" value="<?php echo empty($id) ? "I" : "A"; ?>" />
-                <input type="hidden" name="id" id="id" value="<?php echo $Local->getId(); ?>" />                
+                <input type="hidden" name="id" id="id" value="<?php echo ($Local) ? $Local->getId() : ""; ?>" />                
                 <div class="control-group">
                     <div class="controls">
                         <button type="submit" class="btn btn-primary">Salvar</button>
                         <button type="button" class="btn" onclick="window.location='local.php'">Cancelar</button>
                         <?php
-                        if ($Local->getId() != null) {
+                        if ($id != null) {
                             ?>
                             <button type="button" class="btn btn-danger" onclick="if(confirm('Deseja realmente excluir?')) window.location='local.php?operacao=D&id=<?php echo $auth->encripta($id); ?>'">Excluir</button>
                             <?php

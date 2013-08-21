@@ -23,6 +23,16 @@
 			$this->_ativo = $_ativo; 			
 		}		
 
+		//destrutor da classe
+		public function __destruct(){
+			$this->_id = null;
+			$this->_ultimoSinal = null;
+			$this->_descricao = null;
+			$this->_imei = null;
+			$this->_numero = null;
+			$this->_ativo = null; 
+		}
+
 		//geters e seters
 		public function setId($_id){
 			$this->_id = $_id;

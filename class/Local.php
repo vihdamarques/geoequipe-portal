@@ -55,6 +55,27 @@
 			$this->_email = $_email;
 		}
 
+		//destrutor da classe
+		function __destruct(){
+			$this->_id = null;
+			$this->_nome = null;
+			$this->_descricao = null;
+			$this->_ativo = null;
+			$this->_latitude = null;
+			$this->_longitude = null;
+			$this->_coordenada = null;
+			$this->_logradouro = null;
+			$this->_numero = null;
+			$this->_bairro = null;
+			$this->_cidade = null;
+			$this->_estado = null;
+			$this->_pais = null;
+			$this->_cep = null;
+			$this->_telefone_1 = null;
+			$this->_telefone_2 = null;
+			$this->_email = null;
+		}
+
 		//geters e seters
 		public function setId($_id){
 			$this->_id = $_id;

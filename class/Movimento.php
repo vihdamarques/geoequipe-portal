@@ -23,7 +23,18 @@
 			$this->_apontamento = $_apontamento;
 			$this->_status = $_status;
 			$this->_ordem = $_ordem;
-		}		
+		}				
+
+		//destrutor da classe
+		public function __destruct(){
+			$this->_id = null;
+			$this->_tarefa = null;
+			$this->_usuario = null;
+			$this->_data = null;
+			$this->_apontamento = null;
+			$this->_status = null;
+			$this->_ordem = null;
+		}
 
 		//geters e seters
 		public function setId($_id){

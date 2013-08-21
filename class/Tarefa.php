@@ -20,6 +20,15 @@
 			$this->_data_criacao = $_data_criacao;
 		}		
 
+		//destrutos da classe
+		public function __destruct(){
+			$this->_id = null;
+			$this->_local = null;
+			$this->_usuario = null;
+			$this->_descricao = null;
+			$this->_data_criacao = null;
+		}
+
 		//geters e seters
 		public function setId($_id){
 			$this->_id = $_id;
