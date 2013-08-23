@@ -5,6 +5,9 @@
 <html>
   <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+      <meta charset="utf-8">
+
       <title>Geoequipe</title>
       <!-- CSS -->
       <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -14,7 +17,7 @@
           }
       </style>
       <!-- Scripts -->
-      <script src="http://code.jquery.com/jquery.js"></script>
+      <script src="js/jquery-1.10.2.min.js"></script>
       <script src="js/bootstrap.min.js"></script>
   </head>
   <body>

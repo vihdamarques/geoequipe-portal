@@ -4,34 +4,32 @@
     //Autenticação
     $auth = new Autenticacao();
     $auth->autenticar();    
+    include_once 'header.php';
 ?>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Geoequipe</title>
-        <!-- CSS -->
-        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <div id="map-canvas"></div>
         <style>
-        body {
-            padding-top: 60px;
-        }
-        .twitter {border: 1px #005580 dashed}
-        .twitter .twtr-hd {display:none !important;}
-        .twitter .twtr-timeline {font-family:arial !important; font-size:12pt !important;}
+            html, body, #map-canvas {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+            }
 
+            body {
+                padding-top: 0px !important;
+            }
+
+            #map-canvas {
+                margin-top: 41px !important;
+            }
+
+            #map-canvas img {
+                max-width: none;
+            }
         </style>
-        <!-- Scripts -->
-        <script src="js/bootstrap.min.js"></script>
-    </head>
-    <body>
-        <!--Cabeçalho-->
-        <?php include_once 'header.php'; ?>
-        <!--Corpo-->
-        <div class="container">
-            <h1>Bem vindo ao sistema !</h1>
-            <p>Utilize o menu acima para navegar</p>
-            
-        </div>
+        <script src="http://maps.google.com/maps/api/js?v=3&sensor=false"></script>
+        <script src="js/GeoequipeAPI.js"></script>
+        <script>
+            geoequipe.criaMapa({div:"map-canvas"});
+        </script>
     </body>
 </html>
