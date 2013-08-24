@@ -10,10 +10,11 @@
     include_once 'class/LocalDAO.php';
     include_once 'class/Local.php';
 
-    //Autenticação
-    $id = null;
+    //Autenticação    
     $auth = new Autenticacao();
     $auth->autenticar();
+
+    $id = null;
     $Tarefa = new Tarefa();
     $tarefaDAO = new TarefaDAO();
     $Movimento = new Movimento();
@@ -22,7 +23,9 @@
     $usuarioDAO = new UsuarioDAO();
     $Local = new Local();
     $localDAO = new LocalDAO();
-    $acao = (isset($_GET["acao"])) ? $_GET["acao"] : "";
+    $acaoGET = (isset($_GET["acao"])) ? $_GET["acao"] : "";
+    $acaoPOST = (isset($_POST["acao"])) ? $_POST["acao"] : "";
+    $msg = null;
 
     //verifica se a variavel id existe no array POST
     if (isset($_POST["id"])){
@@ -33,62 +36,70 @@
         $id = null;
     }    
 
-	//ações
+    	//ações
 	    if(!empty($id)){
 	        $Tarefa = $tarefaDAO->consultarId($id);
-
-
-
-
-	        if(!empty($acao)){                        
-	            if($acao == "AG"){
+	        if(!empty($acaoPOST)){                        
+	            if($acaoPOST == "G"){ 
+                    //set atributos da movimentação
 	                $Movimento->setTarefa($Tarefa->getId());
-	                //$Movimento->setUsuario(/*campo usuario*/);
-	                $Movimento->setApontamento((isset($_POST["apontamento"])) ? $_POST["apontamento"] : "");
-	                $Movimento->setStatus($acao);
-	                $movimentoDAO->inserir($Movimento);
-	                $Movimento->setTarefa(null);
-	                $Movimento->setUsuario(null);
-	                $Movimento->setApontamento(null);
-	                $Movimento->setStatus(null);
+	                $Movimento->setUsuario((isset($_POST["usuario"])) ? $_POST["usuario"] : "");	               
+	                $Movimento->setStatus($acaoPOST);
+                    //trata a data para o padrão do banco             
+                    $data = implode("-",array_reverse(explode("/",(isset($_POST["data_agendamento"])) ? $_POST["data_agendamento"] : "")));
+                    $Movimento->setData($data);
+                    $Movimento->setApontamento((isset($_POST["apontamento"])) ? $_POST["apontamento"] : "");
+                    //insere movimentação
+	                $movimentoDAO->inserir($Movimento); 
+                    $Movimento = null;
 	                $id = null;
-	            } elseif ($acao == "CA") {
+                    $msg ="<div class=\"alert alert-success\">
+                            <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
+                            <span class=\"text-success\"><strong>Agendado com sucesso!</strong></span>
+                        </div>";
+	            } elseif ($acaoPOST == "C") {
+	                $Movimento->setTarefa($Tarefa->getId());	                
+                    $Movimento->setUsuario($auth->autenticarCadTarefa());             
+	                $Movimento->setStatus($acaoPOST);
+                    $Movimento->setApontamento((isset($_POST["apontamento"])) ? $_POST["apontamento"] : "");
+	                $movimentoDAO->inserir($Movimento);
+                    $Movimento = null;
+	                $id = null;
+                    $msg ="<div class=\"alert alert-success\">
+                            <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
+                            <span class=\"text-success\"><strong>Cancelado com sucesso!</strong></span>
+                        </div>";                    
+	            } elseif ($acaoPOST == "T") {
 	                $Movimento->setTarefa($Tarefa->getId());
-	                //$Movimento->setUsuario(/*campo usuario*/);
-	                $Movimento->setApontamento((isset($_POST["apontamento"])) ? $_POST["apontamento"] : "");
-	                $Movimento->setStatus($acao);
+                    //pega usuario agendado para tarefa
+                    $usuarioAgendado = $movimentoDAO->usuarioAgendado($Tarefa->getId());
+	                $Movimento->setUsuario($usuarioAgendado->getUsuario());
+                    $Movimento->setStatus($acaoPOST);
+	                $Movimento->setApontamento((isset($_POST["apontamento"])) ? $_POST["apontamento"] : "");	                
 	                $movimentoDAO->inserir($Movimento);
-	                $Movimento->setTarefa(null);
-	                $Movimento->setUsuario(null);
-	                $Movimento->setApontamento(null);
-	                $Movimento->setStatus(null);
+                    $Movimento = null;
 	                $id = null;
-	            } elseif ($acao == "CO") {
+                    $msg ="<div class=\"alert alert-success\">
+                            <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
+                            <span class=\"text-success\"><strong>Concluído com sucesso!</strong></span>
+                        </div>";                    
+	            } elseif ($acaoPOST == "N") {
 	                $Movimento->setTarefa($Tarefa->getId());
-	                //$Movimento->setUsuario(/*campo usuario*/);
-	                $Movimento->setApontamento((isset($_POST["apontamento"])) ? $_POST["apontamento"] : "");
-	                $Movimento->setStatus($acao);
+	                //pega usuario agendado para tarefa
+                    $usuarioAgendado = $movimentoDAO->usuarioAgendado($Tarefa->getId());
+                    $Movimento->setUsuario($usuarioAgendado->getUsuario());
+                    $Movimento->setStatus($acaoPOST);
+	                $Movimento->setApontamento((isset($_POST["apontamento"])) ? $_POST["apontamento"] : "");	                
 	                $movimentoDAO->inserir($Movimento);
-	                $Movimento->setTarefa(null);
-	                $Movimento->setUsuario(null);
-	                $Movimento->setApontamento(null);
-	                $Movimento->setStatus(null);
+                    $Movimento = null;
 	                $id = null;
-	            } elseif ($acao == "AD") {
-	                $Movimento->setTarefa($Tarefa->getId());
-	                //$Movimento->setUsuario(/*campo usuario*/);
-	                $Movimento->setApontamento((isset($_POST["apontamento"])) ? $_POST["apontamento"] : "");
-	                $Movimento->setStatus($acao);
-	                $movimentoDAO->inserir($Movimento);
-	                $Movimento->setTarefa(null);
-	                $Movimento->setUsuario(null);
-	                $Movimento->setApontamento(null);
-	                $Movimento->setStatus(null);
-	                $id = null;
+                    $msg ="<div class=\"alert alert-success\">
+                            <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
+                            <span class=\"text-success\"><strong>Adiado com sucesso!</strong></span>
+                        </div>";                    
 	            }
 	        }
 	    }
-
  ?>
  <!DOCTYPE html>
 <html>
@@ -97,49 +108,136 @@
         <title>Geoequipe</title>
         <!-- CSS -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/jquery-ui-1.10.3.custom.min.css" rel="stylesheet">
         <style>
             body {
                 padding-top: 60px;
             }
         </style>
         <!-- Scripts -->
-        <script src="js/bootstrap.min.js"></script>
+        <script src="js/jquery-1.9.1.min.js"></script>        
+        <script src="js/bootstrap.min.js"></script>        
+        
     </head>
     <body>
         <!--Cabeçalho-->
         <?php include_once 'header.php'; ?>
-        <!--Formulário-->
-        <div class="container">
-            <div class="hero-unit">
-            	<div class="container-fluid">
-	            	<h3 class="pagination-centered">Dados da Tarefa</h3>
-	            	<p><strong>Código:</strong> <?php echo $Tarefa->getId(); ?></p>
-	            	<p><strong>Local:</strong>  <?php $Local = $localDAO->consultarId($Tarefa->getLocal()); 
-	            	                 echo $Local->getNome(); ?>
-	            	</p> 
-	            	<p><strong>Descrição da Tarefa:</strong> <?php echo $Tarefa->getDescricao(); ?></p>
-	            	<p><strong>Data de abertura:</strong> <?php echo strftime("%d/%m/%Y %H:%M:%S", strtotime($Tarefa->getData())); ?></p>
-	            	<p><strong>Usuário Abertura:</strong> <?php $Usuario = $usuarioDAO->consultarId($Tarefa->getUsuario());
-	            	                           echo $Usuario->getNome() ?></p>
-                    <p><strong>Ação selecionada:</strong> <?php switch ($acao) {
-								                                    case "AG":
-								                                        echo "Agendamento";
-								                                        break;
-								                                    case "CA":
-								                                        echo "Cancelar";
-								                                        break;
-								                                    case "CO":
-								                                        echo "Concluir";
-								                                        break;
-								                                    case "AD":
-								                                        echo "Adiar";
-								                                        break;								                                    
-								                                    default:                                        
-								                                        break;
-								                                }
-                    ?></p>
+        <!--relatório-->
+        <div class="container">      
+            <!--Formulário-->        
+            <form id="formAcao" class="form-horizontal" method="POST" action="acoes_tarefas.php">
+                <legend><?php switch ($acaoGET) {
+                            case "G":
+                                echo "Agendar Tarefa";
+                                break;
+                            case "C":
+                                echo "Cancelar Tarefa";
+                                break;
+                            case "T":
+                                echo "Concluir Tarefa";
+                                break;
+                            case "N":
+                                echo "Adiar Tarefa";
+                                break;                                                                
+                            default:
+                                null;
+                                break;
+                        } ?> 
+                </legend>
+                <div class="control-group">
+                    <div class="controls">
+                        <?php echo $msg;?>
+                    </div>
                 </div>
-            </div>            
+                <!--Data Agendamento-->    
+                <?php if($acaoGET){
+                        if($acaoGET == "G") {?>
+                <!--Usuario-->
+                <div class="control-group">
+                    <label class="control-label" for="usuario">Usuário</label>
+                    <div class="controls">
+                        <select name="usuario" id="usuario">
+                            <?php                  
+                               echo $usuarioDAO->selecionar();
+                            ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="data_agendamento">Data Agendamento</label>
+                    <div class="controls">
+                        <!--<div class="input-append date">-->
+                              <input type="text" id="data_agendamento" name="data_agendamento" class="input-small">
+                              <!--<span class="add-on"><i class="icon-calendar"></i></span>-->
+                        <!--</div>-->
+                    </div>
+                </div>
+                <?php } ?>
+                <!--Apontamento-->
+                <div class="control-group">
+                    <label class="control-label" for="apontamento">
+                        <?php switch ($acaoGET) {
+                            case "C":
+                                echo "Motivo cancelamento";
+                                break;
+                            case "N":
+                                echo "Motivo adiamento";
+                                break;                            
+                            default:
+                                echo "Apontamento";
+                                break;
+                        }?>
+                    </label>
+                    <div class="controls">
+                        <textarea name="apontamento" id="apontamento" rows="4" placeholder="Digite o apontamento/motivo"></textarea>    
+                    </div>
+                </div>
+                <?php } ?>
+                <!--ID-->
+                <input type="hidden" name="id" id="id" value="<?php echo $Tarefa->getId(); ?>" />                
+                <input type="hidden" name="acao" id="acao" value="<?php echo $acaoGET; ?>" />
+                <!--Botões-->
+                <div class="control-group">
+                    <div class="controls">
+                        <!--Botão Submitar-->
+                    <?php if($id != null) { ?>
+                        <button type="submit" class="btn btn-primary">
+                        <?php switch ($acaoGET) {
+                            case "G":
+                                echo "Agendar";
+                                break;
+                            case "C":
+                                echo "Cancelar";
+                                break;
+                            case "T":
+                                echo "Concluir";
+                                break;
+                            case "N":
+                                echo "Adiar";
+                                break;                                                                
+                            default:
+                                null;
+                                break;
+                        } ?>                            
+                        </button>
+                    <?php } ?>
+                        <!--Botão Voltar-->
+                        <button type="button" class="btn" onclick="window.location='tarefas.php'">Voltar</button>
+                        <?php
+                        if ($Tarefa->getId() != null) {
+                        ?>  <!--Botão Delete-->
+                            <!--<button type="button" class="btn btn-danger" onclick="if(confirm('Deseja realmente excluir?')) window.location='cadastroTarefa.php?operacao=D&id=<?php echo $auth->encripta($id); ?>'">Excluir</button>-->
+                        <?php
+                            }
+                        ?>
+                    </div>
+                </div>
+            </form>    
         </div>
+      <script type="text/javascript">
+       // $(function(){
+        //    $("#data_agendamento").datepicker();
+        //});
+        </script>   
     </body>
 </html>

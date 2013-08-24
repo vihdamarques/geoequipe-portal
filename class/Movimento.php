@@ -7,6 +7,7 @@
 		private $_apontamento;
 		private $_status;
 		private $_ordem;
+		
 		//construtor da classe
 		public function __construct( $_id = null
 									,$_tarefa = null
@@ -62,7 +63,7 @@
 		}
 
 		public function setData($_data_criacao){
-			$this->_data_criacao = $_data;
+			$this->_data = $_data_criacao;
 		}
 
 		public function getData(){
