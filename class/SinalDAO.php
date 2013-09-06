@@ -1,9 +1,9 @@
 <?php
 
-    include_once 'Conexao.php';
-    include_once 'Sinal.php';
-    include_once 'UsuarioDAO.php';
-    include_once 'EquipamentoDAO.php';
+    include_once 'class/Conexao.php';
+    include_once 'class/Sinal.php';
+    include_once 'class/UsuarioDAO.php';
+    include_once 'class/EquipamentoDAO.php';
 
     class SinalDAO {
         private $_conn;
