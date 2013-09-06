@@ -1,6 +1,6 @@
 <?php
-    include_once "Equipamento.php";
-    include_once "Conexao.php";
+    include_once "class/Equipamento.php";
+    include_once "class/Conexao.php";
 
 	class EquipamentoDAO {
 		private $_conn;

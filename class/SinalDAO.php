@@ -1,9 +1,9 @@
 <?php
 
-    include_once 'Conexao.php';
-    include_once 'Sinal.php';
-    include_once 'UsuarioDAO.php';
-    include_once 'EquipamentoDAO.php';
+    include_once 'class/Conexao.php';
+    include_once 'class/Sinal.php';
+    include_once 'class/UsuarioDAO.php';
+    include_once 'class/EquipamentoDAO.php';
 
     class SinalDAO {
         private $_conn;
@@ -25,8 +25,10 @@
             $stmt->execute();
             $result = $stmt->fetchAll();
             foreach ($result as $key => $linha) {
-                $usuario = new UsuarioDAO()->consultarId($linha["id_usuario"]);
-                $equipamento = new EquipamentoDAO()->consultarId($linha["id_equipamento"]);
+                $usuarioDAO = new UsuarioDAO();
+                $usuario = $usuarioDAO->consultarId($linha["id_usuario"]);
+                $equipamentoDAO = new EquipamentoDAO();
+                $equipamento = $equipamentoDAO->consultarId($linha["id_equipamento"]);
 
                 $sinal = new Sinal($linha["id_sinal"]
                                   ,$usuario
@@ -60,7 +62,7 @@
 
             $stmt = $this->_conn->prepare("SELECT s.* FROM ge_sinal s"
                                         . "WHERE s.id_usuario = :id_usuario "
-                                        . "AND s.data_servidor BETWEEN :data_ini AND :data_fim "
+                                        . "AND s.data_servidor BETWEEN str_to_date(:data_ini,'%d/%m/%Y') AND str_to_date(:data_fim,'%d/%m/%Y') "
                                         . "ORDER BY s.id_sinal");
 
             $stmt->bindValue(":id_usuario", $_id_usuario, PDO::PARAM_INT);
@@ -70,8 +72,10 @@
             $result = $stmt->fetchAll();
 
             foreach ($result as $key => $linha) {
-                $usuario = new UsuarioDAO()->consultarId($linha["id_usuario"]);
-                $equipamento = new EquipamentoDAO()->consultarId($linha["id_equipamento"]);
+                $usuarioDAO = new UsuarioDAO();
+                $usuario = $usuarioDAO->consultarId($linha["id_usuario"]);
+                $equipamentoDAO = new EquipamentoDAO();
+                $equipamento = $equipamentoDAO->consultarId($linha["id_equipamento"]);
 
                 $sinal = new Sinal($linha["id_sinal"]
                                   ,$usuario

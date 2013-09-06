@@ -1,7 +1,7 @@
 <?php
 
-    include_once 'Conexao.php';
-    include_once 'Usuario.php';
+    include_once 'class/Conexao.php';
+    include_once 'class/Usuario.php';
 
     class UsuarioDAO{
         private $_conn;
