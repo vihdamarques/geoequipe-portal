@@ -137,6 +137,5 @@
 		$this->_conn->__destruct();
 		}
 
-
 	}
 ?>

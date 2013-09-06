@@ -23,7 +23,7 @@
     $Tarefa = new Tarefa();
     $tarefaDAO = new TarefaDAO();    
     $usuarioDAO = new UsuarioDAO();    
-    $localDAO = new LocalDAO();    
+    $localDAO = new LocalDAO();        
     $movimentoDAO = new MovimentoDAO();
     $msg = null; 
     
@@ -46,30 +46,48 @@
   $tarefas = $tarefaDAO->consultarTodos($inicio,$tarefa_pag);
 
 ?>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Geoequipe</title>
-        <!-- CSS -->
-        <link href="css/bootstrap.min.css" rel="stylesheet">
-        <style>
-            body {
-                padding-top: 60px;
-            }
-        </style>
-        <!-- Scripts -->
-        <script src="js/bootstrap.min.js"></script>
-    </head>
-    <body>
+
         <!--Cabeçalho-->
         <?php include_once 'header.php'; ?>
         <!--Formulário-->        
-        <div class="controls">
-            <button type="button" class="btn" onclick="window.location='cadastroTarefa.php'">Criar</button>
-            <input type="hidden" name="id" id="id" value="" />
-        </div>
-
+    <div class="container">
+        <form id="formTarefas" class="form-horizontal" method="POST" action="tarefas.php">
+            <legend>Filtros</legend>
+                <button type="button" class="btn" onclick="window.location='cadastroTarefa.php'">Criar</button>
+                <input type="hidden" name="id" id="id" value="" />
+             <!--Status-->   
+            <div class="control-group">
+                <label class="control-label" for="status">Status</label>
+                <div class="controls">
+                    <select class="input-medium" name="status" id="status">
+                        <option> Selecionar</option>
+                        <option value="A"> Aberto</option>
+                        <option value="C"> Cancelado</option>
+                        <option value="G"> Agendado</option>
+                        <option value="T"> Atendido</option>
+                        <option value="N"> Não Atendido</option>
+                    </select>
+                </div>
+            </div>
+             <!--Local-->   
+            <div class="control-group">
+                <label class="control-label" for="local">Local</label>
+                <div class="controls">
+                    <select class="input-large" name="local" id="local">
+                        <option> Selecionar</option>
+                    </select>
+                </div>
+            </div>
+             <!--Usuario-->   
+            <div class="control-group">
+                <label class="control-label" for="usuario">Usuário</label>
+                <div class="controls">
+                    <select class="input-large" name="usuario" id="usuario">
+                        <option> Selecionar</option>
+                     </select>
+                </div>
+            </div>
+        </form>
             <!--Relatório-->
             <?php 
             if (sizeof($tarefas) > 0) {
@@ -128,13 +146,13 @@
                                 </td>
                                 <td>Detalhes</td>
                                 <td>                                    
-                                    <?php if($ultimo_status->getStatus() == "A") {
+                                    <?php if($ultimo_status->getStatus() == "A" or $ultimo_status->getStatus() == "N") {
                                             echo "<select name=\"acao\" class=\"input-medium\">                                        
                                                       <option value=\"0\">Selecione</option>
                                                       <option value=\"G\">Agendar</option>
                                                       <option value=\"C\">Cancelar</option>
                                                   </select>";    
-                                             } elseif ($ultimo_status->getStatus() == "G" or $ultimo_status->getStatus() == "N") {
+                                             } elseif ($ultimo_status->getStatus() == "G") {
                                                 echo "<select name=\"acao\" class=\"input-medium\"> 
                                                           <option value=\"0\">Selecione</option>
                                                           <option value=\"C\">Cancelar</option>
@@ -175,6 +193,7 @@
         }
         ?>
         </ul>       
+
     <!--Selecionar ação-->    
     <script type="text/javascript">
         $(function(){
@@ -182,10 +201,27 @@
                 if ($(this).val() !== "0") {                         
                     var id = $(this).closest('tr').find('.id').text();
                     var acao = $(this).val();                    
-                    window.location = "acoes_tarefas.php?id="+id+"&acao="+acao;
+                    $("#modal_iframe").attr("src","acoes_tarefas.php?id="+id+"&acao="+acao);
+                    $('#modal').modal();
                 }
             });
         });
-    </script>        
+
+        $('#modal').on('hidden', function () {
+          document.location.reload();
+        });
+
+    </script>     
+
+        <!--Modal-->   
+        <div id="modal" class="modal hide fade" style="width: auto; height: auto; margin-left:-325px;">          
+            <div class="modal-body">  
+                <iframe src="" width="650px" height="370px" id="modal_iframe" frameborder="0"> </iframe>
+            </div>  
+            <div class="modal-footer">           
+                <a href="#" class="btn" data-dismiss="modal">Fechar</a>  
+            </div>
+        </div>
+    </div>
     </body>
 </html>
