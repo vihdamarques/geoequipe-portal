@@ -100,12 +100,12 @@
 		}
 
 		public function encripta($string){
-			$codigo = base64_encode("983459834598345098345".$string);
+			$codigo = base64_encode($string);
 			return $codigo;
 		}
 
 		public function decripta($string){			
-			$codigo = trim(str_replace("983459834598345098345","",base64_decode($string)));			
+			$codigo = base64_decode($string);			
 			return $codigo;
 		}
 

@@ -20,12 +20,18 @@
 
 												VALUES ( :id_tarefa
 														,:id_usuario
-														,now()														
+														,:data
 														,:apontamento
 														,:status
 														,:ordem	)"
 											);
 				
+				if($_movimento->getStatus() == "G"){
+					$stmt->bindValue(":data", $_movimento->getData());
+				} else{
+					$stmt->bindValue(":data", date('Y-m-d H:i:s'));
+				}
+
 				$stmt->bindValue(":id_tarefa", $_movimento->getTarefa());
 				$stmt->bindValue(":id_usuario", $_movimento->getUsuario());
 				//$stmt->bindValue(":data", "now()"/*$_movimento->getData()*/);
@@ -136,6 +142,26 @@
 						                    ,$linha["apontamento"] 					                  
 						                    ,$linha["status"] 	
   						                    ,$linha["ordem"] 	
+ 					                       );
+		}			
+		return $_movimento;
+		//fecha conexão
+		$this->_conn->__destruct();
+		}
+
+		public function usuarioAgendado($id_tarefa){
+		$stmt = $this->_conn->prepare("SELECT * FROM ge_tarefa_movto WHERE id_tarefa = :id_tarefa AND status = 'G'");
+		$stmt->bindValue(":id_tarefa", $id_tarefa);
+		$stmt->execute();
+		//retornar para cada tarefa no banco, um objeto tarefa
+		while ($linha = $stmt->fetch()) {
+				$_movimento = new Movimento ($linha["id_tarefa_movto"]
+						                    ,$linha["id_tarefa"]
+						                    ,$linha["id_usuario"]
+						                    ,$linha["data"]
+						                    ,$linha["apontamento"] 					                  
+						                    ,$linha["status"] 	
+  						                    ,$linha["ordem"]
  					                       );
 		}			
 		return $_movimento;

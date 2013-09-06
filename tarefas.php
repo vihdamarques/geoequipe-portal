@@ -25,7 +25,7 @@
     $usuarioDAO = new UsuarioDAO();    
     $localDAO = new LocalDAO();    
     $movimentoDAO = new MovimentoDAO();
-    $msg = null;   
+    $msg = null; 
     
     //verifica se a variavel id existe no array POST
     if (isset($_POST["id"])){
@@ -94,11 +94,11 @@
                             ?>
                             <tr>
                                 <td style="text-align:center"><a href="cadastroTarefa.php?id=<?php echo $auth->encripta($tar->getId()); ?>"><i class="icon-pencil"></i></a></td>
-                                <td class="id" style="display:none;"><?php echo $auth->encripta($tar->getId()); ?></td>
+                                <td class="id" style="display:none;"><?php echo $auth->encripta($tar->getId()); ?></td> <!--id criptografado a ser passado po GET-->
                                 <td><?php echo $tar->getId();?></td>                                
                                 <td><?php echo $tar->getDescricao();?></td>
-                                <td><?php $status = $movimentoDAO->consultarUltimoStatus($tar->getId());                                          
-                                    switch ($status->getStatus()) {
+                                <td><?php $ultimo_status = $movimentoDAO->consultarUltimoStatus($tar->getId());                                          
+                                    switch ($ultimo_status->getStatus()) {
                                     case "A":
                                         echo "Aberto";
                                         break;
@@ -118,7 +118,7 @@
                                         break;
                                     } ?>
                                 </td>
-                                <td><?php echo strftime("%d/%m/%Y %H:%M:%S", strtotime($tar->getData()));?></td>
+                                <td><?php echo date("d/m/Y H:i:s", strtotime($tar->getData()));?></td>
                                 <td><?php $nome_local = $localDAO->consultarId($tar->getLocal());
                                           echo $nome_local->getNome(); ?>
                                 </td>
@@ -128,13 +128,24 @@
                                 </td>
                                 <td>Detalhes</td>
                                 <td>                                    
-                                    <select name="acao" class="input-medium">
-                                        <option value="0">Selecione</option>
-                                        <option value="AG">Agendar</option>
-                                        <option value="CA">Cancelar</option>
-                                        <option value="CO">Concluir</option>
-                                        <option value="AD">Adiar</option>
-                                    </select>
+                                    <?php if($ultimo_status->getStatus() == "A") {
+                                            echo "<select name=\"acao\" class=\"input-medium\">                                        
+                                                      <option value=\"0\">Selecione</option>
+                                                      <option value=\"G\">Agendar</option>
+                                                      <option value=\"C\">Cancelar</option>
+                                                  </select>";    
+                                             } elseif ($ultimo_status->getStatus() == "G" or $ultimo_status->getStatus() == "N") {
+                                                echo "<select name=\"acao\" class=\"input-medium\"> 
+                                                          <option value=\"0\">Selecione</option>
+                                                          <option value=\"C\">Cancelar</option>
+                                                          <option value=\"T\">Concluir</option>
+                                                          <option value=\"N\">Adiar</option>
+                                                      </select>";    
+                                             } else {
+                                                 echo '-';
+                                             }                                       
+                                    ?>                                                                                
+                                   
                                 </td>
                             </tr>
                             <?php

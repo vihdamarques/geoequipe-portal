@@ -180,7 +180,7 @@
                 <div class="control-group">
                     <label class="control-label" for="descricao">Descrição da tarefa</label>
                     <div class="controls">
-                        <textarea name="descricao" id="descricao" placeholder="Digite a descrição da tarefa"><?php echo $Tarefa->getDescricao(); ?></textarea>    
+                        <textarea name="descricao" id="descricao" rows="4" placeholder="Digite a descrição da tarefa"><?php echo $Tarefa->getDescricao(); ?></textarea>    
                     </div>
                 </div>
                 <!--Data Abertura-->
@@ -188,7 +188,7 @@
                 <div class="control-group">
                     <label class="control-label" for="data">Data abertura</label>
                     <div class="controls">
-                        <input type="text" value="<?php echo strftime("%d/%m/%Y %H:%M:%S", strtotime($Tarefa->getData())); ?>" name="data" id="data" placeholder="Digite a data de abertura" readonly="true">
+                        <input type="text" value="<?php echo date("d/m/Y H:i:s", strtotime($Tarefa->getData())); ?>" name="data" id="data" placeholder="Digite a data de abertura" readonly="true">
                     </div>    
                 </div>
                 <?php } ?>                                        
@@ -252,7 +252,7 @@
                                     default:                                        
                                         break;
                                 }  ?></td>
-                                <td><?php echo strftime("%d/%m/%Y %H:%M:%S", strtotime($mov->getData())); ?></td>                                
+                                <td><?php echo date("d/m/Y H:i:s", strtotime($mov->getData())); ?></td>                                
                                 <td><?php $nome_usuario = $usuarioDAO->consultarId($mov->getUsuario());
                                           echo $nome_usuario->getNome(); ?>
                                 </td>
