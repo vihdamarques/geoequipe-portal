@@ -149,40 +149,7 @@
   $usuarios = $usuarioDAO->consultarTodos($inicio, $usuarios_pag, $busca);
 
 ?>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Geoequipe</title>
-        <!-- CSS -->
-        <link href="css/bootstrap.min.css" rel="stylesheet">
-        <style>
-            body {
-                padding-top: 60px;
-            }
-        </style>
-        <!-- Scripts -->
-        <script src="js/bootstrap.min.js"></script>
-        <script>
-            var req;
-            function consulta(){
-                if(window.XMLHttpRequest) { 
-                    req = new XMLHttpRequest(); 
-                } else if(window.ActiveXObject) { 
-                    req = new ActiveXObject("Microsoft.XMLHTTP"); 
-                }
-                var string = $('#busca').val();
-                var url = "usuario.php?busca=" + string;
-                req.open("Get", url, true);
-                req.onreadystatechange = function(){
-                    var resposta = req.responseText;   
-                    document.getElementById('relatorio').innerHTML = resposta;
-                }
-            }
 
-        </script>        
-    </head>
-    <body>
         <!--Cabeçalho-->
         <?php include_once 'header.php'; ?>
         <!--Formulário-->
@@ -247,7 +214,7 @@
                 <div class="control-group">
                     <label class="control-label" for="inputAtivo">Perfil</label>
                     <div class="controls">
-                        <select class="input-small" name="perfil" id="inputAtivo">
+                        <select class="input-small" name="perfil" id="perfil">
                             <option value="E" <?php echo ($Usuario) ? $Usuario->getPerfil() == "E" ? "selected=\"selected\"" : "" : "" ?> >Externo</option>
                             <option value="I" <?php echo ($Usuario) ? $Usuario->getPerfil() == "I" ? "selected=\"selected\"" : "" : ""?> >Interno</option>
                             <option value="G" <?php echo ($Usuario) ? $Usuario->getPerfil() == "G" ? "selected=\"selected\"" : "" : ""?> >Gestor</option>

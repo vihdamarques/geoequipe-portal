@@ -9,16 +9,20 @@
       <meta charset="utf-8">
 
       <title>Geoequipe</title>
-      <!-- CSS -->
+      <!-- CSS -->      
       <link href="css/bootstrap.min.css" rel="stylesheet">
+      <link href="css/datepicker.css" rel="stylesheet">
+      <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
       <style>
           body {
               padding-top: 60px;
           }
       </style>
       <!-- Scripts -->
-      <script src="js/jquery-1.10.2.min.js"></script>
+      <script src="js/jquery-1.10.2.min.js"></script>      
       <script src="js/bootstrap.min.js"></script>
+      <script src="js/bootstrap-datepicker.js"></script>
+      <script src="js/bootstrap-datepicker.pt-BR.js" charset="UTF-8"></script>      
   </head>
   <body>
     <div class="navbar navbar-fixed-top navbar-inverse"> <!-- menu preto: navbar-inverse-->
@@ -68,5 +72,4 @@
         </div>
       </div>
     </div>
-  </body>
-</html>
+  

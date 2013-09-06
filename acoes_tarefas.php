@@ -101,28 +101,34 @@
 	        }
 	    }
  ?>
- <!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Geoequipe</title>
-        <!-- CSS -->
-        <link href="css/bootstrap.min.css" rel="stylesheet">
-        <link href="css/jquery-ui-1.10.3.custom.min.css" rel="stylesheet">
-        <style>
-            body {
-                padding-top: 60px;
-            }
-        </style>
-        <!-- Scripts -->
-        <script src="js/jquery-1.9.1.min.js"></script>        
-        <script src="js/bootstrap.min.js"></script>        
-        
-    </head>
-    <body>
+
         <!--Cabeçalho-->
-        <?php include_once 'header.php'; ?>
+      <!--  <?php //include_once 'header.php'; ?> -->
         <!--relatório-->
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+      <meta charset="utf-8">
+
+      <title>Geoequipe</title>
+      <!-- CSS -->      
+      <link href="css/bootstrap.min.css" rel="stylesheet">
+      <link href="css/datepicker.css" rel="stylesheet">
+      <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
+      <style>
+          body {
+              padding-top: 0px;
+          }
+      </style>
+      <!-- Scripts -->
+      <script src="js/jquery-1.10.2.min.js"></script>
+      <script src="js/bootstrap.min.js"></script>
+      <script src="js/bootstrap-datepicker.js"></script>
+      <script src="js/bootstrap-datepicker.pt-BR.js" charset="UTF-8"></script>      
+  </head>
+  <body>        
         <div class="container">      
             <!--Formulário-->        
             <form id="formAcao" class="form-horizontal" method="POST" action="acoes_tarefas.php">
@@ -167,7 +173,7 @@
                     <label class="control-label" for="data_agendamento">Data Agendamento</label>
                     <div class="controls">
                         <!--<div class="input-append date">-->
-                              <input type="text" id="data_agendamento" name="data_agendamento" class="input-small">
+                              <input type="text" id="data_agendamento" name="data_agendamento" class="input-small datepicker" placeholder="dd/mm/yyyy">
                               <!--<span class="add-on"><i class="icon-calendar"></i></span>-->
                         <!--</div>-->
                     </div>
@@ -222,7 +228,7 @@
                         </button>
                     <?php } ?>
                         <!--Botão Voltar-->
-                        <button type="button" class="btn" onclick="window.location='tarefas.php'">Voltar</button>
+                        <!-- <button type="button" class="btn" onclick="window.location='tarefas.php'">Voltar</button> -->
                         <?php
                         if ($Tarefa->getId() != null) {
                         ?>  <!--Botão Delete-->
@@ -235,9 +241,15 @@
             </form>    
         </div>
       <script type="text/javascript">
-       // $(function(){
-        //    $("#data_agendamento").datepicker();
-        //});
+        $(function(){
+            $(".datepicker").datepicker({
+                language: "pt-BR",
+                orientation: "top",
+                format: "dd/mm/yyyy",
+                autoclose: true,
+                startDate: new Date()
+            });
+        });
         </script>   
     </body>
 </html>
