@@ -1,5 +1,8 @@
 <?php
-	class EquipamentoDAO{
+    include_once "Equipamento.php";
+    include_once "Conexao.php";
+
+	class EquipamentoDAO {
 		private $_conn;
 
 		//construtor

@@ -14,16 +14,10 @@
                 height: 100%;
             }
 
-            body {
-                padding-top: 0px !important;
-            }
-
-            #map-canvas {
-                margin-top: 41px !important;
-            }
-
             #map-canvas img {
                 max-width: none;
+                width: auto;
+                display:inline;
             }
         </style>
         <script src="http://maps.google.com/maps/api/js?v=3&sensor=false"></script>
