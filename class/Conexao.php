@@ -1,12 +1,12 @@
 <?php
 	class Conexao extends PDO{
-		private $_dsn = "mysql:host=localhost;port=3306;dbname=geoequipe;";
-		//private $_dsn = "mysql:host=geoequipe.com.br;port=3306;dbname=blurb372_geoequipe;";
-		private $_user = "root";
-		//private $_user = "blurb372_ge";
-		private $_password = "";
-		//private $_password = "geoequipe";
-		private $_options = array( PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
+		//private $_dsn = "mysql:host=localhost;port=3306;dbname=geoequipe;";
+		private $_dsn = "mysql:host=geoequipe.com.br;port=3306;dbname=blurb372_geoequipe;";
+		//private $_user = "root";
+		private $_user = "blurb372_ge";
+		//private $_password = "";
+		private $_password = "geoequipe";
+		private $_options = array( PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8', PDO::ATTR_TIMEOUT => 600);
 		private $_conn = null;
 
 		//construtor - conectar

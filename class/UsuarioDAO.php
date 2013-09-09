@@ -8,7 +8,7 @@
 
         //construtor
         public function __construct(){
-            $this->_conn = new Conexao();           
+              $this->_conn = new Conexao();
         }
 
         //função para INSERT dos dados na tabela ge_usuario

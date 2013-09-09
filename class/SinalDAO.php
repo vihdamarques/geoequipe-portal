@@ -25,14 +25,9 @@
             $stmt->execute();
             $result = $stmt->fetchAll();
             foreach ($result as $key => $linha) {
-                $usuarioDAO = new UsuarioDAO();
-                $usuario = $usuarioDAO->consultarId($linha["id_usuario"]);
-                $equipamentoDAO = new EquipamentoDAO();
-                $equipamento = $equipamentoDAO->consultarId($linha["id_equipamento"]);
-
                 $sinal = new Sinal($linha["id_sinal"]
-                                  ,$usuario
-                                  ,$equipamento
+                                  ,$linha["id_usuario"]
+                                  ,$linha["id_equipamento"]
                                   ,$linha["data_sinal"]
                                   ,$linha["data_servidor"]
                                   ,$linha["latitude"]
@@ -60,26 +55,22 @@
         public function consultarPorPeriodo($_id_usuario, $_data_ini, $_data_fim){
             $_vetor = array();
 
-            $stmt = $this->_conn->prepare("SELECT s.* FROM ge_sinal s"
-                                        . "WHERE s.id_usuario = :id_usuario "
-                                        . "AND s.data_servidor BETWEEN str_to_date(:data_ini,'%d/%m/%Y') AND str_to_date(:data_fim,'%d/%m/%Y') "
+            $stmt = $this->_conn->prepare("SELECT s.* FROM ge_sinal s \n"
+                                        . "WHERE s.id_usuario = :id_usuario \n"
+                                        . "AND s.data_servidor BETWEEN str_to_date(:data_ini,'%d/%m/%Y') \n"
+                                        . "                        AND str_to_date(:data_fim,'%d/%m/%Y') \n"
                                         . "ORDER BY s.id_sinal");
 
             $stmt->bindValue(":id_usuario", $_id_usuario, PDO::PARAM_INT);
-            $stmt->bindValue(":data_ini", $_id_usuario, PDO::PARAM_STR);
-            $stmt->bindValue(":data_fim", $_id_usuario, PDO::PARAM_STR);
+            $stmt->bindValue(":data_ini", $_data_ini, PDO::PARAM_STR);
+            $stmt->bindValue(":data_fim", $_data_fim, PDO::PARAM_STR);
             $stmt->execute();
             $result = $stmt->fetchAll();
 
             foreach ($result as $key => $linha) {
-                $usuarioDAO = new UsuarioDAO();
-                $usuario = $usuarioDAO->consultarId($linha["id_usuario"]);
-                $equipamentoDAO = new EquipamentoDAO();
-                $equipamento = $equipamentoDAO->consultarId($linha["id_equipamento"]);
-
                 $sinal = new Sinal($linha["id_sinal"]
-                                  ,$usuario
-                                  ,$equipamento
+                                  ,$linha["id_usuario"]
+                                  ,$linha["id_equipamento"]
                                   ,$linha["data_sinal"]
                                   ,$linha["data_servidor"]
                                   ,$linha["latitude"]

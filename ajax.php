@@ -2,11 +2,14 @@
 
 include_once "class/SinalDAO.php";
 
-$processo = $_GET['processo'];
+if (isset($_GET['processo'])) $processo = $_GET['processo'];
 
-$usuario = null;
+$usuario  = null;
 $data_ini = null;
 $data_fim = null;
+
+$MIME_JSON = 'application/json';
+$MIME_JS   = 'application/x-javascript';
 
 switch ($processo) {
   case "getLatitude":
@@ -23,50 +26,141 @@ switch ($processo) {
     if (isset($_GET['usuario'])) $usuario = $_GET['usuario'];
     if (isset($_GET['data_ini'])) $data_ini = $_GET['data_ini'];
     if (isset($_GET['data_fim'])) $data_fim = $_GET['data_fim'];
-    echo jsonRastro($usuario, $data_ini, $data_fim);
+    jsonRastro($usuario, $data_ini, $data_fim);
     break;
   default:
     break;
 }
 
 function jsonMonitoramento($usuario) {
+  global $MIME_JSON;
+  $sinaldao       = new SinalDAO();
+  $possuiDados    = false;
+  $usuarioDAO     = new UsuarioDAO();
+  $equipamentoDAO = new EquipamentoDAO();
 
-  $sinaldao = new SinalDAO();
-  $json = "[";
+  $json = array();
 
   foreach ($sinaldao->consultarPorUsuario($usuario) as $sinal) {
-    $json .= "{";
-    $json .= ' "tipo":"marker"';
-    $json .= ',"nome":"' . $sinal->getUsuario()->getNome() .'"';
-    //$json .= ',"icone":"'+ $sinal->getUsuario()->getNome() +'"';
-    $json .= ',"msg":"<strong>Velocidade:<\/strong> ' . $sinal->getVelocidade() . '<br />' .
-                     '<strong>Data:<\/strong> ' . $sinal->getDataServidor() . '<br />' .
-                     '<strong>Endereço:<\/strong> ' . $sinal->getEndereco() .
-                     '"';
-    $json .= ',"coord":{"lat":' . $sinal->getLatitude() . ',"lng":' . $sinal->getLongitude() . '}';
-    $json .= "}";
-   
+    if (!$possuiDados) $possuiDados = true;
+
+    $usuario = $usuarioDAO->consultarId($sinal->getIdUsuario());
+    //$equipamento = $equipamentoDAO->consultarId($linha["id_equipamento"]);
+    array_push($json,
+      array(
+        "tipo"  => "marker"
+       ,"nome"  => $usuario->getNome()
+       //,"icone" => "icon.png"
+       ,"msg"   => '<strong>Velocidade:<\/strong> ' . $sinal->getVelocidade() . '<br />' .
+                   '<strong>Data:<\/strong> ' . $sinal->getDataServidor() . '<br />' .
+                   '<strong>Endereço:<\/strong> ' . $sinal->getEndereco()
+       ,"coord" => array("lat" => $sinal->getLatitude()
+                        ,"lng" => $sinal->getLongitude())
+      )
+    );
   }
 
-  $json .= "]";
-
-  header('Cache-Control: no-cache, must-revalidate');
-  header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-  header('Content-type: application/json');
-
-  echo $json;
+  if ($possuiDados)
+    httpPrint(json_encode($json), $MIME_JSON, false);
+  else
+    noDataFound();
 }
 
+function jsonRastro($usuario, $data_ini, $data_fim) {
+  global $MIME_JSON;
+  $sinaldao       = new SinalDAO();
+  $possuiDados    = false;
+  $trajeto        = array();
+  $usuarioDAO     = new UsuarioDAO();
+  $equipamentoDAO = new EquipamentoDAO();
 
+  $json = array();
 
+  foreach ($sinaldao->consultarPorPeriodo($usuario, $data_ini, $data_fim) as $sinal) {
+    if (!$possuiDados) $possuiDados = true;
+    
+    $usuario = $usuarioDAO->consultarId($sinal->getIdUsuario());
+    //$equipamento = $equipamentoDAO->consultarId($linha["id_equipamento"]);
+    array_push($json,
+      array(
+        "tipo"  => "marker"
+       ,"nome"  => $usuario->getNome()
+       //,"icone" => "icon.png"
+       ,"msg"   => '<strong>Velocidade:<\/strong> ' . $sinal->getVelocidade() . '<br />' .
+                   '<strong>Data:<\/strong> ' . $sinal->getDataServidor() . '<br />' .
+                   '<strong>Endereço:<\/strong> ' . $sinal->getEndereco()
+       ,"coord" => array("lat" => $sinal->getLatitude()
+                        ,"lng" => $sinal->getLongitude())
+      )
+    );
 
-/*[
-   {"tipo":"marker"
-   ,"nome":"GCM 1305"
-   ,"icone":"http:\/\/www.sistracks.com.br\/i\/apex_tracker\/images\/marker_carro_azul.png"
-   ,"msg":"<strong>Identificação:<\/strong> GCM 1305<br><strong>Status:<\/strong> Em Movimento<br><strong>SV:<\/strong> 9<br><strong>Placa:<\/strong> FGY-6295<br><strong>Velocidade:<\/strong> 18<br><strong>Data:<\/strong> 30\/08\/2013 20:10<br><input type=\"hidden\" name=\"f01\" value=\"18458\" \/><span class=\"sincronizar\" style=\"font-weight:bold; display:none;\">Tempo de sincronização: <\/span><select class=\"sincronizar\" style=\"display:none\" name=\"f02\"><option value=\"300\" >5 minutos<\/option><option value=\"120\" >2 minutos<\/option><option value=\"60\" >1 minutos<\/option><option value=\"30\" selected>30 segundos<\/option><\/select>&nbsp;&nbsp;&nbsp;<input class=\"sincronizar\" style=\"display:none\" type=\"button\" value=\"Salvar\" onClick=\"AlterarVlrs()\" \/><br class=\"sincronizar\"\/>"
-   ,"coord":{"lat":-23.60626,"lng":-46.92621}
-   ,"equipamento":"<input type=\"hidden\" value=\"18458\" name=\"f01\" \/>"}
-  ]
-*/
+    array_push($trajeto, array("lat" => $sinal->getLatitude()
+                              ,"lng" => $sinal->getLongitude()));
+
+  }
+
+  if ($possuiDados) {
+    $json = array_merge($json, tracarTrajeto($trajeto));
+    httpPrint(json_encode($json), $MIME_JSON, false);
+  } else {
+    noDataFound();
+  }
+}
+
+function tracarTrajeto($coords) {
+  $cor       = '#77F';
+  $opacidade = '0.6';
+  $espessura = '4';
+  $trajeto   = array();
+
+  for ($n = 1; $n < sizeof($coords); $n++) {
+    array_push($trajeto,
+      array(
+        "tipo"      => "linha"
+       ,"nome"      => "Trecho 1 a 2"
+       ,"cor"       => "$cor"
+       ,"opacidade" => "$opacidade"
+       ,"espessura" => "$espessura"
+       ,"msg"       => "<strong>Distância:<\/strong> " . calculaDistancia($coords[$n-1]["lat"]
+                                                                         ,$coords[$n-1]["lng"]
+                                                                         ,$coords[$n]["lat"]
+                                                                         ,$coords[$n]["lng"]) . " Km"
+       ,"coord"     => array(array("lat" => $coords[$n-1]["lat"], "lng" => $coords[$n-1]["lng"])
+                            ,array("lat" => $coords[$n]["lat"], "lng" => $coords[$n]["lng"]))
+      )
+    );
+  }
+
+  return $trajeto;
+}
+
+function calculaDistancia($lat1, $lng1, $lat2, $lng2) {
+  $raio_terra = 6378136.245; // em Metros
+  $rad        = 180 / pi();
+  $arco_ab    = 90 - $lat1;
+  $arco_ac    = 90 - $lat2;
+  $arco_abc   = $lng2 - $lng1;
+  $arco_cos;
+
+  $arco_cos = (cos($arco_ac/$rad) * cos($arco_ab/$rad)) + (sin($arco_ac/$rad) * sin($arco_ab/$rad) * cos($arco_abc/$rad));
+  $arco_cos = (acos($arco_cos) * 180) / pi();
+
+  return round((2 * pi() * $raio_terra * $arco_cos) / 360, 2);
+}
+
+function noDataFound() {
+  global $MIME_JS;
+  httpPrint('geoequipe.msgAjaxFalha("Dados não encontrados !")', $MIME_JS, false);
+}
+
+function httpPrint($content, $mime = 'text/html', $cache = false) {
+  if (!$cache) {
+    header('Cache-Control: no-cache, must-revalidate');
+    header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+    header('Pragma: no-cache');
+  }
+  header('Content-type: ' . $mime . '; charset=utf-8');
+  echo $content;
+}
+
 ?>

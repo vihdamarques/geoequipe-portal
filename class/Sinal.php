@@ -2,8 +2,8 @@
     class Sinal {
 
         private $_id;
-        private $_usuario;
-        private $_equipamento;
+        private $_id_usuario;
+        private $_id_equipamento;
         private $_data_sinal;
         private $_data_servidor;
         private $_latitude;
@@ -18,56 +18,56 @@
         private $_cep;
 
         // construtor da classe
-        public function __construct($_id            = null
-                                   ,$_usuario       = null
-                                   ,$_equipamento   = null
-                                   ,$_data_sinal    = null
-                                   ,$_data_servidor = null
-                                   ,$_latitude      = null
-                                   ,$_longitude     = null
-                                   ,$_velocidade    = null
-                                   ,$_logradouro    = null
-                                   ,$_numero        = null
-                                   ,$_bairro        = null
-                                   ,$_cidade        = null
-                                   ,$_estado        = null
-                                   ,$_pais          = null
-                                   ,$_cep           = null) {
+        public function __construct($_id             = null
+                                   ,$_id_usuario     = null
+                                   ,$_id_equipamento = null
+                                   ,$_data_sinal     = null
+                                   ,$_data_servidor  = null
+                                   ,$_latitude       = null
+                                   ,$_longitude      = null
+                                   ,$_velocidade     = null
+                                   ,$_logradouro     = null
+                                   ,$_numero         = null
+                                   ,$_bairro         = null
+                                   ,$_cidade         = null
+                                   ,$_estado         = null
+                                   ,$_pais           = null
+                                   ,$_cep            = null) {
 
-            $this->_id            = $_id;
-            $this->_usuario       = $_usuario;
-            $this->_equipamento   = $_equipamento;
-            $this->_data_sinal    = $_data_sinal;
-            $this->_data_servidor = $_data_servidor;
-            $this->_latitude      = $_latitude;
-            $this->_longitude     = $_longitude;
-            $this->_velocidade    = $_velocidade;
-            $this->_logradouro    = $_logradouro;
-            $this->_numero        = $_numero;
-            $this->_bairro        = $_bairro;
-            $this->_cidade        = $_cidade;
-            $this->_estado        = $_estado;
-            $this->_pais          = $_pais;
-            $this->_cep           = $_cep;
+            $this->_id             = $_id;
+            $this->_id_usuario     = $_id_usuario;
+            $this->_id_equipamento = $_id_equipamento;
+            $this->_data_sinal     = $_data_sinal;
+            $this->_data_servidor  = $_data_servidor;
+            $this->_latitude       = $_latitude;
+            $this->_longitude      = $_longitude;
+            $this->_velocidade     = $_velocidade;
+            $this->_logradouro     = $_logradouro;
+            $this->_numero         = $_numero;
+            $this->_bairro         = $_bairro;
+            $this->_cidade         = $_cidade;
+            $this->_estado         = $_estado;
+            $this->_pais           = $_pais;
+            $this->_cep            = $_cep;
         }
 
         // destrutor da classe
         public function __destruct() {
-            $this->_id            = null;
-            $this->_usuario       = null;
-            $this->_equipamento   = null;
-            $this->_data_sinal    = null;
-            $this->_data_servidor = null;
-            $this->_latitude      = null;
-            $this->_longitude     = null;
-            $this->_velocidade    = null;
-            $this->_logradouro    = null;
-            $this->_numero        = null;
-            $this->_bairro        = null;
-            $this->_cidade        = null;
-            $this->_estado        = null;
-            $this->_pais          = null;
-            $this->_cep           = null;
+            $this->_id             = null;
+            $this->_id_usuario     = null;
+            $this->_id_equipamento = null;
+            $this->_data_sinal     = null;
+            $this->_data_servidor  = null;
+            $this->_latitude       = null;
+            $this->_longitude      = null;
+            $this->_velocidade     = null;
+            $this->_logradouro     = null;
+            $this->_numero         = null;
+            $this->_bairro         = null;
+            $this->_cidade         = null;
+            $this->_estado         = null;
+            $this->_pais           = null;
+            $this->_cep            = null;
         }
 
         public function setId($_id){
@@ -78,20 +78,20 @@
             return $this->_id;
         }
 
-        public function setUsuario($_usuario){
-            $this->_usuario = $_usuario;
+        public function setIdUsuario($_id_usuario){
+            $this->_id_usuario = $_id_usuario;
         }
 
-        public function getUsuario(){
-            return $this->_usuario;
+        public function getIdUsuario(){
+            return $this->_id_usuario;
         }
 
-        public function setEquipamento($_equipamento){
-            $this->_equipamento = $_equipamento;
+        public function setIdEquipamento($_id_equipamento){
+            $this->_id_equipamento = $_id_equipamento;
         }
 
-        public function getEquipamento(){
-            return $this->_equipamento;
+        public function getIdEquipamento(){
+            return $this->_id_equipamento;
         }
 
         public function setDataSinal($_data_sinal){
