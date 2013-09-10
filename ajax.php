@@ -51,9 +51,9 @@ function jsonMonitoramento($usuario) {
         "tipo"  => "marker"
        ,"nome"  => $usuario->getNome()
        //,"icone" => "icon.png"
-       ,"msg"   => '<strong>Velocidade:<\/strong> ' . $sinal->getVelocidade() . '<br />' .
-                   '<strong>Data:<\/strong> ' . $sinal->getDataServidor() . '<br />' .
-                   '<strong>Endereço:<\/strong> ' . $sinal->getEndereco()
+       ,"msg"   => '<strong>Velocidade:</strong> ' . $sinal->getVelocidade() . '<br />' .
+                   '<strong>Data:</strong> ' . $sinal->getDataServidor() . '<br />' .
+                   '<strong>Endereço:</strong> ' . $sinal->getEndereco()
        ,"coord" => array("lat" => $sinal->getLatitude()
                         ,"lng" => $sinal->getLongitude())
       )
@@ -86,9 +86,9 @@ function jsonRastro($usuario, $data_ini, $data_fim) {
         "tipo"  => "marker"
        ,"nome"  => $usuario->getNome()
        //,"icone" => "icon.png"
-       ,"msg"   => '<strong>Velocidade:<\/strong> ' . $sinal->getVelocidade() . '<br />' .
-                   '<strong>Data:<\/strong> ' . $sinal->getDataServidor() . '<br />' .
-                   '<strong>Endereço:<\/strong> ' . $sinal->getEndereco()
+       ,"msg"   => '<strong>Velocidade:</strong> ' . $sinal->getVelocidade() . '<br />' .
+                   '<strong>Data:</strong> ' . $sinal->getDataServidor() . '<br />' .
+                   '<strong>Endereço:</strong> ' . $sinal->getEndereco()
        ,"coord" => array("lat" => $sinal->getLatitude()
                         ,"lng" => $sinal->getLongitude())
       )
@@ -117,14 +117,14 @@ function tracarTrajeto($coords) {
     array_push($trajeto,
       array(
         "tipo"      => "linha"
-       ,"nome"      => "Trecho 1 a 2"
+       ,"nome"      => "Trecho " . ($n-1) . " a " . $n
        ,"cor"       => "$cor"
        ,"opacidade" => "$opacidade"
        ,"espessura" => "$espessura"
-       ,"msg"       => "<strong>Distância:<\/strong> " . calculaDistancia($coords[$n-1]["lat"]
+       ,"msg"       => "<strong>Distância:</strong> " . calculaDistancia($coords[$n-1]["lat"]
                                                                          ,$coords[$n-1]["lng"]
                                                                          ,$coords[$n]["lat"]
-                                                                         ,$coords[$n]["lng"]) . " Km"
+                                                                         ,$coords[$n]["lng"]) . " metros"
        ,"coord"     => array(array("lat" => $coords[$n-1]["lat"], "lng" => $coords[$n-1]["lng"])
                             ,array("lat" => $coords[$n]["lat"], "lng" => $coords[$n]["lng"]))
       )

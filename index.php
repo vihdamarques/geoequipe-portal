@@ -16,14 +16,23 @@
 
             #map-canvas img {
                 max-width: none;
-                width: auto;
-                display:inline;
             }
         </style>
         <script src="http://maps.google.com/maps/api/js?v=3&sensor=false"></script>
         <script src="js/GeoequipeAPI.js"></script>
         <script>
             geoequipe.criaMapa({div:"map-canvas"});
+            carregaMarkers();
+            setInterval("carregaMarkers()", 60000);
+
+            function carregaMarkers(){
+              geoequipe.criaMarker({
+                processo: {processo: 'monitoramento', usuario: 0}
+               //,param: {}
+               ,mapa: geoequipe.mapa(0)
+               ,limpar: geoequipe.marker()
+              });
+            }
         </script>
     </body>
 </html>
