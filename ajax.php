@@ -1,6 +1,9 @@
 <?php
 
 include_once "class/SinalDAO.php";
+include_once "class/UsuarioDAO.php";
+include_once "class/EquipamentoDAO.php";
+include_once "class/Conexao.php";
 
 if (isset($_GET['processo'])) $processo = $_GET['processo'];
 
@@ -34,31 +37,32 @@ switch ($processo) {
 
 function jsonMonitoramento($usuario) {
   global $MIME_JSON;
-  $sinaldao       = new SinalDAO();
+  $conn           = new conexao();
+  $sinaldao       = new SinalDAO($conn);
   $possuiDados    = false;
-  $usuarioDAO     = new UsuarioDAO();
-  $equipamentoDAO = new EquipamentoDAO();
 
   $json = array();
 
   foreach ($sinaldao->consultarPorUsuario($usuario) as $sinal) {
     if (!$possuiDados) $possuiDados = true;
 
-    $usuario = $usuarioDAO->consultarId($sinal->getIdUsuario());
-    //$equipamento = $equipamentoDAO->consultarId($linha["id_equipamento"]);
     array_push($json,
       array(
         "tipo"  => "marker"
-       ,"nome"  => $usuario->getNome()
-       //,"icone" => "icon.png"
-       ,"msg"   => '<strong>Velocidade:</strong> ' . $sinal->getVelocidade() . '<br />' .
+       ,"nome"  => $sinal->getUsuario()->getNome()
+       ,"icone" => "img/marker/marker_pessoa_azul.png"
+       ,"msg"   => '<strong>Nome:</strong> ' . $sinal->getUsuario()->getNome() . '<br />'.
+                   '<strong>Número:</strong> ' . $sinal->getEquipamento()->getNumero() . '<br />' .
                    '<strong>Data:</strong> ' . $sinal->getDataServidor() . '<br />' .
-                   '<strong>Endereço:</strong> ' . $sinal->getEndereco()
+                   '<strong>Endereço:</strong> ' . $sinal->getEndereco() . '<br />' .
+                   '<strong>Velocidade:</strong> ' . $sinal->getVelocidade()
        ,"coord" => array("lat" => $sinal->getLatitude()
                         ,"lng" => $sinal->getLongitude())
       )
     );
   }
+
+  $conn->__destruct();
 
   if ($possuiDados)
     httpPrint(json_encode($json), $MIME_JSON, false);
@@ -68,27 +72,28 @@ function jsonMonitoramento($usuario) {
 
 function jsonRastro($usuario, $data_ini, $data_fim) {
   global $MIME_JSON;
-  $sinaldao       = new SinalDAO();
+
+  $conn           = new conexao();
+  $sinaldao       = new SinalDAO($conn);
   $possuiDados    = false;
+  $n              = 0;
   $trajeto        = array();
-  $usuarioDAO     = new UsuarioDAO();
-  $equipamentoDAO = new EquipamentoDAO();
 
   $json = array();
 
   foreach ($sinaldao->consultarPorPeriodo($usuario, $data_ini, $data_fim) as $sinal) {
     if (!$possuiDados) $possuiDados = true;
-    
-    $usuario = $usuarioDAO->consultarId($sinal->getIdUsuario());
-    //$equipamento = $equipamentoDAO->consultarId($linha["id_equipamento"]);
+
     array_push($json,
       array(
         "tipo"  => "marker"
-       ,"nome"  => $usuario->getNome()
-       //,"icone" => "icon.png"
-       ,"msg"   => '<strong>Velocidade:</strong> ' . $sinal->getVelocidade() . '<br />' .
+       ,"nome"  => $sinal->getUsuario()->getNome()
+       ,"icone" => "img/marker/numeros/" . ++$n . ".png"
+       ,"msg"   => '<strong>Nome:</strong> ' . $sinal->getUsuario()->getNome() . '<br />'.
+                   '<strong>Número:</strong> ' . $sinal->getEquipamento()->getNumero() . '<br />' .
                    '<strong>Data:</strong> ' . $sinal->getDataServidor() . '<br />' .
-                   '<strong>Endereço:</strong> ' . $sinal->getEndereco()
+                   '<strong>Endereço:</strong> ' . $sinal->getEndereco() . '<br />' .
+                   '<strong>Velocidade:</strong> ' . $sinal->getVelocidade()
        ,"coord" => array("lat" => $sinal->getLatitude()
                         ,"lng" => $sinal->getLongitude())
       )
@@ -96,15 +101,15 @@ function jsonRastro($usuario, $data_ini, $data_fim) {
 
     array_push($trajeto, array("lat" => $sinal->getLatitude()
                               ,"lng" => $sinal->getLongitude()));
-
   }
+
+  $conn->__destruct();
 
   if ($possuiDados) {
     $json = array_merge($json, tracarTrajeto($trajeto));
     httpPrint(json_encode($json), $MIME_JSON, false);
-  } else {
+  } else
     noDataFound();
-  }
 }
 
 function tracarTrajeto($coords) {
@@ -117,7 +122,7 @@ function tracarTrajeto($coords) {
     array_push($trajeto,
       array(
         "tipo"      => "linha"
-       ,"nome"      => "Trecho " . ($n-1) . " a " . $n
+       ,"nome"      => "Trecho " . $n . " a " . ($n+1)
        ,"cor"       => "$cor"
        ,"opacidade" => "$opacidade"
        ,"espessura" => "$espessura"

@@ -1,14 +1,14 @@
 <?php
 
-    include_once 'class/Conexao.php';
+    //include_once 'class/Conexao.php';
     include_once 'class/Usuario.php';
 
     class UsuarioDAO{
         private $_conn;
 
         //construtor
-        public function __construct(){
-              $this->_conn = new Conexao();
+        public function __construct($_conn){
+              $this->_conn = $_conn;
         }
 
         //função para INSERT dos dados na tabela ge_usuario
@@ -48,7 +48,7 @@
                 //commita
                 $this->_conn->commit();                 
                 //fecha conexão
-                $this->_conn->__destruct();
+                //$this->_conn->__destruct();
 
             }
             catch(PDOException $_e){
@@ -87,7 +87,7 @@
                 //commita
                 $this->_conn->commit();
                 //fecha conexão
-                $this->_conn->__destruct();             
+                //$this->_conn->__destruct();             
             }
             catch(PDOException $_e){
                 $this->_conn->rollback();
@@ -106,7 +106,7 @@
                 //commita
                 $this->_conn->commit();
                 //fecha conexao
-                $this->_conn->__destruct();
+                //$this->_conn->__destruct();
             } catch(PDOException $_e){
                 $this->_conn->rollback();
                 echo "Erro: ".$_e->getMessage();
@@ -116,7 +116,7 @@
         //retorna o numero total de usuarios na tabela ge_usuario
         public function totalUsuarios(){
             $stmt = $this->_conn->query("SELECT count(*) CONT FROM ge_usuario");
-            return $resultado = $stmt->fetch();         
+            return $resultado = $stmt->fetch();
         }
 
         //retorna todos os usuários cadastrados na tabela ge_usuario
@@ -151,7 +151,7 @@
             //retorna um array de usuarios
             return $_vetor;
             //fecha conexão
-            $this->_conn->__destruct();
+            //$this->_conn->__destruct();
         }
 
         //retorna um usuario consultando po ID
@@ -174,7 +174,7 @@
             }
             return $usuario;
             //fecha conexão
-            $this->_conn->__destruct();
+            //$this->_conn->__destruct();
         }
 
         //cria uma tag select com todos os usuarios cadastrados
@@ -206,7 +206,7 @@
             $html .= "</select>\n"; 
             return $html;
             //fecha conexão
-            $this->_conn->__destruct();
+            //$this->_conn->__destruct();
         }
 
         /*public function busca($nome){

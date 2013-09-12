@@ -1,13 +1,12 @@
 <?php
     include_once "class/Equipamento.php";
-    include_once "class/Conexao.php";
 
     class EquipamentoDAO {
         private $_conn;
 
         //construtor
-        public function __construct(){
-              $this->_conn = new Conexao();
+        public function __construct($_conn){
+            $this->_conn = $_conn;
         }
 
         //função para INSERT dos dados na tabela ge_equipamento
@@ -40,7 +39,7 @@
                 //commita
                 $this->_conn->commit();                 
                 //fecha conexão
-                $this->_conn->__destruct();
+                //$this->_conn->__destruct();
             }
             catch(PDOException $_e){
                 $this->_conn->rollBack();
@@ -69,7 +68,7 @@
                 //commita
                 $this->_conn->commit();
                 //fecha conexão
-                $this->_conn->__destruct();             
+                //$this->_conn->__destruct();             
             }
             catch(PDOException $_e){
                 $this->_conn->rollback();
@@ -87,7 +86,7 @@
                 //commita
                 $this->_conn->commit();
                 //fecha conexao
-                $this->_conn->__destruct();
+                //$this->_conn->__destruct();
             } catch(PDOException $_e){
                 $this->_conn->rollback();
                 echo "Erro: ".$_e->getMessage();
@@ -117,31 +116,34 @@
                                               ,$linha["numero"] 
                                               ,$linha["ativo"]
                                           );
-                $_vetor[$key] = $equipamento;               
+                $_vetor[$key] = $equipamento;
             }
             //array de equipamentos
             return $_vetor;
             //fecha conexão
-            $this->_conn->__destruct();
+            //$this->_conn->__destruct();
         }
 
         //retorna o equipamento consultando por ID
-        public function consultarId($_id){          
+        public function consultarId($_id){
         $stmt = $this->_conn->prepare("SELECT * FROM ge_equipamento WHERE id_equipamento = :id");
-        $stmt->bindValue(":id", $_id);      
+        $stmt->bindValue(":id", $_id);
         $stmt->execute();
+        $result = $stmt->fetchAll();
+
         //retornar para cada equipamento no banco, um objeto equipamento
-        while ($linha = $stmt->fetch()) {
+        foreach ($result as $key => $linha) {
             $equipamento = new Equipamento($linha["id_equipamento"]
                                           ,$linha["id_ultimo_sinal"]
                                           ,$linha["des_equipamento"]
                                           ,$linha["imei"]
                                           ,$linha["numero"]
-                                          ,$linha["ativo"]);                                                                        
-        }           
+                                          ,$linha["ativo"]);
+        }
+
         return $equipamento;
         //fecha conexão
-        $this->_conn->__destruct();
+        //$this->_conn->__destruct();
         }
 
         //cria uma tag select com todos os equipamentos cadastrados
@@ -170,7 +172,7 @@
                 $html .= "</select>\n"; 
                 return $html;
                 //fecha conexão
-                $this->_conn->__destruct();
+                //$this->_conn->__destruct();
                 }
     }
 ?>
