@@ -3,9 +3,12 @@
     include_once 'class/Conexao.php';
     include_once 'class/UsuarioDAO.php';
     include_once 'class/Autenticacao.php';
+
+    //Conexão
+    $conn = new Conexao();     
     
     //Autenticação
-    $auth = new Autenticacao();
+    $auth = new Autenticacao($conn);
     $auth->autenticar();
     
     //declara e inicializa as variáveis
@@ -19,7 +22,7 @@
     $celular = null;
     $telefone = null;
     $Usuario = new Usuario();
-    $usuarioDAO = new UsuarioDAO();
+    $usuarioDAO = new UsuarioDAO($conn);
     $msg = null;   
     $busca = (isset($_GET["busca"])) ? $_GET["busca"] : "";
     
@@ -148,14 +151,16 @@
   $total_pag = ceil($total_usuarios/$usuarios_pag);
   $usuarios = $usuarioDAO->consultarTodos($inicio, $usuarios_pag, $busca);
 
+    //destruir conexão
+    $conn->__destruct();  
+
 ?>
 
         <!--Cabeçalho-->
         <?php include_once 'header.php'; ?>
         <!--Formulário-->
         <div class="container">
-            <?php
-              $auth = new Autenticacao();
+            <?php              
               $perfil = $auth->autenticarCadUsua();
               if ($perfil == "G"){
             ?>

@@ -10,8 +10,11 @@
     include_once 'class/LocalDAO.php';
     include_once 'class/Local.php';
    
+    //Conexão
+    $conn = new Conexao();
+
     //Autenticação
-    $auth = new Autenticacao();
+    $auth = new Autenticacao($conn);
     $auth->autenticar();
 
     //declara e inicializa as variáveis
@@ -21,12 +24,12 @@
     $descricao = null;
     $data = null;    
     $Tarefa = new Tarefa();
-    $tarefaDAO = new TarefaDAO();
+    $tarefaDAO = new TarefaDAO($conn);
     $Movimento = new Movimento();
-    $movimentoDAO = new MovimentoDAO();
+    $movimentoDAO = new MovimentoDAO($conn);
     $Usuario = new Usuario();
-    $usuarioDAO = new UsuarioDAO();
-    $localDAO = new LocalDAO; 
+    $usuarioDAO = new UsuarioDAO($conn);
+    $localDAO = new LocalDAO($conn); 
     $movimentos = null;
     $msg = null;   
 
@@ -128,23 +131,11 @@
     }    
 
     $movimentos = $movimentoDAO->consultarTodos($id);
+
+    //destruir conexão
+    $conn->__destruct();
 ?>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Geoequipe</title>
-        <!-- CSS -->
-        <link href="css/bootstrap.min.css" rel="stylesheet">
-        <style>
-            body {
-                padding-top: 60px;
-            }
-        </style>
-        <!-- Scripts -->
-        <script src="js/bootstrap.min.js"></script>
-    </head>
-    <body>
+
         <!--Cabeçalho-->
         <?php include_once 'header.php'; ?>
         <!--Formulário-->

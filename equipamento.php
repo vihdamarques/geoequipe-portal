@@ -3,9 +3,12 @@
     include_once 'class/Conexao.php';
     include_once 'class/EquipamentoDAO.php';
     include_once 'class/Autenticacao.php';
+
+    //Conexão
+    $conn = new Conexao();    
     
     //Autenticação
-    $auth = new Autenticacao();
+    $auth = new Autenticacao($conn);
     $auth->autenticar();
     
     //declara e inicializa as variáveis
@@ -15,7 +18,7 @@
     $imei = null;
     $ativo = null;    
     $Equipamento = new Equipamento();
-    $equipamentoDAO = new EquipamentoDAO();
+    $equipamentoDAO = new EquipamentoDAO($conn);
     $msg = null;   
     
     //verifica se a variavel id existe no array POST
@@ -121,23 +124,11 @@
   $total_equipamento = (int) $equipamentoDAO->totalEquipamentos();
   $total_pag = ceil($total_equipamento/$equipamento_pag);  
   $equipamentos = $equipamentoDAO->consultarTodos($inicio,$equipamento_pag);
+
+    //destruir conexão
+    $conn->__destruct();  
 ?>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Geoequipe</title>
-        <!-- CSS -->
-        <link href="css/bootstrap.min.css" rel="stylesheet">
-        <style>
-            body {
-                padding-top: 60px;
-            }
-        </style>
-        <!-- Scripts -->
-        <script src="js/bootstrap.min.js"></script>
-    </head>
-    <body>
+
         <!--Cabeçalho-->
         <?php include_once 'header.php'; ?>
         <!--Formulário-->
