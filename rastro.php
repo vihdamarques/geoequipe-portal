@@ -4,9 +4,9 @@
     include_once 'class/UsuarioDAO.php';
 
     //Autenticação
-    $auth = new Autenticacao();
-    $auth->autenticar();
     $conn = new Conexao();
+    $auth = new Autenticacao($conn);
+    $auth->autenticar();
     $usuarioDAO = new UsuarioDAO($conn);
 
     include_once 'header.php';
