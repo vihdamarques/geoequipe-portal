@@ -10,8 +10,11 @@
     include_once 'class/Movimento.php';    
     include_once 'class/MovimentoDAO.php';
 
+    //Conexão
+    $conn = new Conexao();
+
     //Autenticação
-    $auth = new Autenticacao();
+    $auth = new Autenticacao($conn);
     $auth->autenticar();
     
     //declara e inicializa as variáveis
@@ -22,10 +25,10 @@
     $descricao;
     $data;
     $Tarefa = new Tarefa();
-    $tarefaDAO = new TarefaDAO();    
-    $usuarioDAO = new UsuarioDAO();    
-    $localDAO = new LocalDAO();        
-    $movimentoDAO = new MovimentoDAO();
+    $tarefaDAO = new TarefaDAO($conn);    
+    $usuarioDAO = new UsuarioDAO($conn);    
+    $localDAO = new LocalDAO($conn);        
+    $movimentoDAO = new MovimentoDAO($conn);
     $msg = null; 
     
     //verifica se a variavel id existe no array POST
@@ -52,11 +55,13 @@
 
     $tarefas = $tarefaDAO->consultarTodos($inicio, $tarefa_pag, $status, $local, $usuario, $descricao, $data);
 
+    //destruir conexão
+    $conn->__destruct();
 ?>
 
-        <!--Cabeçalho-->
-        <?php include_once 'header.php'; ?>
-        <!--Formulário-->        
+    <!--Cabeçalho-->
+    <?php include_once 'header.php'; ?>
+    <!--Formulário-->        
     <div class="container">
         <form id="formTarefas" class="form-horizontal" method="POST" action="tarefas.php">
             <legend>Filtros</legend>

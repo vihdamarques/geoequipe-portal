@@ -4,8 +4,8 @@
 	class Autenticacao{
 		private $_conn;
 		//construtor
-		public function __construct(){
-			$this->_conn = new Conexao();						
+		public function __construct($conn){
+			$this->_conn = $conn;						
 		}
 
 		public function consultarLogin($usuario, $senha){

@@ -3,8 +3,8 @@
 		private $_conn;
 
 		//construtor
-		public function __construct(){
-			$this->_conn = new Conexao();			
+		public function __construct($_conn){
+			$this->_conn = $_conn;			
 		}
 
 		//função para INSERT dos dados na tabela ge_local
@@ -68,7 +68,7 @@
 				//commita
 				$this->_conn->commit(); 				
 				//fecha conexão
-				$this->_conn->__destruct();
+				//$this->_conn->__destruct();
 
 			}
 			catch(PDOException $_e){
@@ -123,7 +123,7 @@
 				//commita
 				$this->_conn->commit();
 				//fecha conexão
-				$this->_conn->__destruct();				
+				//$this->_conn->__destruct();				
 			}
 			catch(PDOException $_e){
 				$this->_conn->rollback();
@@ -142,7 +142,7 @@
 				//commita
 				$this->_conn->commit();
 				//fecha conexao
-				$this->_conn->__destruct();
+				//$this->_conn->__destruct();
 			} catch(PDOException $_e){
 				$this->_conn->rollback();
 				echo "Erro: ".$_e->getMessage();
@@ -187,7 +187,7 @@
 			//retorna um array de locais
 			return $_vetor;
 			//fecha conexão
-			$this->_conn->__destruct();
+			//$this->_conn->__destruct();
 		}
 
 		//retorna um local consultando po ID
@@ -217,7 +217,7 @@
 		}		
 		return $local;
 		//fecha conexão
-		$this->_conn->__destruct();
+		//$this->_conn->__destruct();
 		}
 
 	//cria uma tag select com todos os locais cadastrados
@@ -259,7 +259,7 @@
 			}				
 			return $html;
 			//fecha conexão
-			$this->_conn->__destruct();
+			//$this->_conn->__destruct();
 		}
 	}
 ?>

@@ -3,8 +3,8 @@
 		private $_conn;
 
 		//construtor
-		public function __construct(){
-			$this->_conn = new Conexao();			
+		public function __construct($_conn){
+			$this->_conn = $_conn;			
 		}
 
 		//função para INSERT dos dados na tabela ge_tarefa_movto
@@ -43,7 +43,7 @@
 				//commita
 				$this->_conn->commit();
 				//fecha conexão
-				$this->_conn->__destruct();
+				//$this->_conn->__destruct();
 			}
 			catch(PDOException $_e){
 				$this->_conn->rollBack();
@@ -126,7 +126,7 @@
 			}		
 			return $_vetor;
 			//fecha conexão
-			$this->_conn->__destruct();
+			//$this->_conn->__destruct();
 		}
 		
 		public function consultarUltimoStatus($id_tarefa){			
@@ -146,7 +146,7 @@
 		}			
 		return $_movimento;
 		//fecha conexão
-		$this->_conn->__destruct();
+		//$this->_conn->__destruct();
 		}
 
 		public function usuarioAgendado($id_tarefa){
@@ -166,7 +166,7 @@
 		}			
 		return $_movimento;
 		//fecha conexão
-		$this->_conn->__destruct();
+		//$this->_conn->__destruct();
 		}
 	}
 ?>

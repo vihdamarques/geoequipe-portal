@@ -3,8 +3,8 @@
 		private $_conn;
 
 		//construtor
-		public function __construct(){
-			$this->_conn = new Conexao();			
+		public function __construct($_conn){
+			$this->_conn = $_conn;			
 		}
 
 		//função para INSERT dos dados na tabela ge_tarefa
@@ -37,7 +37,7 @@
 				//retorna id inserido
 				return $lastId;
 				//fecha conexão				
-				$this->_conn->__destruct();							
+				//$this->_conn->__destruct();							
 			}
 			catch(PDOException $_e){
 				$this->_conn->rollBack();
@@ -62,7 +62,7 @@
 			//commita
 			$this->_conn->commit();
 			//fecha conexão
-			$this->_conn->__destruct();				
+			//$this->_conn->__destruct();				
 			}
 			catch(PDOException $_e){
 				$this->_conn->rollback();
@@ -81,7 +81,7 @@
 				//commita
 				$this->_conn->commit();
 				//fecha conexao
-				$this->_conn->__destruct();
+				//$this->_conn->__destruct();
 			} catch(PDOException $_e){
 				$this->_conn->rollback();
 				echo "Erro: ".$_e->getMessage();
@@ -136,7 +136,7 @@
 			//retorna um array de tarefas
 			return $_vetor;
 			//fecha conexão
-			$this->_conn->__destruct();
+			//$this->_conn->__destruct();
 		}
 
 		//retona uma tarefa consultando po ID
@@ -155,7 +155,7 @@
 		}			
 		return $tarefa;
 		//fecha conexão
-		$this->_conn->__destruct();
+		//$this->_conn->__destruct();
 		}
 
 	}

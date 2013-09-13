@@ -10,19 +10,22 @@
     include_once 'class/LocalDAO.php';
     include_once 'class/Local.php';
 
+    //Conexão
+    $conn = new Conexao();
+
     //Autenticação    
-    $auth = new Autenticacao();
+    $auth = new Autenticacao($conn);
     $auth->autenticar();
 
     $id = null;
     $Tarefa = new Tarefa();
-    $tarefaDAO = new TarefaDAO();
+    $tarefaDAO = new TarefaDAO($conn);
     $Movimento = new Movimento();
-    $movimentoDAO = new MovimentoDAO();
+    $movimentoDAO = new MovimentoDAO($conn);
     $Usuario = new Usuario();
-    $usuarioDAO = new UsuarioDAO();
+    $usuarioDAO = new UsuarioDAO($conn);
     $Local = new Local();
-    $localDAO = new LocalDAO();
+    $localDAO = new LocalDAO($conn);
     $acaoGET = (isset($_GET["acao"])) ? $_GET["acao"] : "";
     $acaoPOST = (isset($_POST["acao"])) ? $_POST["acao"] : "";
     $msg = null;
@@ -100,11 +103,12 @@
 	            }
 	        }
 	    }
+
+    //destruir conexão        
+    $conn->__destruct();        
  ?>
 
-        <!--Cabeçalho-->
-      <!--  <?php //include_once 'header.php'; ?> -->
-        <!--relatório-->
+
 <!DOCTYPE html>
 <html>
   <head>

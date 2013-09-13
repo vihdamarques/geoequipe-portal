@@ -40,7 +40,7 @@
                 <a href="#contact" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-globe icon-white"></i> Gerenciar <b class="caret"></b></a> <!-- icone branco: icon-white-->
                 <ul class="dropdown-menu">
                     <li><a href="index.php">Monitoramento</a></li>
-                    <li><a href="#">Rastro</a></li>
+                    <li><a href="rastro.php">Rastro</a></li>
                     <li><a href="#">Histórico</a></li>
                     <li><a href="tarefas.php">Tarefas</a></li>
                     <li><a href="#">Agendamento</a></li>

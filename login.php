@@ -2,11 +2,15 @@
     include_once 'class/Conexao.php';
     include_once 'class/Autenticacao.php';
     include_once 'class/Usuario.php';
+
+    //Conexão
+    $conn = new Conexao();
+
     //declara e inicializa as variaveis
     $usuario = null;
     $senha = null;
     $msg = "";
-    $auth = new Autenticacao();
+    $auth = new Autenticacao($conn);
 
     if($_SERVER["REQUEST_METHOD"]  == "POST"){
         $usuario = (isset($_POST['usuario'])) ? $_POST['usuario'] : "";
@@ -23,6 +27,9 @@
                     </div>";
         }
     }
+
+    //destruir conexão
+    $conn->__destruct();    
 ?>
 <!DOCTYPE html>
 <html>

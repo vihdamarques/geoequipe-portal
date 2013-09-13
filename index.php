@@ -1,8 +1,11 @@
 <?php 
     include_once 'class/Conexao.php';
     include_once 'class/Autenticacao.php';
+
+    $conn = new Conexao();
+
     //Autenticação
-    $auth = new Autenticacao();
+    $auth = new Autenticacao($conn);
     $auth->autenticar();    
     include_once 'header.php';
 ?>
