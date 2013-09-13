@@ -247,7 +247,7 @@
 				                  ,$linha["email"]);
 				$_vetor[$key] = $local;				
 			}			
-			$html = "<option value='0'>"."Selecione um local"."</option>\n";
+			$html = "<option value=''>"."Selecione um local"."</option>\n";
 			foreach ($_vetor as $local) {				
 				$id = $local->getId();
 				$nome = $local->getNome();

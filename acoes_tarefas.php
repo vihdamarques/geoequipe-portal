@@ -155,7 +155,7 @@
                         <?php echo $msg;?>
                     </div>
                 </div>
-                <!--Data Agendamento-->    
+                <!--Data Agendamento-->
                 <?php if($acaoGET){
                         if($acaoGET == "G") {?>
                 <!--Usuario-->
@@ -169,6 +169,7 @@
                         </select>
                     </div>
                 </div>
+                <!--Data Agendamento-->
                 <div class="control-group">
                     <label class="control-label" for="data_agendamento">Data Agendamento</label>
                     <div class="controls">

@@ -95,11 +95,32 @@
 		}
 
 		//retorna todos as tarefas cadastrados na tabela ge_tarefa
-		public function consultarTodos($_ini, $_fin){
+		public function consultarTodos($_ini, $_fin, $_status, $_local, $_usuario, $_descricao, $_data_criacao){
 			$_vetor = array();
-			$stmt = $this->_conn->prepare("SELECT * FROM ge_tarefa ORDER BY id_tarefa LIMIT :ini,:fin");
+			//$stmt = $this->_conn->prepare("SELECT * FROM ge_tarefa ORDER BY id_tarefa LIMIT :ini,:fin");
+			$stmt = $this->_conn->prepare("SELECT t.*				                                  
+											FROM ge_tarefa       t
+											    ,ge_tarefa_movto m
+											WHERE t.id_tarefa = m.id_tarefa
+										      AND m.id_tarefa_movto = (SELECT max(id_tarefa_movto) 
+										                               FROM ge_tarefa_movto 
+										                               WHERE id_tarefa = t.id_tarefa)
+										      AND ((:status !='' AND m.status = :status) OR :status ='')
+											  AND ((:local !='' AND t.id_local = :local) OR :local ='')
+										      AND ((:usuario !='' AND t.id_usuario = :usuario) OR :usuario ='')
+										      AND ((:descricao !='' AND lower(t.descricao) like lower(:descricao)) OR :descricao ='')
+										      AND ((:usuario !='' AND t.id_usuario = :usuario) OR :usuario ='')
+										      AND ((:data !='' AND date_format(t.data_criacao, '%d/%m/%Y') = :data) OR :data ='')
+											ORDER BY t.id_tarefa
+											LIMIT :ini,:fin");
+
 			$stmt->bindValue(":ini", $_ini, PDO::PARAM_INT);
 			$stmt->bindValue(":fin", $_fin, PDO::PARAM_INT);
+			$stmt->bindValue(":status", $_status, PDO::PARAM_STR);
+			$stmt->bindValue(":local", $_local, PDO::PARAM_INT);
+			$stmt->bindValue(":usuario", $_usuario, PDO::PARAM_INT);
+			$stmt->bindValue(":descricao", '%'.$_descricao.'%', PDO::PARAM_STR);
+			$stmt->bindValue(":data", $_data_criacao, PDO::PARAM_STR);
 			$stmt->execute();
 			//retornar para cada linha na tabela ge_tarefa, um objeto tarefa e insere em um array de tarefa	
 			$result = $stmt->fetchAll();

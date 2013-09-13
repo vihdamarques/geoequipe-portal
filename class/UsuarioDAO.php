@@ -178,9 +178,9 @@
         }
 
         //cria uma tag select com todos os usuarios cadastrados
-        public function selecionar(){
+        public function selecionar($id_usuario){
             $_vetor = array();          
-            $stmt = $this->_conn->prepare("SELECT * FROM ge_usuario ORDER BY nome");
+            $stmt = $this->_conn->prepare("SELECT * FROM ge_usuario WHERE ativo = 'S' ORDER BY nome");
             $stmt->execute();
             //retornar para cada linha na tabela ge_usuario, um objeto usuario e insere em um array de usuarios     
             $result = $stmt->fetchAll();
@@ -197,18 +197,20 @@
                                       ,$linha["perfil"]);
             $_vetor[$key] = $usuario;                               
             }
-            $html = "<select name='usuario' id='usuario'>\n";
-            foreach ($_vetor as $usuario) {             
-                $id = $usuario->getId();
-                $nome = $usuario->getNome();
-                $html .= "<option value=".$id.">".$nome."</option>\n";
-            }
-            $html .= "</select>\n"; 
+            $html = "<option value=''>"."Selecione um usuário"."</option>\n";
+            foreach ($_vetor as $usuario) {       
+              $id = $usuario->getId();
+              $nome = $usuario->getNome();
+              $html .= "<option value=".$id;
+              if($id == $id_usuario){ 
+                $html .= " selected";
+              }
+              $html .= " >".$nome."</option>\n";
+            }            
             return $html;
             //fecha conexão
             //$this->_conn->__destruct();
         }
-
         /*public function busca($nome){
             $stmt = $this->_conn->prepare("SELECT * FROM GE_USUARIO WHERE NOME LIKE '%:nome%'");
 

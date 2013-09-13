@@ -16,10 +16,11 @@
     
     //declara e inicializa as variáveis
     $id = null;       
-    $local = null;
-    $usuario = null;
-    $descricao = null;
-    $data = null;
+    $local;
+    $usuario;
+    $status;
+    $descricao;
+    $data;
     $Tarefa = new Tarefa();
     $tarefaDAO = new TarefaDAO();    
     $usuarioDAO = new UsuarioDAO();    
@@ -35,15 +36,21 @@
     } else {
         $id = null;
     }
-    
-  //paginacao do relatorio
-  $pag = (isset($_GET["pag"])) ? $_GET["pag"] : 0;
-  $tarefa_pag = 10; //tarefas por página
-  $inicio = $pag * $tarefa_pag;
-  $total_tarefa = (int) $tarefaDAO->totalTarefas();
-  $total_pag = ceil($total_tarefa/$tarefa_pag);  
 
-  $tarefas = $tarefaDAO->consultarTodos($inicio,$tarefa_pag);
+    $status = (isset($_POST["status"])) ? $_POST["status"] : '';
+    $local = (isset($_POST["local"])) ? $_POST["local"] : '';
+    $usuario = (isset($_POST["usuario"])) ? $_POST["usuario"] : '';
+    $descricao = (isset($_POST["descricao"])) ? $_POST["descricao"] : '';
+    $data = (isset($_POST["data"])) ? $_POST["data"] : '';
+    
+    //paginacao do relatorio
+    $pag = (isset($_GET["pag"])) ? $_GET["pag"] : 0;
+    $tarefa_pag = 10; //tarefas por página
+    $inicio = $pag * $tarefa_pag;
+    $total_tarefa = (int) $tarefaDAO->totalTarefas();
+    $total_pag = ceil($total_tarefa/$tarefa_pag);  
+
+    $tarefas = $tarefaDAO->consultarTodos($inicio, $tarefa_pag, $status, $local, $usuario, $descricao, $data);
 
 ?>
 
@@ -60,21 +67,23 @@
                 <label class="control-label" for="status">Status</label>
                 <div class="controls">
                     <select class="input-medium" name="status" id="status">
-                        <option> Selecionar</option>
-                        <option value="A"> Aberto</option>
-                        <option value="C"> Cancelado</option>
-                        <option value="G"> Agendado</option>
-                        <option value="T"> Atendido</option>
-                        <option value="N"> Não Atendido</option>
+                        <option value=""> Selecionar</option>
+                        <option value="A" <?php echo ($status == 'A') ?  'selected' : '' ?> > Aberto</option>
+                        <option value="C" <?php echo ($status == 'C') ?  'selected' : '' ?> > Cancelado</option>
+                        <option value="G" <?php echo ($status == 'G') ?  'selected' : '' ?> > Agendado</option>
+                        <option value="T" <?php echo ($status == 'T') ?  'selected' : '' ?> > Atendido</option>
+                        <option value="N" <?php echo ($status == 'N') ?  'selected' : '' ?> > Não Atendido</option>
                     </select>
                 </div>
             </div>
              <!--Local-->   
             <div class="control-group">
-                <label class="control-label" for="local">Local</label>
+                <label class="control-label" for="local">Local</label>                
                 <div class="controls">
-                    <select class="input-large" name="local" id="local">
-                        <option> Selecionar</option>
+                    <select name="local" id="local">
+                        <?php                  
+                           echo $localDAO->selecionar($local);
+                        ?>
                     </select>
                 </div>
             </div>
@@ -82,9 +91,43 @@
             <div class="control-group">
                 <label class="control-label" for="usuario">Usuário</label>
                 <div class="controls">
-                    <select class="input-large" name="usuario" id="usuario">
-                        <option> Selecionar</option>
-                     </select>
+                    <select name="usuario" id="usuario">
+                        <?php                  
+                           echo $usuarioDAO->selecionar($usuario);
+                        ?>
+                    </select>
+                </div>
+            </div>
+            <!--Descrição-->
+            <div class="control-group">
+                <label class="control-label" for="descricao">Descrição</label>
+                <div class="controls">
+                    <input class="input-medium" type="text" name="descricao" id="descricao" placeholder="Descrição" value="<?php echo $descricao; ?>">
+                </div>
+            </div>
+            <!--Data-->
+            <div class="control-group">
+                <label class="control-label" for="data">Data Criação</label>
+                <div class="controls">                    
+                    <input type="text" id="data" name="data" class="input-small datepicker" placeholder="dd/mm/yyyy" value="<?php echo $data; ?>">
+                </div>
+            </div>
+        
+            <div class="control-group">
+                <div class="controls">
+                    <!--Botão Submitar-->
+                    <button type="submit" class="btn btn-primary">Pesquisar</button>
+                    <script type="text/javascript">
+                        function limparPesquisa(){
+                            $('#status').val('');
+                            $('#local').val('');
+                            $('#usuario').val('');
+                            $('#descricao').val('');
+                            $('#data').val('');
+                        }
+                    </script>
+                    <!--Botão Limpar-->
+                    <button type="button" class="btn" onclick="limparPesquisa();">Limpar</button>
                 </div>
             </div>
         </form>
@@ -115,7 +158,7 @@
                                 <td class="id" style="display:none;"><?php echo $auth->encripta($tar->getId()); ?></td> <!--id criptografado a ser passado po GET-->
                                 <td><?php echo $tar->getId();?></td>                                
                                 <td><?php echo $tar->getDescricao();?></td>
-                                <td><?php $ultimo_status = $movimentoDAO->consultarUltimoStatus($tar->getId());                                          
+                                <td><?php $ultimo_status = $movimentoDAO->consultarUltimoStatus($tar->getId());                              
                                     switch ($ultimo_status->getStatus()) {
                                     case "A":
                                         echo "Aberto";
@@ -172,7 +215,7 @@
                     </tbody>
                 </table>                
                 <?php
-                }
+                } else echo 'Nenhum registro encontrado!';
             ?>
         <!--Paginação do Relatório-->    
         <ul class="pager">
@@ -212,6 +255,16 @@
         });
 
     </script>     
+    <script type="text/javascript">
+        $(function(){
+            $(".datepicker").datepicker({
+                language: "pt-BR",
+                orientation: "top",
+                format: "dd/mm/yyyy",
+                autoclose: true                
+            });
+        });
+    </script> 
 
         <!--Modal-->   
         <div id="modal" class="modal hide fade" style="width: auto; height: auto; margin-left:-325px;">          
