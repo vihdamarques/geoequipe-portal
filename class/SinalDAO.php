@@ -19,7 +19,7 @@
             $stmt = $this->_conn->prepare("SELECT s.* \n"
                                         . "      ,date_format(s.data_sinal, '%d/%m/%Y %H:%i:%S') data_sinal_formatada \n"
                                         . "      ,date_format(s.data_servidor, '%d/%m/%Y %H:%i:%S') data_servidor_formatada \n"
-                                        . "      ,u.usuario, u.nome, e.des_equipamento, e.imei, e.numero \n"
+                                        . "      ,u.usuario, u.nome, e.des_equipamento, e.imei, e.numero numero_telefone \n"
                                         . "FROM ge_sinal s, ge_usuario u, ge_equipamento e \n"
                                         . "WHERE s.id_sinal = u.id_ultimo_sinal \n"
                                         . "AND (u.id_usuario = :id_usuario OR :id_usuario = 0) \n"
@@ -38,7 +38,7 @@
                                               ,null
                                               ,$linha["des_equipamento"]
                                               ,$linha["imei"]
-                                              ,$linha["numero"]);
+                                              ,$linha["numero_telefone"]);
 
                 $sinal = new Sinal($linha["id_sinal"]
                                   ,$usuario
@@ -67,13 +67,13 @@
         public function consultarPorPeriodo($_id_usuario, $_data_ini, $_data_fim){
             $_vetor = array();
 
-            $stmt = $this->_conn->prepare("SELECT s.*, u.usuario, u.nome, e.des_equipamento, e.imei, e.numero \n"
+            $stmt = $this->_conn->prepare("SELECT s.*, u.usuario, u.nome, e.des_equipamento, e.imei, e.numero numero_telefone \n"
                                         . "FROM ge_sinal s, ge_usuario u, ge_equipamento e \n"
                                         . "WHERE s.id_usuario = :id_usuario \n"
                                         . "  AND s.id_usuario = u.id_usuario \n"
                                         . "  AND s.id_equipamento = e.id_equipamento \n"
-                                        . "AND s.data_servidor BETWEEN str_to_date(:data_ini,'%d/%m/%Y') \n"
-                                        . "                        AND str_to_date(:data_fim,'%d/%m/%Y') \n"
+                                        . "AND s.data_servidor BETWEEN str_to_date(:data_ini,'%d/%m/%Y %H:%i') \n"
+                                        . "                        AND str_to_date(:data_fim,'%d/%m/%Y %H:%i') \n"
                                         . "ORDER BY s.id_sinal");
 
             $stmt->bindValue(":id_usuario", $_id_usuario, PDO::PARAM_INT);
@@ -92,7 +92,7 @@
                                               ,null
                                               ,$linha["des_equipamento"]
                                               ,$linha["imei"]
-                                              ,$linha["numero"]);
+                                              ,$linha["numero_telefone"]);
 
                 $sinal = new Sinal($linha["id_sinal"]
                                   ,$usuario

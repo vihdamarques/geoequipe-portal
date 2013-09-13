@@ -11,8 +11,8 @@
 
     include_once 'header.php';
 ?>
-        <div id="map-canvas"></div>
-        <div id="controle" style="position:absolute; right:10px; top:50px; display:block; background-color:#FFF; padding:10px; text-align:right; border-radius:10px; opacity:0.8;">
+        <div id="map-container" style="position: absolute;bottom: 0px;left: 0px;right: 0px;top: 41px"><div id="map-canvas"></div></div>
+        <div id="controle" style="position:absolute; right:10px; top:80px; display:block; background-color:#FFF; padding:10px; text-align:right; border-radius:10px; opacity:0.8;">
             <select id="usuario">
                 <option value="0" selected>- Selecione o Usuário -</option>
                 <?php
@@ -23,9 +23,9 @@
                 ?>
             </select>
             <br />
-            Data inicial: <input type="text" id="data_ini" class="input-small datepicker" placeholder="dd/mm/yyyy" value="11/09/2013">
+            Data inicial: <input type="text" id="data_ini" class="input-medium datepicker" value="<?php echo date("d/m/Y H:i"); ?>">
             <br />
-            Data final: <input type="text" id="data_fim" class="input-small datepicker" placeholder="dd/mm/yyyy" value="12/09/2013">
+            Data final: <input type="text" id="data_fim" class="input-medium datepicker" value="<?php echo date("d/m/Y H:i"); ?>">
             <br />
             <button type="button" id="visualizar" class="btn">Visualizar</button>
         </div>

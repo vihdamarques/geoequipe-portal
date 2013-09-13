@@ -11,8 +11,8 @@
 
     include_once 'header.php';
 ?>
-        <div id="map-canvas"></div>
-        <div id="controle" style="position:absolute; right:10px; top:50px; display:block; background-color:#FFF; padding:10px; text-align:right; border-radius:10px; opacity:0.8;">
+        <div id="map-container" style="position: absolute;bottom: 0px;left: 0px;right: 0px;top: 41px"><div id="map-canvas"></div></div>
+        <div id="controle" style="position:absolute; right:10px; top:80px; display:block; background-color:#FFF; padding:10px; text-align:right; border-radius:10px; opacity:0.8;">
             <select id="usuario">
                 <option value="0" selected>- Todos os usuários -</option>
                 <?php
