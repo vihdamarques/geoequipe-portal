@@ -32,6 +32,8 @@
     $Local = new Local();
     $localDAO = new LocalDAO($conn);
     $msg = null;   
+    $busca = (isset($_POST["busca"])) ? $_POST["busca"] : ""; 
+    $flag_busca = (isset($_POST["flag_busca"])) ? $_POST["flag_busca"] : "N";
     
     //verifica se a variavel id existe no array POST
     if (isset($_POST["id"])){
@@ -53,80 +55,12 @@
         $operacao = "";
     }        
 
-    if (!empty($id)) {
-        $Local = $localDAO->consultarId($id);
-        if ($operacao == "A") {        
-            try {
-                $nome = (isset($_POST["nome"])) ? $_POST["nome"] : "";                
-                $descricao = (isset($_POST["descricao"])) ? $_POST["descricao"] : "";
-                $ativo = (isset($_POST["ativo"])) ? $_POST["ativo"] : "";
-                $latitude = (isset($_POST["latitude"])) ? $_POST["latitude"] : "";
-                $longitude = (isset($_POST["longitude"])) ? $_POST["longitude"] : "";
-                $coordenada = (isset($_POST["coordenada"])) ? $_POST["coordenada"] : "";
-                $logradouro = (isset($_POST["logradouro"])) ? $_POST["logradouro"] : "";
-                $numero = (isset($_POST["numero"])) ? $_POST["numero"] : "";
-                $bairro = (isset($_POST["bairro"])) ? $_POST["bairro"] : "";                
-                $cidade = (isset($_POST["cidade"])) ? $_POST["cidade"] : "";
-                $estado = (isset($_POST["estado"])) ? $_POST["estado"] : "";
-                $pais = (isset($_POST["pais"])) ? $_POST["pais"] : "";
-                $cep = (isset($_POST["cep"])) ? $_POST["cep"] : "";
-                $telefone_1 = (isset($_POST["telefone_1"])) ? $_POST["telefone_1"] : "";
-                $telefone_2 = (isset($_POST["telefone_2"])) ? $_POST["telefone_2"] : "";
-                $email = (isset($_POST["email"])) ? $_POST["email"] : "";
-                                
-                $Local->setNome($nome);
-                $Local->setDescricao($descricao);
-                $Local->setAtivo($ativo);
-                $Local->setLatitude($latitude);
-                $Local->setLongitude($longitude);
-                $Local->setCoordenada($coordenada);
-                $Local->setLogradouro($logradouro);
-                $Local->setNumero($numero);
-                $Local->setBairro($bairro);
-                $Local->setCidade($cidade);
-                $Local->setEstado($estado);
-                $Local->setPais($pais);
-                $Local->setCep($cep);
-                $Local->setTelefone_1($telefone_1);
-                $Local->setTelefone_2($telefone_2);      
-                $Local->setEmail($email);      
-                //atualizar
-                $localDAO->alterar($Local);
-                $msg = "<div class=\"alert alert-success\">
-                            <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
-                            <span class=\"text-success\"><strong>Atualizado com sucesso!</strong></span>
-                        </div>";       
-                //destrói objeto
-                $Local = null;
-                $id = null;
-            } catch (Exception $e) {
-                $msg = "<div class=\"alert alert-error\">
-                            <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
-                            <span class=\"text-error\"><strong>" . $e->getMessage() . "</strong></span>
-                        </div>";
-            }
-
-        } elseif ($operacao == "D") {          
-            try {
-                //deletar
-                $localDAO->excluir($id);
-                $msg ="<div class=\"alert alert-error\">
-                            <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
-                            <span class=\"text-error\"><strong>Deletado com sucesso!</strong></span>
-                        </div>"; 
-                //destrói objeto
-                $Local = null;
-                $id = null;
-            } catch (Exception $e) {
-                $msg = "<div class=\"alert alert-error\">
-                            <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
-                            <span class=\"text-error\"><strong>" . $e->getMessage() . "</strong></span>
-                        </div>";
-            }
-        }
-    } else {       
-        if ($operacao == "I") {            
-            try {   $nome = (isset($_POST["nome"])) ? $_POST["nome"] : "";                
+    if ($flag_busca == "N") {
+        if (!empty($id)) {
+            $Local = $localDAO->consultarId($id);
+            if ($operacao == "A") {        
+                try {
+                    $nome = (isset($_POST["nome"])) ? $_POST["nome"] : "";                
                     $descricao = (isset($_POST["descricao"])) ? $_POST["descricao"] : "";
                     $ativo = (isset($_POST["ativo"])) ? $_POST["ativo"] : "";
                     $latitude = (isset($_POST["latitude"])) ? $_POST["latitude"] : "";
@@ -158,31 +92,110 @@
                     $Local->setCep($cep);
                     $Local->setTelefone_1($telefone_1);
                     $Local->setTelefone_2($telefone_2);      
-                    $Local->setEmail($email);    
-                    //inserir
-                    $localDAO->inserir($Local); 
+                    $Local->setEmail($email);      
+                    //atualizar
+                    $localDAO->alterar($Local);
                     $msg = "<div class=\"alert alert-success\">
                                 <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
-                                <span class=\"text-success\"><strong>Inserido com sucesso!</strong></span>
+                                <span class=\"text-success\"><strong>Atualizado com sucesso!</strong></span>
+                            </div>";       
+                    //destrói objeto
+                    $Local = null;
+                    $id = null;
+                } catch (Exception $e) {
+                    $msg = "<div class=\"alert alert-error\">
+                                <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
+                                <span class=\"text-error\"><strong>" . $e->getMessage() . "</strong></span>
+                            </div>";
+                }
+
+            } elseif ($operacao == "D") {          
+                try {
+                    //deletar
+                    $localDAO->excluir($id);
+                    $msg ="<div class=\"alert alert-error\">
+                                <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
+                                <span class=\"text-error\"><strong>Deletado com sucesso!</strong></span>
                             </div>"; 
                     //destrói objeto
                     $Local = null;
                     $id = null;
-            } catch (Exception $e) {
+                } catch (Exception $e) {
                     $msg = "<div class=\"alert alert-error\">
                                 <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
                                 <span class=\"text-error\"><strong>" . $e->getMessage() . "</strong></span>
-                            </div>"; 
+                            </div>";
+                }
             }
-        }
-    }    
-  //paginacao do relatorio
-  $pag = (isset($_GET["pag"])) ? $_GET["pag"] : 0;
-  $local_pag = 10; //usuários por página
-  $inicio = $pag * $local_pag;
-  $total_local = (int) $localDAO->totalLocal();
-  $total_pag = ceil($total_local/$local_pag);  
-  $locais = $localDAO->consultarTodos($inicio,$local_pag);
+        } else {       
+            if ($operacao == "I") {            
+                try {   $nome = (isset($_POST["nome"])) ? $_POST["nome"] : "";                
+                        $descricao = (isset($_POST["descricao"])) ? $_POST["descricao"] : "";
+                        $ativo = (isset($_POST["ativo"])) ? $_POST["ativo"] : "";
+                        $latitude = (isset($_POST["latitude"])) ? $_POST["latitude"] : "";
+                        $longitude = (isset($_POST["longitude"])) ? $_POST["longitude"] : "";
+                        $coordenada = (isset($_POST["coordenada"])) ? $_POST["coordenada"] : "";
+                        $logradouro = (isset($_POST["logradouro"])) ? $_POST["logradouro"] : "";
+                        $numero = (isset($_POST["numero"])) ? $_POST["numero"] : "";
+                        $bairro = (isset($_POST["bairro"])) ? $_POST["bairro"] : "";                
+                        $cidade = (isset($_POST["cidade"])) ? $_POST["cidade"] : "";
+                        $estado = (isset($_POST["estado"])) ? $_POST["estado"] : "";
+                        $pais = (isset($_POST["pais"])) ? $_POST["pais"] : "";
+                        $cep = (isset($_POST["cep"])) ? $_POST["cep"] : "";
+                        $telefone_1 = (isset($_POST["telefone_1"])) ? $_POST["telefone_1"] : "";
+                        $telefone_2 = (isset($_POST["telefone_2"])) ? $_POST["telefone_2"] : "";
+                        $email = (isset($_POST["email"])) ? $_POST["email"] : "";
+                                        
+                        $Local->setNome($nome);
+                        $Local->setDescricao($descricao);
+                        $Local->setAtivo($ativo);
+                        $Local->setLatitude($latitude);
+                        $Local->setLongitude($longitude);
+                        $Local->setCoordenada($coordenada);
+                        $Local->setLogradouro($logradouro);
+                        $Local->setNumero($numero);
+                        $Local->setBairro($bairro);
+                        $Local->setCidade($cidade);
+                        $Local->setEstado($estado);
+                        $Local->setPais($pais);
+                        $Local->setCep($cep);
+                        $Local->setTelefone_1($telefone_1);
+                        $Local->setTelefone_2($telefone_2);      
+                        $Local->setEmail($email);    
+                        //inserir
+                        $localDAO->inserir($Local); 
+                        $msg = "<div class=\"alert alert-success\">
+                                    <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
+                                    <span class=\"text-success\"><strong>Inserido com sucesso!</strong></span>
+                                </div>"; 
+                        //destrói objeto
+                        $Local = null;
+                        $id = null;
+                } catch (Exception $e) {
+                        $msg = "<div class=\"alert alert-error\">
+                                    <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
+                                    <span class=\"text-error\"><strong>" . $e->getMessage() . "</strong></span>
+                                </div>"; 
+                }
+            }
+        }    
+          //paginacao do relatorio
+          $pag = (isset($_GET["pag"])) ? $_GET["pag"] : 0;
+          $local_pag = 10; //usuários por página
+          $inicio = $pag * $local_pag;
+          $total_local = (int) $localDAO->totalLocal();
+          $total_pag = ceil($total_local/$local_pag);  
+          $locais = $localDAO->consultarTodos($inicio,$local_pag);
+
+    } else {
+          //paginacao do relatorio
+          $pag = (isset($_GET["pag"])) ? $_GET["pag"] : 0;
+          $local_pag = 10; //usuários por página
+          $inicio = $pag * $local_pag;
+          $total_local = (int) $localDAO->totalLocal();
+          $total_pag = ceil($total_local/$local_pag);  
+          $locais = $localDAO->busca($busca, $inicio,$local_pag);
+    }
 
     //destruir conexão
     $conn->__destruct();   
@@ -294,6 +307,14 @@
                             <?php
                         }
                         ?>
+                    </div>
+                </div>
+                <!--Busca-->
+                <div class="control-group">
+                    <div class="controls">
+                        <input type="text"  class="input-xlarge" name="busca" id="busca" value="<?php echo $busca;?>" placeholder="BUSCA" tabindex="1" />
+                        <button type="submit" class="btn" id="id_btn_busca" onclick="$('#flag_busca').val('S');"><i class="icon-search icon-large"></i></button>
+                        <input type="hidden" name="flag_busca" id="flag_busca" value="<?php echo $flag_busca;?>"/>
                     </div>
                 </div>
             </form>

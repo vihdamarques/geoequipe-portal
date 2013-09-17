@@ -174,5 +174,34 @@
                 //fecha conexão
                 //$this->_conn->__destruct();
                 }
+
+        public function busca($busca, $_ini, $_fin){
+            $_vetor = array();
+            $stmt = $this->_conn->prepare("SELECT * 
+                                           FROM ge_equipamento
+                                           WHERE numero LIKE :busca
+                                              OR lower(des_equipamento) LIKE lower(:busca)
+                                              OR imei LIKE :busca
+                                           LIMIT :ini,:fin");
+
+            $stmt->bindValue(":busca", '%'.$busca.'%', PDO::PARAM_STR);
+            $stmt->bindValue(":ini", $_ini, PDO::PARAM_INT);
+            $stmt->bindValue(":fin", $_fin, PDO::PARAM_INT);
+            $stmt->execute();
+
+            $result = $stmt->fetchAll();
+            foreach ($result as $key => $linha){
+                $equipamento = new Equipamento($linha["id_equipamento"]
+                                              ,$linha["id_ultimo_sinal"]
+                                              ,$linha["des_equipamento"]
+                                              ,$linha["imei"]
+                                              ,$linha["numero"] 
+                                              ,$linha["ativo"]
+                                              );
+                $_vetor[$key] = $equipamento;                               
+            }
+            //retorna um array de usuarios
+            return $_vetor;
+        }                
     }
 ?>

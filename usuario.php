@@ -23,8 +23,9 @@
     $telefone = null;
     $Usuario = new Usuario();
     $usuarioDAO = new UsuarioDAO($conn);
-    $msg = null;   
-    $busca = (isset($_GET["busca"])) ? $_GET["busca"] : "";
+    $msg = null;
+    $busca = (isset($_POST["busca"])) ? $_POST["busca"] : ""; 
+    $flag_busca = (isset($_POST["flag_busca"])) ? $_POST["flag_busca"] : "N";
     
     //verifica se a variavel id existe no array POST ou GET
     if (isset($_POST["id"])){
@@ -46,110 +47,121 @@
         $operacao = "";
     }        
 
-    if (!empty($id)) {
-        $Usuario = $usuarioDAO->consultarId($id); 
-        if ($operacao == "A") {         
-            try {
-                $usuario = (isset($_POST["usuario"])) ? $_POST["usuario"] : "";                
-                $senha = $auth->hashSenha(isset($_POST["senha"]) ? $_POST["senha"] : "");
-                $nome = (isset($_POST["nome"])) ? $_POST["nome"] : "";
-                $ativo = (isset($_POST["ativo"])) ? $_POST["ativo"] : "";
-                $perfil = (isset($_POST["perfil"])) ? $_POST["perfil"] : "";
-                $email = (isset($_POST["email"])) ? $_POST["email"] : "";
-                $celular = (isset($_POST["celular"])) ? $_POST["celular"] : "";
-                $telefone = (isset($_POST["telefone"])) ? $_POST["telefone"] : "";
+    if ($flag_busca == "N"){
+        if (!empty($id)) {
+            $Usuario = $usuarioDAO->consultarId($id); 
+            if ($operacao == "A") {         
+                try {
+                    $usuario = (isset($_POST["usuario"])) ? $_POST["usuario"] : "";                
+                    $senha = $auth->hashSenha(isset($_POST["senha"]) ? $_POST["senha"] : "");
+                    $nome = (isset($_POST["nome"])) ? $_POST["nome"] : "";
+                    $ativo = (isset($_POST["ativo"])) ? $_POST["ativo"] : "";
+                    $perfil = (isset($_POST["perfil"])) ? $_POST["perfil"] : "";
+                    $email = (isset($_POST["email"])) ? $_POST["email"] : "";
+                    $celular = (isset($_POST["celular"])) ? $_POST["celular"] : "";
+                    $telefone = (isset($_POST["telefone"])) ? $_POST["telefone"] : "";
 
-                $Usuario->setUsuario($usuario);
-                $Usuario->setSenha($senha);
-                $Usuario->setNome($nome);
-                $Usuario->setAtivo($ativo);
-                $Usuario->setPerfil($perfil);
-                $Usuario->setEmail($email);
-                $Usuario->setCelular($celular);
-                $Usuario->setTelefone($telefone);    
-                //atualizar      
-                $usuarioDAO->alterar($Usuario);
+                    $Usuario->setUsuario($usuario);
+                    $Usuario->setSenha($senha);
+                    $Usuario->setNome($nome);
+                    $Usuario->setAtivo($ativo);
+                    $Usuario->setPerfil($perfil);
+                    $Usuario->setEmail($email);
+                    $Usuario->setCelular($celular);
+                    $Usuario->setTelefone($telefone);    
+                    //atualizar      
+                    $usuarioDAO->alterar($Usuario);
 
-                $msg ="<div class=\"alert alert-success\">
-                        <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
-                        <span class=\"text-success\"><strong>Atualizado com sucesso!</strong></span>
-                       </div>";  
-                //destrói objeto
-                $Usuario = null;
-                $id = null;
-            } catch (Exception $e) {
-                $msg = "<div class=\"alert alert-error\">
-                         <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
-                         <span class=\"text-error\"><strong>" . $e->getMessage() . "</strong></span>
-                        </div>";
-            }
-
-        } elseif ($operacao == "D") {          
-            try {
-                //deletar
-                $usuarioDAO->excluir($id);
-                $msg =" <div class=\"alert alert-error\">
-                         <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
-                         <span class=\"text-error\"><strong>Deletado com sucesso!</strong></span>
-                        </div>"; 
-
-                //destrói objeto
-                $Usuario = null;
-                $id = null;
-            } catch (Exception $e) {
-                $msg = "<div class=\"alert alert-error\">
-                         <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
-                         <span class=\"text-error\"><strong>" . $e->getMessage() . "</strong></span>
-                        </div>";
-            }
-        }
-    } else {       
-        if ($operacao == "I") {            
-            try {
-                $usuario = (isset($_POST["usuario"])) ? $_POST["usuario"] : "";                
-                $senha = $auth->hashSenha(isset($_POST["senha"]) ? $_POST["senha"] : "");
-                $nome = (isset($_POST["nome"])) ? $_POST["nome"] : "";
-                $ativo = (isset($_POST["ativo"])) ? $_POST["ativo"] : "";
-                $perfil = (isset($_POST["perfil"])) ? $_POST["perfil"] : "";
-                $email = (isset($_POST["email"])) ? $_POST["email"] : "";
-                $celular = (isset($_POST["celular"])) ? $_POST["celular"] : "";
-                $telefone = (isset($_POST["telefone"])) ? $_POST["telefone"] : "";
-
-                $Usuario->setUsuario($usuario);
-                $Usuario->setSenha($senha);
-                $Usuario->setNome($nome);
-                $Usuario->setAtivo($ativo);
-                $Usuario->setPerfil($perfil);
-                $Usuario->setEmail($email);
-                $Usuario->setCelular($celular);
-                $Usuario->setTelefone($telefone);
-                //inserir
-                $usuarioDAO->inserir($Usuario); 
-                $msg = "<div class=\"alert alert-success\">
-                         <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
-                         <span class=\"text-success\"><strong>Inserido com sucesso!</strong></span>
-                        </div>"; 
-
-                //destrói objeto
-                $Usuario = null;
-                $id = null;
-            } catch (Exception $e) {
+                    $msg ="<div class=\"alert alert-success\">
+                            <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
+                            <span class=\"text-success\"><strong>Atualizado com sucesso!</strong></span>
+                           </div>";  
+                    //destrói objeto
+                    $Usuario = null;
+                    $id = null;
+                } catch (Exception $e) {
                     $msg = "<div class=\"alert alert-error\">
                              <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
                              <span class=\"text-error\"><strong>" . $e->getMessage() . "</strong></span>
+                            </div>";
+                }
+
+            } elseif ($operacao == "D") {          
+                try {
+                    //deletar
+                    $usuarioDAO->excluir($id);
+                    $msg =" <div class=\"alert alert-error\">
+                             <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
+                             <span class=\"text-error\"><strong>Deletado com sucesso!</strong></span>
                             </div>"; 
+
+                    //destrói objeto
+                    $Usuario = null;
+                    $id = null;
+                } catch (Exception $e) {
+                    $msg = "<div class=\"alert alert-error\">
+                             <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
+                             <span class=\"text-error\"><strong>" . $e->getMessage() . "</strong></span>
+                            </div>";
+                }
             }
-        }
-    }    
+        } else {       
+            if ($operacao == "I") {            
+                try {
+                    $usuario = (isset($_POST["usuario"])) ? $_POST["usuario"] : "";                
+                    $senha = $auth->hashSenha(isset($_POST["senha"]) ? $_POST["senha"] : "");
+                    $nome = (isset($_POST["nome"])) ? $_POST["nome"] : "";
+                    $ativo = (isset($_POST["ativo"])) ? $_POST["ativo"] : "";
+                    $perfil = (isset($_POST["perfil"])) ? $_POST["perfil"] : "";
+                    $email = (isset($_POST["email"])) ? $_POST["email"] : "";
+                    $celular = (isset($_POST["celular"])) ? $_POST["celular"] : "";
+                    $telefone = (isset($_POST["telefone"])) ? $_POST["telefone"] : "";
 
-  //paginacao do relatorio
-  $pag = (isset($_GET["pag"])) ? $_GET["pag"] : 0;
+                    $Usuario->setUsuario($usuario);
+                    $Usuario->setSenha($senha);
+                    $Usuario->setNome($nome);
+                    $Usuario->setAtivo($ativo);
+                    $Usuario->setPerfil($perfil);
+                    $Usuario->setEmail($email);
+                    $Usuario->setCelular($celular);
+                    $Usuario->setTelefone($telefone);
+                    //inserir
+                    $usuarioDAO->inserir($Usuario); 
+                    $msg = "<div class=\"alert alert-success\">
+                             <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
+                             <span class=\"text-success\"><strong>Inserido com sucesso!</strong></span>
+                            </div>"; 
 
-  $usuarios_pag = 10; //usuários por página
-  $inicio = $pag * $usuarios_pag;
-  $total_usuarios = (int) $usuarioDAO->totalUsuarios();
-  $total_pag = ceil($total_usuarios/$usuarios_pag);
-  $usuarios = $usuarioDAO->consultarTodos($inicio, $usuarios_pag, $busca);
+                    //destrói objeto
+                    $Usuario = null;
+                    $id = null;
+                } catch (Exception $e) {
+                        $msg = "<div class=\"alert alert-error\">
+                                 <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>
+                                 <span class=\"text-error\"><strong>" . $e->getMessage() . "</strong></span>
+                                </div>"; 
+                }
+            }
+        }    
+
+      //paginacao do relatorio
+      $pag = (isset($_GET["pag"])) ? $_GET["pag"] : 0;
+
+      $usuarios_pag = 10; //usuários por página
+      $inicio = $pag * $usuarios_pag;
+      $total_usuarios = (int) $usuarioDAO->totalUsuarios();
+      $total_pag = ceil($total_usuarios/$usuarios_pag);
+      $usuarios = $usuarioDAO->consultarTodos($inicio, $usuarios_pag);    
+
+    } else {
+      $pag = (isset($_GET["pag"])) ? $_GET["pag"] : 0;
+
+      $usuarios_pag = 10; //usuários por página
+      $inicio = $pag * $usuarios_pag;
+      $total_usuarios = (int) $usuarioDAO->totalUsuarios();
+      $total_pag = ceil($total_usuarios/$usuarios_pag);
+      $usuarios = $usuarioDAO->busca($busca, $inicio, $usuarios_pag);    
+    }  
 
     //destruir conexão
     $conn->__destruct();  
@@ -159,6 +171,7 @@
         <!--Cabeçalho-->
         <?php include_once 'header.php'; ?>
         <!--Formulário-->
+        
         <div class="container">
             <?php              
               $perfil = $auth->autenticarCadUsua();
@@ -241,16 +254,18 @@
                         ?>
                     </div>
                 </div>
+                <!--Busca-->
+                <div class="control-group">
+                    <div class="controls">
+                        <input type="text"  class="input-xlarge" name="busca" id="busca" value="<?php echo $busca;?>" placeholder="BUSCA" tabindex="1" />
+                        <button type="submit" class="btn" id="id_btn_busca" onclick="$('#flag_busca').val('S');"><i class="icon-search icon-large"></i></button>
+                        <input type="hidden" name="flag_busca" id="flag_busca" value="<?php echo $flag_busca;?>"/>
+                    </div>
+                </div>
             </form>
             <?php
               }
             ?>
-            <br />
-            <!--Busca-->
-            <div class="controls"> 
-                <input type="text"  class="span5 search-query" name="busca" id="busca" autocomplete="off" placeholder="BUSCA" tabindex="1" >
-                <button type="button" class="btn" onclick="consulta()"><i class="icon-search icon-large"></i></button>
-            </div>
             <br />
             <!--Relatório-->
             <?php                
@@ -345,6 +360,6 @@
         }
         ?>
         </ul>
-        </div>
+        </div>     
     </body>
 </html>

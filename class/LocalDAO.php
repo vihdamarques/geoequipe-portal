@@ -261,5 +261,53 @@
 			//fecha conexão
 			//$this->_conn->__destruct();
 		}
+
+	    public function busca($busca, $_ini, $_fin){
+            $_vetor = array();
+            $stmt = $this->_conn->prepare("SELECT * 
+                                           FROM ge_local
+                                           WHERE lower(nome) LIKE lower(:busca)
+                                              OR lower(descricao) LIKE lower(:busca)
+                                              OR lower(logradouro) LIKE lower(:busca)
+                                              OR lower(numero) LIKE lower(:busca)
+                                              OR lower(bairro) LIKE lower(:busca)
+                                              OR lower(cidade) LIKE lower(:busca)
+                                              OR lower(estado) LIKE lower(:busca)
+                                              OR lower(pais) LIKE lower(:busca)
+                                              OR lower(cep) LIKE lower(:busca)
+                                              OR lower(telefone_1) LIKE lower(:busca)
+                                              OR lower(telefone_2) LIKE lower(:busca)
+                                              OR lower(email) LIKE lower(:busca)                                       
+                                           LIMIT :ini,:fin");
+
+            $stmt->bindValue(":busca", '%'.$busca.'%', PDO::PARAM_STR);
+            $stmt->bindValue(":ini", $_ini, PDO::PARAM_INT);
+            $stmt->bindValue(":fin", $_fin, PDO::PARAM_INT);
+            $stmt->execute();
+
+            $result = $stmt->fetchAll();
+            foreach ($result as $key => $linha){
+				$local = new Local($linha["id_local"]
+				                  ,$linha["nome"]
+				                  ,$linha["descricao"]
+				                  ,$linha["ativo"]
+				                  ,$linha["latitude"] 
+				                  ,$linha["longitude"]
+				                  ,$linha["coordenada"]
+				                  ,$linha["logradouro"]
+				                  ,$linha["numero"]
+				                  ,$linha["bairro"]
+				                  ,$linha["cidade"]
+				                  ,$linha["estado"]
+				                  ,$linha["pais"]
+				                  ,$linha["cep"]
+				                  ,$linha["telefone_1"]
+				                  ,$linha["telefone_2"]
+				                  ,$linha["email"]);
+                $_vetor[$key] = $local;                               
+            }
+            //retorna um array de usuarios
+            return $_vetor;
+        }		
 	}
 ?>

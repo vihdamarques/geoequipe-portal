@@ -120,18 +120,13 @@
         }
 
         //retorna todos os usuários cadastrados na tabela ge_usuario
-        public function consultarTodos($_ini, $_fin, $_busca){
+        public function consultarTodos($_ini, $_fin){
             $_vetor = array();          
-            if($_busca == null){
-                $stmt = $this->_conn->prepare("SELECT * FROM ge_usuario ORDER BY nome LIMIT :ini,:fin");    
-                $stmt->bindValue(":ini", $_ini, PDO::PARAM_INT);
-                $stmt->bindValue(":fin", $_fin, PDO::PARAM_INT);                
-            } else {
-                $stmt = $this->_conn->prepare("SELECT * FROM ge_usuario WHERE upper(nome) LIKE upper(:busca) ORDER BY nome LIMIT :ini,:fin");   
-                $stmt->bindValue(":ini", $_ini, PDO::PARAM_INT);
-                $stmt->bindValue(":fin", $_fin, PDO::PARAM_INT);
-                $stmt->bindValue(":busca", "%".addslashes($_busca)."%");            
-            }
+
+            $stmt = $this->_conn->prepare("SELECT * FROM ge_usuario ORDER BY nome LIMIT :ini,:fin");    
+            $stmt->bindValue(":ini", $_ini, PDO::PARAM_INT);
+            $stmt->bindValue(":fin", $_fin, PDO::PARAM_INT);                
+
             $stmt->execute();
             //retornar para cada linha na tabela ge_usuario, um objeto usuario e insere em um array de usuarios                     
             $result = $stmt->fetchAll();
@@ -179,7 +174,7 @@
 
         //cria uma tag select com todos os usuarios cadastrados
         public function selecionar($id_usuario){
-            $_vetor = array();          
+            $_vetor = array(); 
             $stmt = $this->_conn->prepare("SELECT * FROM ge_usuario WHERE ativo = 'S' ORDER BY nome");
             $stmt->execute();
             //retornar para cada linha na tabela ge_usuario, um objeto usuario e insere em um array de usuarios     
@@ -211,36 +206,40 @@
             //fecha conexão
             //$this->_conn->__destruct();
         }
-        /*public function busca($nome){
-            $stmt = $this->_conn->prepare("SELECT * FROM GE_USUARIO WHERE NOME LIKE '%:nome%'");
 
-            $stmt->bindValue(":nome", $nome);
+        public function busca($busca, $_ini, $_fin){
+            $_vetor = array();
+            $stmt = $this->_conn->prepare("SELECT * 
+                                           FROM ge_usuario 
+                                           WHERE lower(nome) LIKE lower(:busca)
+                                              OR lower(usuario) LIKE lower(:busca)
+                                              OR lower(email) LIKE lower(:busca)
+                                              OR lower(celular) LIKE lower(:busca)
+                                              OR lower(telefone) LIKE lower(:busca)                                              
+                                           LIMIT :ini,:fin");
 
+            $stmt->bindValue(":busca", '%'.$busca.'%', PDO::PARAM_STR);
+            $stmt->bindValue(":ini", $_ini, PDO::PARAM_INT);
+            $stmt->bindValue(":fin", $_fin, PDO::PARAM_INT);
             $stmt->execute();
 
-            //retornar para cada usuario no banco, um usuario objeto
-            while ($linha = $stmt->fetch()) {
+            $result = $stmt->fetchAll();
+            foreach ($result as $key => $linha){
                 $usuario = new Usuario($linha["id_usuario"]
                                       ,$linha["usuario"]
                                       ,$linha["senha"]
                                       ,$linha["nome"]
-                                      ,$linha["email"]
+                                      ,$linha["email"] 
                                       ,$linha["celular"]
                                       ,$linha["telefone"]
                                       ,$linha["ativo"]
                                       ,$linha["id_ultimo_sinal"]
                                       ,$linha["perfil"]);
-            }   
-
-            if(count($usuario) > 0){
-                return $usuario;
-            } else{
-                return "Dados não encontrados"
+                $_vetor[$key] = $usuario;                               
             }
-                
-            //fecha conexão
-            $this->_conn->__destruct();
-        }*/
+            //retorna um array de usuarios
+            return $_vetor;
+        }
 
     }
 ?>
