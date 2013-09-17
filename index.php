@@ -23,6 +23,10 @@
                 $conn->__destruct();
                 ?>
             </select>
+            <br />
+            <label class="checkbox">
+                <input type="checkbox" id="mostraTarefas" /> Mostrar tarefas agendadas
+            </label>
         </div>
         <style>
             html, body, #map-canvas {
@@ -40,15 +44,23 @@
         <script>
             geoequipe.criaMapa({div:"map-canvas"});
             $("#usuario").change(carregaMarkers);
+            $("#mostraTarefas").change(carregaMarkers);
             carregaMarkers();
             setInterval("carregaMarkers()", 60000);
 
             function carregaMarkers(){
-              geoequipe.criaMarker({
-                processo: {processo: 'monitoramento', usuario: $("#usuario").val()}
-               ,mapa: geoequipe.mapa(0)
-               ,limpar: geoequipe.marker()
-              });
+              geoequipe.criaMarker([
+                {
+                  processo: {processo: 'monitoramento', usuario: $("#usuario").val()}
+                 ,mapa: geoequipe.mapa(0)
+                 ,limpar: geoequipe.marker()
+                 ,manterFoco: false
+                }
+               ,($("#mostraTarefas:checked").size() ? {
+                  processo: {processo: 'tarefa', usuario: $("#usuario").val()}
+                 ,mapa: geoequipe.mapa(0)
+                } : null)
+              ]);
             }
         </script>
     </body>

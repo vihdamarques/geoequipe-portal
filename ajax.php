@@ -55,7 +55,7 @@ function jsonMonitoramento($usuario) {
       array(
         "tipo"  => "marker"
        ,"nome"  => $sinal->getUsuario()->getNome()
-       ,"icone" => "img/marker/marker_pessoa_vermelho.png"
+       ,"icone" => "img/marker/pessoa.png"
        ,"msg"   => '<strong>Nome:</strong> ' . $sinal->getUsuario()->getNome() . '<br />'.
                    '<strong>Número:</strong> ' . $sinal->getEquipamento()->getNumero() . '<br />' .
                    '<strong>Data:</strong> ' . $sinal->getDataServidor() . '<br />' .
@@ -90,8 +90,8 @@ function jsonTarefa($usuario) {
       array(
         "tipo"  => "marker"
        ,"nome"  => $tarefa["local"]->getNome()
-       //,"icone" => "img/marker/marker_pessoa_vermelho.png"
-       ,"msg"   => '<strong>Nome:</strong> ' . $tarefa["local"]->getNome() . '<br />'.
+       ,"icone" => "img/marker/tarefa.png"
+       ,"msg"   => '<strong>Local:</strong> ' . $tarefa["local"]->getNome() . '<br />'.
                    '<strong>Tarefa:</strong> ' . $tarefa["tarefa"]->getDescricao() . '<br />' .
                    '<strong>Data:</strong> ' . $tarefa["movimento"]->getData() . '<br />' .
                    '<strong>Endereço:</strong> ' . $tarefa["local"]->getEndereco() . '<br />' .
@@ -128,7 +128,7 @@ function jsonRastro($usuario, $data_ini, $data_fim) {
       array(
         "tipo"  => "marker"
        ,"nome"  => $sinal->getUsuario()->getNome()
-       ,"icone" => "img/marker/numeros/" . ++$n . ".png"
+       ,"icone" => "img/marker/number_" . ++$n . ".png"
        ,"msg"   => '<strong>Nome:</strong> ' . $sinal->getUsuario()->getNome() . '<br />'.
                    '<strong>Número:</strong> ' . $sinal->getEquipamento()->getNumero() . '<br />' .
                    '<strong>Data:</strong> ' . $sinal->getDataServidor() . '<br />' .

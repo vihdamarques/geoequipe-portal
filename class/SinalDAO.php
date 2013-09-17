@@ -74,7 +74,8 @@
                                         . "  AND s.id_equipamento = e.id_equipamento \n"
                                         . "AND s.data_servidor BETWEEN str_to_date(:data_ini,'%d/%m/%Y %H:%i') \n"
                                         . "                        AND str_to_date(:data_fim,'%d/%m/%Y %H:%i') \n"
-                                        . "ORDER BY s.id_sinal");
+                                        . "ORDER BY s.id_sinal \n"
+                                        . "LIMIT 0, 99");
 
             $stmt->bindValue(":id_usuario", $_id_usuario, PDO::PARAM_INT);
             $stmt->bindValue(":data_ini", $_data_ini, PDO::PARAM_STR);

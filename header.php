@@ -22,7 +22,7 @@
       <script src="js/jquery-1.10.2.min.js"></script>      
       <script src="js/bootstrap.min.js"></script>
       <script src="js/bootstrap-datetimepicker.min.js"></script>
-      <!-- script src="js/bootstrap-datepicker.pt-BR.js" charset="UTF-8"></script-->
+      <script src="js/bootstrap-datetimepicker.pt-BR.js" charset="UTF-8"></script>
   </head>
   <body>
     <div class="navbar navbar-fixed-top navbar-inverse"> <!-- menu preto: navbar-inverse-->
