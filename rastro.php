@@ -13,6 +13,7 @@
 ?>
         <div id="map-container" style="position: absolute;bottom: 0px;left: 0px;right: 0px;top: 41px"><div id="map-canvas"></div></div>
         <div id="controle" style="position:absolute; right:10px; top:80px; display:block; background-color:#FFF; padding:10px; text-align:right; border-radius:10px; opacity:0.8;">
+            Usuário:
             <select id="usuario">
                 <option value="0" selected>- Selecione o Usuário -</option>
                 <?php
@@ -23,9 +24,22 @@
                 ?>
             </select>
             <br />
-            Data inicial: <input type="text" id="data_ini" class="input-medium datepicker" value="<?php echo date("d/m/Y H:i"); ?>">
+
+            Data inicial:
+            <div id="data_ini_container" class="input-append date">
+              <input data-format="dd/MM/yyyy hh:mm" type="text" class="input-medium" id="data_ini" value="<?php echo date("d/m/Y H:i", strtotime("-2 hours")); ?>"></input>
+              <span class="add-on">
+                <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+              </span>
+            </div>
             <br />
-            Data final: <input type="text" id="data_fim" class="input-medium datepicker" value="<?php echo date("d/m/Y H:i"); ?>">
+            Data final:
+            <div id="data_fim_container" class="input-append date">
+              <input data-format="dd/MM/yyyy hh:mm" type="text" class="input-medium" id="data_fim" value="<?php echo date("d/m/Y H:i"); ?>"></input>
+              <span class="add-on">
+                <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+              </span>
+            </div>
             <br />
             <button type="button" id="visualizar" class="btn">Visualizar</button>
         </div>
@@ -54,12 +68,11 @@
               });
             }
 
-            $(".datepicker").datepicker({
-                language: "pt-BR",
-                orientation: "top",
-                format: "dd/mm/yyyy",
-                autoclose: true                
+            $('#data_ini_container, #data_fim_container').datetimepicker({
+              language: 'pt-BR'
+             ,pickSeconds: false
             });
+
         </script>
     </body>
 </html>

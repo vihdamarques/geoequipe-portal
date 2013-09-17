@@ -3,6 +3,7 @@
 include_once "class/SinalDAO.php";
 include_once "class/UsuarioDAO.php";
 include_once "class/EquipamentoDAO.php";
+include_once "class/TarefaDAO.php";
 include_once "class/Conexao.php";
 
 if (isset($_GET['processo'])) $processo = $_GET['processo'];
@@ -22,7 +23,7 @@ switch ($processo) {
     echo '-46.635246';
     break;
   case "monitoramento":
-    if (isset($_GET['usuario']))  $usuario = $_GET['usuario'];
+    if (isset($_GET['usuario'])) $usuario = $_GET['usuario'];
     jsonMonitoramento($usuario);
     break;
   case "rastro":
@@ -30,6 +31,10 @@ switch ($processo) {
     if (isset($_GET['data_ini'])) $data_ini = $_GET['data_ini'];
     if (isset($_GET['data_fim'])) $data_fim = $_GET['data_fim'];
     jsonRastro($usuario, $data_ini, $data_fim);
+    break;
+  case "tarefa":
+    if (isset($_GET['usuario'])) $usuario = $_GET['usuario'];
+    jsonTarefa($usuario);
     break;
   default:
     break;
@@ -50,7 +55,7 @@ function jsonMonitoramento($usuario) {
       array(
         "tipo"  => "marker"
        ,"nome"  => $sinal->getUsuario()->getNome()
-       ,"icone" => "img/marker/marker_pessoa_azul.png"
+       ,"icone" => "img/marker/marker_pessoa_vermelho.png"
        ,"msg"   => '<strong>Nome:</strong> ' . $sinal->getUsuario()->getNome() . '<br />'.
                    '<strong>Número:</strong> ' . $sinal->getEquipamento()->getNumero() . '<br />' .
                    '<strong>Data:</strong> ' . $sinal->getDataServidor() . '<br />' .
@@ -58,6 +63,41 @@ function jsonMonitoramento($usuario) {
                    '<strong>Velocidade:</strong> ' . $sinal->getVelocidade()
        ,"coord" => array("lat" => $sinal->getLatitude()
                         ,"lng" => $sinal->getLongitude())
+      )
+    );
+  }
+
+  $conn->__destruct();
+
+  if ($possuiDados)
+    httpPrint(json_encode($json), $MIME_JSON, false);
+  else
+    noDataFound();
+}
+
+function jsonTarefa($usuario) {
+  global $MIME_JSON;
+  $conn        = new conexao();
+  $tarefadao   = new TarefaDAO($conn);
+  $possuiDados = false;
+
+  $json = array();
+
+  foreach ($tarefadao->consultarJson($usuario) as $tarefa) {
+    if (!$possuiDados) $possuiDados = true;
+
+    array_push($json,
+      array(
+        "tipo"  => "marker"
+       ,"nome"  => $tarefa["local"]->getNome()
+       //,"icone" => "img/marker/marker_pessoa_vermelho.png"
+       ,"msg"   => '<strong>Nome:</strong> ' . $tarefa["local"]->getNome() . '<br />'.
+                   '<strong>Tarefa:</strong> ' . $tarefa["tarefa"]->getDescricao() . '<br />' .
+                   '<strong>Data:</strong> ' . $tarefa["movimento"]->getData() . '<br />' .
+                   '<strong>Endereço:</strong> ' . $tarefa["local"]->getEndereco() . '<br />' .
+                   '<strong>Apontamento:</strong> ' . $tarefa["movimento"]->getApontamento()
+       ,"coord" => array("lat" => $tarefa["local"]->getLatitude()
+                        ,"lng" => $tarefa["local"]->getLongitude())
       )
     );
   }

@@ -10,7 +10,6 @@
     $auth->autenticar();
     $usuarioDAO = new UsuarioDAO($conn);
 
-
     include_once 'header.php';
 ?>
         <div id="map-container" style="position: absolute;bottom: 0px;left: 0px;right: 0px;top: 41px"><div id="map-canvas"></div></div>

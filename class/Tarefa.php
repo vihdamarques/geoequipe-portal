@@ -18,7 +18,7 @@
 			$this->_usuario = $_usuario;
 			$this->_descricao = $_descricao;			
 			$this->_data_criacao = $_data_criacao;
-		}		
+		}
 
 		//destrutos da classe
 		public function __destruct(){
