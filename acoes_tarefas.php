@@ -119,7 +119,7 @@
       <title>Geoequipe</title>
       <!-- CSS -->      
       <link href="css/bootstrap.min.css" rel="stylesheet">
-      <link href="css/datepicker.css" rel="stylesheet">
+      <link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet">
       <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
       <style>
           body {
@@ -129,7 +129,7 @@
       <!-- Scripts -->
       <script src="js/jquery-1.10.2.min.js"></script>
       <script src="js/bootstrap.min.js"></script>
-      <script src="js/bootstrap-datepicker.js"></script>
+      <script src="js/bootstrap-datetimepicker.min.js"></script>
       <script src="js/bootstrap-datepicker.pt-BR.js" charset="UTF-8"></script>      
   </head>
   <body>        
@@ -177,10 +177,12 @@
                 <div class="control-group">
                     <label class="control-label" for="data_agendamento">Data Agendamento</label>
                     <div class="controls">
-                        <!--<div class="input-append date">-->
-                              <input type="text" id="data_agendamento" name="data_agendamento" class="input-small datepicker" placeholder="dd/mm/yyyy">
-                              <!--<span class="add-on"><i class="icon-calendar"></i></span>-->
-                        <!--</div>-->
+                        <div id="data_container" class="input-append date">
+                          <input data-format="dd/MM/yyyy" type="text" class="input-small" id="data_agendamento" name="data_agendamento" placeholder="dd/mm/yyyy"></input>
+                          <span class="add-on">
+                            <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+                          </span>
+                        </div> 
                     </div>
                 </div>
                 <?php } ?>
@@ -246,15 +248,12 @@
             </form>    
         </div>
       <script type="text/javascript">
-        $(function(){
-            $(".datepicker").datepicker({
-                language: "pt-BR",
-                orientation: "top",
-                format: "dd/mm/yyyy",
-                autoclose: true,
-                startDate: new Date()
-            });
-        });
+        $('#data_container').datetimepicker({
+          language: "pt-BR"
+         ,pickTime: false
+         ,format: "dd/MM/yyyy"
+         ,startDate: new Date()
+        });  
         </script>   
     </body>
 </html>

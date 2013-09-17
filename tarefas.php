@@ -64,8 +64,7 @@
     <!--Formulário-->        
     <div class="container">
         <form id="formTarefas" class="form-horizontal" method="POST" action="tarefas.php">
-            <legend>Filtros</legend>
-                <button type="button" class="btn" onclick="window.location='cadastroTarefa.php'">Criar</button>
+            <legend>Filtros</legend>                
                 <input type="hidden" name="id" id="id" value="" />
              <!--Status-->   
             <div class="control-group">
@@ -106,22 +105,29 @@
             <!--Descrição-->
             <div class="control-group">
                 <label class="control-label" for="descricao">Descrição</label>
-                <div class="controls">
-                    <input class="input-medium" type="text" name="descricao" id="descricao" placeholder="Descrição" value="<?php echo $descricao; ?>">
+                <div class="controls">                    
+                    <input class="input-xlarge" type="text" name="descricao" id="descricao" placeholder="Descrição" value="<?php echo $descricao; ?>">
                 </div>
             </div>
             <!--Data-->
             <div class="control-group">
                 <label class="control-label" for="data">Data Criação</label>
-                <div class="controls">                    
-                    <input type="text" id="data" name="data" class="input-small datepicker" placeholder="dd/mm/yyyy" value="<?php echo $data; ?>">
+                <div class="controls">           
+                    <div id="data_container" class="input-append date">
+                      <input data-format="dd/MM/yyyy" type="text" class="input-small" id="data" name="data" placeholder="dd/mm/yyyy" value="<?php echo $data; ?>"></input>
+                      <span class="add-on">
+                        <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+                      </span>
+                    </div>                             
                 </div>
             </div>
         
             <div class="control-group">
                 <div class="controls">
+                    <!--Botão Criar-->
+                    <button type="button" class="btn btn-primary" onclick="window.location='cadastroTarefa.php'">Criar</button>
                     <!--Botão Submitar-->
-                    <button type="submit" class="btn btn-primary">Pesquisar</button>
+                    <button type="submit" class="btn">Pesquisar</button>
                     <script type="text/javascript">
                         function limparPesquisa(){
                             $('#status').val('');
@@ -132,7 +138,7 @@
                         }
                     </script>
                     <!--Botão Limpar-->
-                    <button type="button" class="btn" onclick="limparPesquisa();">Limpar</button>
+                    <button type="button" class="btn btn-danger" onclick="limparPesquisa();">Limpar</button>                    
                 </div>
             </div>
         </form>
@@ -261,14 +267,11 @@
 
     </script>     
     <script type="text/javascript">
-        $(function(){
-            $(".datepicker").datepicker({
-                language: "pt-BR",
-                orientation: "top",
-                format: "dd/mm/yyyy",
-                autoclose: true                
-            });
-        });
+        $('#data_container').datetimepicker({
+          language: "pt-BR"
+         ,pickTime: false
+         ,format: "dd/MM/yyyy"
+        });            
     </script> 
 
         <!--Modal-->   
@@ -280,6 +283,6 @@
                 <a href="#" class="btn" data-dismiss="modal">Fechar</a>  
             </div>
         </div>
-    </div>
+    </div>    
     </body>
 </html>
