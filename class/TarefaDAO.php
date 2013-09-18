@@ -172,7 +172,7 @@
                                         . ",l.id_local id_local, l.nome nome_local, l.latitude "
                                         . ",l.longitude, l.logradouro, l.numero, l.bairro, l.cidade "
                                         . ",l.estado, l.pais, l.cep, l.telefone_1, l.telefone_2, l.email "
-                                        . ",u.nome nome_usuario, u.usuario, m.id_tarefa_movto, m.data data_movto "
+                                        . ",u.nome nome_usuario, u.usuario, m.id_tarefa_movto, date_format(m.data, '%d/%m/%Y') data_movto "
                                         . ",m.apontamento, m.status, m.ordem "
                                         . "from ge_tarefa t, ge_local l, ge_tarefa_movto m, ge_usuario u "
                                         . "where t.id_local  = l.id_local "

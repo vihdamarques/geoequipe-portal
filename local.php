@@ -3,16 +3,17 @@
     include_once 'class/Conexao.php';
     include_once 'class/LocalDAO.php';
     include_once 'class/Autenticacao.php';
+    include_once 'class/Geocoder.php';
 
     //Conexão
-    $conn = new Conexao();    
-    
+    $conn = new Conexao();
+
     //Autenticação
     $auth = new Autenticacao($conn);
     $auth->autenticar();
-    
+
     //declara e inicializa as variáveis
-    $id = null;       
+    $id = null;
     $nome = null;
     $descricao = null;
     $ativo = null;
@@ -58,7 +59,7 @@
     if ($flag_busca == "N") {
         if (!empty($id)) {
             $Local = $localDAO->consultarId($id);
-            if ($operacao == "A") {        
+            if ($operacao == "A") {
                 try {
                     $nome = (isset($_POST["nome"])) ? $_POST["nome"] : "";                
                     $descricao = (isset($_POST["descricao"])) ? $_POST["descricao"] : "";
@@ -80,9 +81,6 @@
                     $Local->setNome($nome);
                     $Local->setDescricao($descricao);
                     $Local->setAtivo($ativo);
-                    $Local->setLatitude($latitude);
-                    $Local->setLongitude($longitude);
-                    $Local->setCoordenada($coordenada);
                     $Local->setLogradouro($logradouro);
                     $Local->setNumero($numero);
                     $Local->setBairro($bairro);
@@ -93,6 +91,11 @@
                     $Local->setTelefone_1($telefone_1);
                     $Local->setTelefone_2($telefone_2);      
                     $Local->setEmail($email);      
+
+                    $coord = Geocoder::getLocation($Local->getEndereco());
+                    $Local->setLatitude($coord["lat"]);
+                    $Local->setLongitude($coord["lng"]);
+
                     //atualizar
                     $localDAO->alterar($Local);
                     $msg = "<div class=\"alert alert-success\">
@@ -109,7 +112,7 @@
                             </div>";
                 }
 
-            } elseif ($operacao == "D") {          
+            } elseif ($operacao == "D") {
                 try {
                     //deletar
                     $localDAO->excluir($id);
@@ -128,8 +131,8 @@
                 }
             }
         } else {       
-            if ($operacao == "I") {            
-                try {   $nome = (isset($_POST["nome"])) ? $_POST["nome"] : "";                
+            if ($operacao == "I") {
+                try {   $nome = (isset($_POST["nome"])) ? $_POST["nome"] : "";
                         $descricao = (isset($_POST["descricao"])) ? $_POST["descricao"] : "";
                         $ativo = (isset($_POST["ativo"])) ? $_POST["ativo"] : "";
                         $latitude = (isset($_POST["latitude"])) ? $_POST["latitude"] : "";
@@ -137,7 +140,7 @@
                         $coordenada = (isset($_POST["coordenada"])) ? $_POST["coordenada"] : "";
                         $logradouro = (isset($_POST["logradouro"])) ? $_POST["logradouro"] : "";
                         $numero = (isset($_POST["numero"])) ? $_POST["numero"] : "";
-                        $bairro = (isset($_POST["bairro"])) ? $_POST["bairro"] : "";                
+                        $bairro = (isset($_POST["bairro"])) ? $_POST["bairro"] : "";
                         $cidade = (isset($_POST["cidade"])) ? $_POST["cidade"] : "";
                         $estado = (isset($_POST["estado"])) ? $_POST["estado"] : "";
                         $pais = (isset($_POST["pais"])) ? $_POST["pais"] : "";
@@ -145,7 +148,7 @@
                         $telefone_1 = (isset($_POST["telefone_1"])) ? $_POST["telefone_1"] : "";
                         $telefone_2 = (isset($_POST["telefone_2"])) ? $_POST["telefone_2"] : "";
                         $email = (isset($_POST["email"])) ? $_POST["email"] : "";
-                                        
+
                         $Local->setNome($nome);
                         $Local->setDescricao($descricao);
                         $Local->setAtivo($ativo);
@@ -161,7 +164,12 @@
                         $Local->setCep($cep);
                         $Local->setTelefone_1($telefone_1);
                         $Local->setTelefone_2($telefone_2);      
-                        $Local->setEmail($email);    
+                        $Local->setEmail($email);
+
+                        $coord = Geocoder::getLocation($Local->getEndereco());
+                        $Local->setLatitude($coord["lat"]);
+                        $Local->setLongitude($coord["lng"]);
+
                         //inserir
                         $localDAO->inserir($Local); 
                         $msg = "<div class=\"alert alert-success\">
@@ -198,7 +206,7 @@
     }
 
     //destruir conexão
-    $conn->__destruct();   
+    $conn->__destruct();
 
 ?>
 

@@ -41,7 +41,7 @@
                 <ul class="dropdown-menu">
                     <li><a href="index.php">Monitoramento</a></li>
                     <li><a href="rastro.php">Rastro</a></li>
-                    <li><a href="#">Histórico</a></li>
+                    <li><a href="historico.php">Histórico</a></li>
                     <li><a href="tarefas.php">Tarefas</a></li>
                     <li><a href="#">Agendamento</a></li>
                 </ul>
