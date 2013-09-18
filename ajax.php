@@ -11,9 +11,17 @@ if (isset($_GET['processo'])) $processo = $_GET['processo'];
 $usuario  = null;
 $data_ini = null;
 $data_fim = null;
+$id_sinal = null;
 
 $MIME_JSON = 'application/json';
 $MIME_JS   = 'application/x-javascript';
+
+$marker_pessoa = "img/marker/pessoa.png";
+$marker_tarefa = "img/marker/tarefa.png";
+
+function marker_numerico($n) {
+  return "img/marker/number_" . $n . ".png";
+}
 
 switch ($processo) {
   case "getLatitude":
@@ -36,12 +44,16 @@ switch ($processo) {
     if (isset($_GET['usuario'])) $usuario = $_GET['usuario'];
     jsonTarefa($usuario);
     break;
+  case "sinal":
+    if (isset($_GET['sinal'])) $id_sinal = $_GET['sinal'];
+    jsonSinal($id_sinal);
+    break;
   default:
     break;
 }
 
 function jsonMonitoramento($usuario) {
-  global $MIME_JSON;
+  global $MIME_JSON, $marker_pessoa;
   $conn           = new conexao();
   $sinaldao       = new SinalDAO($conn);
   $possuiDados    = false;
@@ -55,7 +67,42 @@ function jsonMonitoramento($usuario) {
       array(
         "tipo"  => "marker"
        ,"nome"  => $sinal->getUsuario()->getNome()
-       ,"icone" => "img/marker/pessoa.png"
+       ,"icone" => $marker_pessoa
+       ,"msg"   => '<strong>Nome:</strong> ' . $sinal->getUsuario()->getNome() . '<br />'.
+                   '<strong>Número:</strong> ' . $sinal->getEquipamento()->getNumero() . '<br />' .
+                   '<strong>Data:</strong> ' . $sinal->getDataServidor() . '<br />' .
+                   '<strong>Endereço:</strong> ' . $sinal->getEndereco() . '<br />' .
+                   '<strong>Velocidade:</strong> ' . $sinal->getVelocidade()
+       ,"coord" => array("lat" => $sinal->getLatitude()
+                        ,"lng" => $sinal->getLongitude())
+      )
+    );
+  }
+
+  $conn->__destruct();
+
+  if ($possuiDados)
+    httpPrint(json_encode($json), $MIME_JSON, false);
+  else
+    noDataFound();
+}
+
+function jsonSinal($id_sinal) {
+  global $MIME_JSON, $marker_pessoa;
+  $conn           = new conexao();
+  $sinaldao       = new SinalDAO($conn);
+  $possuiDados    = false;
+
+  $json = array();
+
+  foreach ($sinaldao->consultarPorId($id_sinal) as $sinal) {
+    if (!$possuiDados) $possuiDados = true;
+
+    array_push($json,
+      array(
+        "tipo"  => "marker"
+       ,"nome"  => $sinal->getUsuario()->getNome()
+       ,"icone" => $marker_pessoa
        ,"msg"   => '<strong>Nome:</strong> ' . $sinal->getUsuario()->getNome() . '<br />'.
                    '<strong>Número:</strong> ' . $sinal->getEquipamento()->getNumero() . '<br />' .
                    '<strong>Data:</strong> ' . $sinal->getDataServidor() . '<br />' .
@@ -76,7 +123,7 @@ function jsonMonitoramento($usuario) {
 }
 
 function jsonTarefa($usuario) {
-  global $MIME_JSON;
+  global $MIME_JSON, $marker_tarefa;
   $conn        = new conexao();
   $tarefadao   = new TarefaDAO($conn);
   $possuiDados = false;
@@ -90,7 +137,7 @@ function jsonTarefa($usuario) {
       array(
         "tipo"  => "marker"
        ,"nome"  => $tarefa["local"]->getNome()
-       ,"icone" => "img/marker/tarefa.png"
+       ,"icone" => $marker_tarefa
        ,"msg"   => '<strong>Local:</strong> ' . $tarefa["local"]->getNome() . '<br />'.
                    '<strong>Tarefa:</strong> ' . $tarefa["tarefa"]->getDescricao() . '<br />' .
                    '<strong>Data:</strong> ' . $tarefa["movimento"]->getData() . '<br />' .
@@ -128,7 +175,7 @@ function jsonRastro($usuario, $data_ini, $data_fim) {
       array(
         "tipo"  => "marker"
        ,"nome"  => $sinal->getUsuario()->getNome()
-       ,"icone" => "img/marker/number_" . ++$n . ".png"
+       ,"icone" => marker_numerico(++$n)
        ,"msg"   => '<strong>Nome:</strong> ' . $sinal->getUsuario()->getNome() . '<br />'.
                    '<strong>Número:</strong> ' . $sinal->getEquipamento()->getNumero() . '<br />' .
                    '<strong>Data:</strong> ' . $sinal->getDataServidor() . '<br />' .
