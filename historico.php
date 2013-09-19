@@ -111,23 +111,25 @@
                 ?>
                 <table class="table table-hover" style="width: 100%">
                     <thead>
-                        <tr>                        
-                            <th>Usuario</th>
+                        <tr>
+                            <th>Visualizar</th>                    
+                            <th>Usuário</th>
                             <th>Equipamento</th>
                             <th>Data</th>
                             <th>Hora</th>                                                        
-                            <th>Endereco</th>                            
+                            <th>Endereço</th>                            
                         </tr>
                     </thead>
                     <tbody>
                         <?php
                         foreach ($historico as $key => $linha) {
                             ?>
-                            <tr>                                                              
+                            <tr>
+                                <td style="text-align:center"><a href="index.php?sinal=<?php echo $linha->getId(); ?>"><i class="icon-search"></i></a></td>
                                 <td><?php echo $linha->getUsuario()->getNome(); ?></td>                                
                                 <td><?php echo $linha->getEquipamento()->getNumero();?></td>
-                                <td><?php echo $linha->getDataServidor();?></td>           
-                                <td><?php echo $linha->getDataServidor();?></td>
+                                <td><?php echo date("d/m/Y", strtotime($linha->getDataServidor()));?></td>           
+                                <td><?php echo date("H:i", strtotime($linha->getDataServidor()));?></td>
                                 <td><?php echo $linha->getEndereco();;?></td>                                                                
                             </tr>
                             <?php
@@ -136,7 +138,7 @@
                     </tbody>
                 </table>                
                 <?php
-                } else echo 'Nenhum registro encontrado!';
+                }
             ?>       
   
     <script type="text/javascript">
