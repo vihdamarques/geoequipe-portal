@@ -43,7 +43,7 @@
                     <li><a href="rastro.php">Rastro</a></li>
                     <li><a href="historico.php">Histórico</a></li>
                     <li><a href="tarefas.php">Tarefas</a></li>
-                    <li><a href="#">Agendamento</a></li>
+                    <li><a href="#">Distribuição</a></li>
                 </ul>
               </li>
               <li class="dropdown">
@@ -62,7 +62,14 @@
                 </ul>
               </li>        
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i> Login <b class="caret"></b></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i> 
+                      <?php include_once 'class/Usuario.php'; 
+                            $string = isset($_SESSION["usuario"]) ? $_SESSION["usuario"]: "" ;
+                            $usuario = new Usuario();
+                            $usuario = unserialize($string);
+                            echo $usuario->getUsuario();                            
+                      ?>
+                  <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li><a href="logout.php">Sair</a></li>
                 </ul>
