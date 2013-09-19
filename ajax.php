@@ -154,7 +154,7 @@ function jsonTarefa($usuario) {
   if ($possuiDados)
     httpPrint(json_encode($json), $MIME_JSON, false);
   else
-    noDataFound();
+    noDataFound("Nenhuma tarefa agendada para hoje");
 }
 
 function jsonRastro($usuario, $data_ini, $data_fim) {
@@ -196,7 +196,7 @@ function jsonRastro($usuario, $data_ini, $data_fim) {
     $json = array_merge($json, tracarTrajeto($trajeto));
     httpPrint(json_encode($json), $MIME_JSON, false);
   } else
-    noDataFound();
+    noDataFound("Nenhum sinal encontrado no período");
 }
 
 function tracarTrajeto($coords) {
@@ -240,9 +240,10 @@ function calculaDistancia($lat1, $lng1, $lat2, $lng2) {
   return round((2 * pi() * $raio_terra * $arco_cos) / 360, 2);
 }
 
-function noDataFound() {
+function noDataFound($msg = null) {
   global $MIME_JS;
-  httpPrint('geoequipe.msgAjaxFalha("Dados não encontrados !")', $MIME_JS, false);
+  if ($msg == null) $msg = "Dados não encontrados !";
+  httpPrint('geoequipe.msgAjaxFalha("' . $msg . '")', $MIME_JS, false);
 }
 
 function httpPrint($content, $mime = 'text/html', $cache = false) {
