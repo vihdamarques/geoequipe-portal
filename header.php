@@ -64,10 +64,13 @@
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i> 
                       <?php include_once 'class/Usuario.php'; 
-                            $string = isset($_SESSION["usuario"]) ? $_SESSION["usuario"]: "" ;
-                            $usuario = new Usuario();
-                            $usuario = unserialize($string);
-                            echo $usuario->getUsuario();                            
+                            $string = isset($_SESSION["usuario"]) ? $_SESSION["usuario"] : null;
+                            if ($string != null) {
+                              $usuario = unserialize($string);
+                              echo $usuario->getUsuario();
+                            } else {
+                              echo "Login";
+                            }
                       ?>
                   <b class="caret"></b></a>
                 <ul class="dropdown-menu">
