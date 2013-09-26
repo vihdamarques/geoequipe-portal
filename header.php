@@ -13,6 +13,7 @@
       <link href="css/bootstrap.min.css" rel="stylesheet">
       <link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet">
       <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
+      <link href="css/ui-lightness/jquery-ui-1.10.3.custom.min.css" rel="stylesheet">
       <style>
           body {
               padding-top: 60px;
@@ -22,7 +23,8 @@
       <script src="js/jquery-1.10.2.min.js"></script>      
       <script src="js/bootstrap.min.js"></script>
       <script src="js/bootstrap-datetimepicker.min.js"></script>
-      <script src="js/bootstrap-datetimepicker.pt-BR.js" charset="UTF-8"></script>
+      <script src="js/bootstrap-datetimepicker.pt-BR.js"></script>
+      <script src="js/jquery-ui-1.10.3.custom.min.js"></script>
   </head>
   <body>
     <div class="navbar navbar-fixed-top navbar-inverse"> <!-- menu preto: navbar-inverse-->
@@ -43,7 +45,7 @@
                     <li><a href="rastro.php">Rastro</a></li>
                     <li><a href="historico.php">Histórico</a></li>
                     <li><a href="tarefas.php">Tarefas</a></li>
-                    <li><a href="#">Distribuição</a></li>
+                    <li><a href="distribuicao.php">Distribuição</a></li>
                 </ul>
               </li>
               <li class="dropdown">
@@ -64,13 +66,10 @@
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i> 
                       <?php include_once 'class/Usuario.php'; 
-                            $string = isset($_SESSION["usuario"]) ? $_SESSION["usuario"] : null;
-                            if ($string != null) {
-                              $usuario = unserialize($string);
-                              echo $usuario->getUsuario();
-                            } else {
-                              echo "Login";
-                            }
+                            $string = isset($_SESSION["usuario"]) ? $_SESSION["usuario"]: "" ;
+                            $usuario = new Usuario();
+                            $usuario = unserialize($string);
+                            echo $usuario->getUsuario();                            
                       ?>
                   <b class="caret"></b></a>
                 <ul class="dropdown-menu">

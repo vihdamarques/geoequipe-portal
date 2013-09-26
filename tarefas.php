@@ -62,9 +62,15 @@
     <!--Cabeçalho-->
     <?php include_once 'header.php'; ?>
     <!--Formulário-->        
-    <div class="container">
+    <div class="container">        
+            <div class="control-group">
+                <div class="controls">
+                    <!--Botão Criar-->
+                    <button type="button" class="btn btn-primary" onclick="window.location='cadastroTarefa.php'">Criar</button>                            
+                </div>
+            </div>
         <form id="formTarefas" class="form-horizontal" method="POST" action="tarefas.php">
-            <legend>Filtros</legend>                
+            <legend>Pesquisa de Tarefas</legend>
                 <input type="hidden" name="id" id="id" value="" />
              <!--Status-->   
             <div class="control-group">
@@ -121,11 +127,9 @@
                     </div>                             
                 </div>
             </div>
-        
+            <!--Botões-->                
             <div class="control-group">
                 <div class="controls">
-                    <!--Botão Criar-->
-                    <button type="button" class="btn btn-primary" onclick="window.location='cadastroTarefa.php'">Criar</button>
                     <!--Botão Submitar-->
                     <button type="submit" class="btn">Pesquisar</button>
                     <script type="text/javascript">
@@ -261,10 +265,6 @@
             });
         });
 
-        $('#modal').on('hidden', function () {
-          document.location.reload();
-        });
-
     </script>     
     <script type="text/javascript">
         $('#data_container').datetimepicker({
@@ -280,7 +280,7 @@
                 <iframe src="" width="650px" height="370px" id="modal_iframe" frameborder="0"> </iframe>
             </div>  
             <div class="modal-footer">           
-                <a href="#" class="btn" data-dismiss="modal">Fechar</a>  
+                <a href="#" class="btn" data-dismiss="modal" onclick="window.location.reload();">Fechar</a>  
             </div>
         </div>
     </div>    
