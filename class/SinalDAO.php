@@ -25,6 +25,7 @@
                                         . "AND (u.id_usuario = :id_usuario OR :id_usuario = 0) \n"
                                         . "AND s.id_usuario = u.id_usuario \n"
                                         . "AND s.id_equipamento = e.id_equipamento \n"
+                                        . "AND u.ativo = 'S'\n"                                               //erico 26/09/2013
                                         . "ORDER BY s.id_usuario");
             $stmt->bindValue(":id_usuario", $_id_usuario, PDO::PARAM_INT);
             $stmt->execute();
