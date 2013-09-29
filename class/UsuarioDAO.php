@@ -173,7 +173,7 @@
         }
 
         //cria uma tag select com todos os usuarios cadastrados
-        public function selecionar($_id_usuario){
+        public function selecionar($id_usuario){
             $_vetor = array();
             $stmt = $this->_conn->prepare("SELECT * FROM ge_usuario WHERE ativo = 'S' ORDER BY nome");
             $stmt->execute();
@@ -197,8 +197,8 @@
               $id = $usuario->getId();
               $nome = $usuario->getNome();
               $html .= "<option value=".$id;
-              if($id == $_id_usuario){ 
-                  $html .= " selected ";
+              if($id == $id_usuario){ 
+                  $html .= " selected";
               }
               $html .= " >".$nome."</option>\n";
             }            
@@ -240,6 +240,5 @@
             //retorna um array de usuarios
             return $_vetor;
         }
-
     }
 ?>

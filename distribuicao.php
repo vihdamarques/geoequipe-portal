@@ -12,7 +12,7 @@
     $auth = new Autenticacao($conn);
     $auth->autenticar();
     
-    //declara e inicializa as variáveis    
+    //declaração variáveis    
     $usuarioDAO = new UsuarioDAO($conn);    
     $tarefaDAO = new TarefaDAO($conn);
     $movimentoDAO = new MovimentoDAO($conn);
@@ -36,53 +36,48 @@
                     </div>"; 
          }
     }  
-
     //destruir conexão
     $conn->__destruct();
+    //include do arquivo cabeçalho da página
+    include_once 'header.php';
 ?>
-
     <!--Cabeçalho-->
-    <?php include_once 'header.php'; ?>
-        <script>
-            $(function() {
-                $( "#sortable" ).sortable({
-                    axis: "y"                    
-                });
-                //$( "#sortable" ).disableSelection();
+    <script>
+        $(function() {
+            $( "#sortable" ).sortable({
+                axis: "y"                    
             });
+        });
 
-            function pegaOrdem(){
-                var array = [];
-                $('li[name*="li_"]').each(function() {
-                    array.push($(this).val());                    
-                });
-                $('#ordem').val(array);
-                var ordem = btoa($('#ordem').val());
-                window.location='distribuicao.php?ordenar=S&ordem='+ordem;
-            }
-
-        </script>
-        <style>
-            #sortable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
-            #sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }
-            #sortable li span { position: absolute; margin-left: -1.3em; }
-        </style>        
-
-         <form id="formDistribuicao" class="form-horizontal" method="POST" action="distribuicao.php">
+        function pegaOrdem(){
+            var array = [];
+            $('li[name*="li_"]').each(function() {
+                array.push($(this).val());                    
+            });
+            $('#ordem').val(array);
+            var ordem = btoa($('#ordem').val());
+            window.location='distribuicao.php?ordenar=S&ordem='+ordem;
+        }
+    </script>
+    <style>
+        #sortable { list-style-type: none; margin: 0; padding: 0; width: 50%; }
+        #sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 14px; height: auto; }
+        #sortable li span { position: absolute; margin-left: -1.3em; }
+    </style>       
+    <div class="container">
+        <form id="formDistribuicao" class="form-horizontal" method="POST" action="distribuicao.php">
             <legend>Distribuição</legend>
             <div class="control-group">
                 <div class="controls">
-                    <?php echo $msg;?>
+                    <?php echo $msg; ?>
                 </div>
             </div>                                     
-             <!--Usuario-->   
+            <!--Usuario-->   
             <div class="control-group">
                 <label class="control-label" for="usuario">Usuário</label>
                 <div class="controls">
                     <select name="usuario" id="usuario">
-                        <?php
-                           echo $usuarioDAO->selecionar($usuario);
-                        ?>
+                        <?php echo $usuarioDAO->selecionar($usuario); ?>
                     </select>
                 </div>
             </div>
@@ -92,19 +87,27 @@
                     <!--Botão Pesquisar-->
                     <button type="submit" class="btn">Pesquisar</button>
                     <input type="hidden" id="ordem" />
+                    <!--Botão Salvar Ordem-->
                     <button type="button" class="btn btn-primary" onclick="pegaOrdem();">Salvar Ordem</button>
+                    <p class="help-block" style="margin-top:10px;">Clique e arraste as tarefas para ordenar</p> 
                 </div>
             </div>
         </form>   
         <ul id="sortable">
-            <?php  if(sizeof($tarefas) > 0) {
-                    foreach ($tarefas as $key => $value) { ?>
-                <li class="ui-state-default" name="<?php echo 'li_'.$value["movimento"]->getId(); ?>" value="<?php echo $value["movimento"]->getId(); ?>">
-                    <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>                    
-                    <?php echo 'Tarefa: '.$value["tarefa"]->getDescricao().' Data Criação: '.$value["tarefa"]->getData(); ?>                     
-                </li>
+            <?php if(sizeof($tarefas) > 0 and $usuario != 0) {
+                    foreach ($tarefas as $key => $value) { 
+            ?>
+            <li class="ui-state-default" name="<?php echo 'li_'.$value["movimento"]->getId(); ?>" value="<?php echo $value["movimento"]->getId(); ?>">
+                <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>                    
+                <?php echo '<b># </b>'.$value["tarefa"]->getId()
+                          .' <b>Tarefa: </b>'.$value["tarefa"]->getDescricao()
+                          .' <b>em </b>'.$value["local"]->getNome(); 
+                ?>                     
+            </li>
             <?php   }
-                   } ?>          
+                } 
+            ?>
         </ul>
+    </div>
     </body>
 </html>

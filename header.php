@@ -13,7 +13,7 @@
       <link href="css/bootstrap.min.css" rel="stylesheet">
       <link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet">
       <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
-      <link href="css/ui-lightness/jquery-ui-1.10.3.custom.min.css" rel="stylesheet">
+      <link href="css/smoothness/jquery-ui.min.css" rel="stylesheet">
       <style>
           body {
               padding-top: 60px;
@@ -59,17 +59,16 @@
               <li class="dropdown">
                 <a href="#contact" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-file icon-white"></i> Relatórios <b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                    <li><a href="#">Gráficos</a></li>
-                    <li><a href="#">Relatórios</a></li>                    
+                    <li><a href="#">Gráficos</a></li>                    
                 </ul>
               </li>        
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i> 
                       <?php include_once 'class/Usuario.php'; 
                             $string = isset($_SESSION["usuario"]) ? $_SESSION["usuario"]: "" ;
-                            $usuario = new Usuario();
-                            $usuario = unserialize($string);
-                            echo $usuario->getUsuario();                            
+                            $usuario_login = new Usuario();
+                            $usuario_login = unserialize($string);
+                            echo $usuario_login->getUsuario();                            
                       ?>
                   <b class="caret"></b></a>
                 <ul class="dropdown-menu">

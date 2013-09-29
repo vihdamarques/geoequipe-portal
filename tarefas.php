@@ -25,9 +25,9 @@
     $descricao;
     $data;
     $Tarefa = new Tarefa();
-    $tarefaDAO = new TarefaDAO($conn);    
-    $usuarioDAO = new UsuarioDAO($conn);    
-    $localDAO = new LocalDAO($conn);        
+    $tarefaDAO = new TarefaDAO($conn);  
+    $usuarioDAO = new UsuarioDAO($conn);
+    $localDAO = new LocalDAO($conn);     
     $movimentoDAO = new MovimentoDAO($conn);
     $msg = null; 
     
@@ -57,22 +57,22 @@
 
     //destruir conexão
     $conn->__destruct();
+    //include do arquivo cabeçalho da página    
+    include_once 'header.php';
 ?>
-
     <!--Cabeçalho-->
-    <?php include_once 'header.php'; ?>
-    <!--Formulário-->        
+    <!--Botão Criar-->
     <div class="container">        
-            <div class="control-group">
-                <div class="controls">
-                    <!--Botão Criar-->
-                    <button type="button" class="btn btn-primary" onclick="window.location='cadastroTarefa.php'">Criar</button>                            
-                </div>
+        <div class="control-group">
+            <div class="controls">            
+                <button type="button" class="btn btn-primary" onclick="window.location='cadastroTarefa.php'">Criar</button>     
             </div>
+        </div>
+        <!--Formulário-->
         <form id="formTarefas" class="form-horizontal" method="POST" action="tarefas.php">
             <legend>Pesquisa de Tarefas</legend>
                 <input type="hidden" name="id" id="id" value="" />
-             <!--Status-->   
+            <!--Status-->   
             <div class="control-group">
                 <label class="control-label" for="status">Status</label>
                 <div class="controls">
@@ -86,7 +86,7 @@
                     </select>
                 </div>
             </div>
-             <!--Local-->   
+            <!--Local-->   
             <div class="control-group">
                 <label class="control-label" for="local">Local</label>                
                 <div class="controls">
@@ -97,7 +97,7 @@
                     </select>
                 </div>
             </div>
-             <!--Usuario-->   
+            <!--Usuario-->   
             <div class="control-group">
                 <label class="control-label" for="usuario">Usuário</label>
                 <div class="controls">
@@ -148,8 +148,8 @@
         </form>
             <!--Relatório-->
             <?php 
-            if (sizeof($tarefas) > 0) {
-                ?>
+                if (sizeof($tarefas) > 0) {
+            ?>
                 <table class="table table-hover" style="width: 100%">
                     <thead>
                         <tr>
@@ -159,73 +159,69 @@
                             <th>Status</th>
                             <th>Data criação</th>                            
                             <th>Local</th>
-                            <th>Usuário abertura</th>
-                            <th>Detalhes</th>
+                            <th>Usuário abertura</th>                           
                             <th>Ação</th>                            
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                        foreach ($tarefas as $key => $tar) {
-                            ?>
-                            <tr>
-                                <td style="text-align:center"><a href="cadastroTarefa.php?id=<?php echo $auth->encripta($tar->getId()); ?>"><i class="icon-pencil"></i></a></td>
-                                <td class="id" style="display:none;"><?php echo $auth->encripta($tar->getId()); ?></td> <!--id criptografado a ser passado po GET-->
-                                <td><?php echo $tar->getId();?></td>                                
-                                <td><?php echo $tar->getDescricao();?></td>
-                                <td><?php $ultimo_status = $movimentoDAO->consultarUltimoStatus($tar->getId());                              
-                                    switch ($ultimo_status->getStatus()) {
-                                    case "A":
-                                        echo "Aberto";
-                                        break;
-                                    case "C":
-                                        echo "Cancelado";
-                                        break;
-                                    case "G":
-                                        echo "Agendado";
-                                        break;
-                                    case "T":
-                                        echo "Atendido";
-                                        break;
-                                    case "N":
-                                        echo "Não Atendido";
-                                        break;                                                                                                                                                            
-                                    default:                                        
-                                        break;
-                                    } ?>
-                                </td>
-                                <td><?php echo date("d/m/Y H:i:s", strtotime($tar->getData()));?></td>
-                                <td><?php $nome_local = $localDAO->consultarId($tar->getLocal());
-                                          echo $nome_local->getNome(); ?>
-                                </td>
-
-                                <td><?php $nome_usuario = $usuarioDAO->consultarId($tar->getUsuario());
-                                          echo $nome_usuario->getNome(); ?>
-                                </td>
-                                <td>Detalhes</td>
-                                <td>                                    
-                                    <?php if($ultimo_status->getStatus() == "A" or $ultimo_status->getStatus() == "N") {
-                                            echo "<select name=\"acao\" class=\"input-medium\">                                        
+                            foreach ($tarefas as $key => $tar) {
+                        ?>
+                        <tr>
+                            <td style="text-align:center"><a href="cadastroTarefa.php?id=<?php echo $auth->encripta($tar->getId()); ?>"><i class="icon-pencil"></i></a></td>
+                            <td class="id" style="display:none;"><?php echo $auth->encripta($tar->getId()); ?></td> <!--id criptografado a ser passado po GET-->
+                            <td><?php echo $tar->getId();?></td>                                
+                            <td><?php echo $tar->getDescricao();?></td>
+                            <td><?php $ultimo_status = $movimentoDAO->consultarUltimoStatus($tar->getId());                              
+                                switch ($ultimo_status->getStatus()) {
+                                case "A":
+                                    echo "Aberto";
+                                    break;
+                                case "C":
+                                    echo "Cancelado";
+                                    break;
+                                case "G":
+                                    echo "Agendado";
+                                    break;
+                                case "T":
+                                    echo "Atendido";
+                                    break;
+                                case "N":
+                                    echo "Não Atendido";
+                                    break;                                                                                                                                                            
+                                default:                                        
+                                    break;
+                                } ?>
+                            </td>
+                            <td><?php echo date("d/m/Y H:i:s", strtotime($tar->getData()));?></td>
+                            <td><?php $nome_local = $localDAO->consultarId($tar->getLocal());
+                                      echo $nome_local->getNome(); ?>
+                            </td>
+                            <td><?php $nome_usuario = $usuarioDAO->consultarId($tar->getUsuario());
+                                      echo $nome_usuario->getNome(); ?>
+                            </td>                              
+                            <td>                                    
+                                <?php if($ultimo_status->getStatus() == "A" or $ultimo_status->getStatus() == "N") {
+                                        echo "<select name=\"acao\" class=\"input-medium\">                                        
+                                                  <option value=\"0\">Selecione</option>
+                                                  <option value=\"G\">Agendar</option>
+                                                  <option value=\"C\">Cancelar</option>
+                                              </select>";    
+                                         } elseif ($ultimo_status->getStatus() == "G") {
+                                            echo "<select name=\"acao\" class=\"input-medium\"> 
                                                       <option value=\"0\">Selecione</option>
-                                                      <option value=\"G\">Agendar</option>
                                                       <option value=\"C\">Cancelar</option>
+                                                      <option value=\"T\">Concluir</option>
+                                                      <option value=\"N\">Adiar</option>
                                                   </select>";    
-                                             } elseif ($ultimo_status->getStatus() == "G") {
-                                                echo "<select name=\"acao\" class=\"input-medium\"> 
-                                                          <option value=\"0\">Selecione</option>
-                                                          <option value=\"C\">Cancelar</option>
-                                                          <option value=\"T\">Concluir</option>
-                                                          <option value=\"N\">Adiar</option>
-                                                      </select>";    
-                                             } else {
-                                                 echo '-';
-                                             }                                       
-                                    ?>                                                                                
-                                   
-                                </td>
-                            </tr>
-                            <?php
-                        }
+                                         } else {
+                                             echo '-';
+                                         }                                       
+                                ?>                               
+                            </td>
+                        </tr>
+                        <?php
+                            }
                         ?>
                     </tbody>
                 </table>                
@@ -251,7 +247,6 @@
         }
         ?>
         </ul>       
-
     <!--Selecionar ação-->    
     <script type="text/javascript">
         $(function(){
@@ -264,7 +259,6 @@
                 }
             });
         });
-
     </script>     
     <script type="text/javascript">
         $('#data_container').datetimepicker({
@@ -273,11 +267,10 @@
          ,format: "dd/MM/yyyy"
         });            
     </script> 
-
         <!--Modal-->   
         <div id="modal" class="modal hide fade" style="width: auto; height: auto; margin-left:-325px;">          
             <div class="modal-body">  
-                <iframe src="" width="650px" height="370px" id="modal_iframe" frameborder="0"> </iframe>
+                <iframe src="" width="650px" height="370px" id="modal_iframe" frameborder="0"></iframe>
             </div>  
             <div class="modal-footer">           
                 <a href="#" class="btn" data-dismiss="modal" onclick="window.location.reload();">Fechar</a>  
