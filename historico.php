@@ -25,7 +25,7 @@
     $usuarioDAO = new UsuarioDAO($conn);
     $equipamentoDAO = new EquipamentoDAO($conn);    
     
-    $usuario = isset($_POST["usuario"]) ? $_POST["usuario"] : ""; echo $usuario;
+    $usuario = isset($_POST["usuario"]) ? $_POST["usuario"] : "";
     $data_inicial = isset($_POST["data_ini"]) ? $_POST["data_ini"] : "";
     $data_final = isset($_POST["data_fin"]) ? $_POST["data_fin"] : "";
     
