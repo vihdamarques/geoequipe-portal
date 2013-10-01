@@ -73,7 +73,7 @@
                             </div>";
                 }
 
-            } elseif ($operacao == "D") {          
+            } elseif ($operacao == "D") {
                 try {
                     //deletar
                     $equipamentoDAO->excluir($id);
@@ -139,14 +139,14 @@
     }
 
     //destruir conexão
-    $conn->__destruct();  
-?>
+    $conn->__destruct();
 
-        <!--Cabeçalho-->
-        <?php include_once 'header.php'; ?>
+    include_once 'header.php';
+?>
+        <!--Cabeçalho-->      
         <!--Formulário-->
         <div class="container">
-            <form id="formUsuario" class="form-horizontal" method="POST" action="equipamento.php">
+            <form id="formEquipamento" class="form-horizontal" method="POST" action="equipamento.php">
                 <legend>Cadastro de Equipamento <!-- span style="font-size: 10pt">(Todos os campos são obrigatórios)</span--></legend>
                 <div class="control-group">
                     <div class="controls">
@@ -186,13 +186,13 @@
                     <div class="controls">
                         <button type="submit" class="btn btn-primary">Salvar</button>
                         <button type="button" class="btn" onclick="window.location='equipamento.php'">Cancelar</button>
-                        <?php
-                        if ($id != null) {
-                            ?>
-                            <button type="button" class="btn btn-danger" onclick="if(confirm('Deseja realmente excluir?')) window.location='equipamento.php?operacao=D&id=<?php echo $auth->encripta($id); ?>'">Excluir</button>
-                            <?php
-                        }
+                       <!-- <?php
+                            //if ($id != null) {
                         ?>
+                        <button type="button" class="btn btn-danger" onclick="if(confirm('Deseja realmente excluir?')) window.location='equipamento.php?operacao=D&id=<?php echo $auth->encripta($id); ?>'">Excluir</button>
+                        <?php
+                            //}
+                        ?>-->
                     </div>
                 </div>
                 <!--Busca-->
@@ -207,46 +207,46 @@
             <br />
             <!--Relatório-->
             <?php 
-            if (sizeof($equipamentos) > 0) {
-                ?>
-                <table class="table table-hover" style="width: 100%">
-                    <thead>
-                        <tr>
-                            <th style="text-align:center">Editar</th>
-                            <th>#</th>
-                            <th>Numero</th>
-                            <th>Descrição</th>
-                            <th>IMEI</th>
-                            <th>Ativo</th>                                                
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
+                if (sizeof($equipamentos) > 0) {
+            ?>
+            <table class="table table-hover" style="width: 100%">
+                <thead>
+                    <tr>
+                        <th style="text-align:center">Editar</th>
+                        <th>#</th>
+                        <th>Numero</th>
+                        <th>Descrição</th>
+                        <th>IMEI</th>
+                        <th>Ativo</th>                                                
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
                         foreach ($equipamentos as $key => $eqp) {
-                            ?>
-                            <tr>
-                                <td style="text-align:center"><a href="equipamento.php?id=<?php echo $auth->encripta($eqp->getId()); ?>"><i class="icon-pencil"></i></a></td>
-                                <td><?php echo $eqp->getId(); ?></td>
-                                <td><?php echo $eqp->getNumero(); ?></td>
-                                <td><?php echo $eqp->getDescricao(); ?></td>
-                                <td><?php echo $eqp->getImei(); ?></td>                                                                
-                                <td><?php  switch ($eqp->getAtivo()) {
-                                    case "S":
-                                       echo "Sim";
-                                        break;
-                                    case "N":
-                                        echo "Não";
-                                        break;
-                                    default:                                                    
-                                        break;
-                                } ?></td>                                        
-                            </tr>
-                            <?php
+                    ?>
+                        <tr>
+                            <td style="text-align:center"><a href="equipamento.php?id=<?php echo $auth->encripta($eqp->getId()); ?>"><i class="icon-pencil"></i></a></td>
+                            <td><?php echo $eqp->getId(); ?></td>
+                            <td><?php echo $eqp->getNumero(); ?></td>
+                            <td><?php echo $eqp->getDescricao(); ?></td>
+                            <td><?php echo $eqp->getImei(); ?></td>                                                                
+                            <td><?php  switch ($eqp->getAtivo()) {
+                                case "S":
+                                   echo "Sim";
+                                    break;
+                                case "N":
+                                    echo "Não";
+                                    break;
+                                default:                                                    
+                                    break;
+                            } ?></td>                                        
+                        </tr>
+                    <?php
                         }
-                        ?>
-                    </tbody>
-                </table>                
-                <?php
+                    ?>
+                </tbody>
+            </table>          
+            <?php
                 }
             ?>
         <!--Paginação do Relatório-->    
@@ -254,18 +254,14 @@
         <?php 
             if ($pag !=  0){
         ?>
-          <li class="previous">
-            <a href="equipamento.php?pag=<?php echo $pag - 1; ?>">&larr; Anterior</a>
-          </li>
-          <?php 
+            <li class="previous"><a href="equipamento.php?pag=<?php echo $pag - 1; ?>">&larr; Anterior</a></li>
+        <?php 
             } 
             if ($pag < $total_pag){
-          ?>
-          <li class="next">
-            <a href="equipamento.php?pag=<?php echo $pag + 1; ?>"> Próximo &rarr;</a>
-          </li>
-          <?php
-        }
+        ?>
+            <li class="next"><a href="equipamento.php?pag=<?php echo $pag + 1; ?>"> Próximo &rarr;</a></li>
+        <?php
+            }
         ?>
         </ul>
         </div>

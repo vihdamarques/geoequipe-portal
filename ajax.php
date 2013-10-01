@@ -130,7 +130,7 @@ function jsonTarefa($usuario) {
 
   $json = array();
 
-  foreach ($tarefadao->consultarJson($usuario) as $tarefa) {
+  foreach ($tarefadao->consultarJson($usuario,1) as $tarefa) {
     if (!$possuiDados) $possuiDados = true;
 
     array_push($json,

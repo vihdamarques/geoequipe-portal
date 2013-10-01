@@ -30,7 +30,7 @@
             </select>
             <br />
             <label class="checkbox">
-                <input type="checkbox" id="mostraTarefas" checked /> Mostrar tarefas agendadas
+                <input type="checkbox" id="mostraTarefas" /> Mostrar tarefas agendadas
             </label>
         </div>
         <?php

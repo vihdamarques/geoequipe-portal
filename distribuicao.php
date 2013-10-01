@@ -23,7 +23,7 @@
     $msg = null;    
 
     if($usuario != ""){
-        $tarefas = $tarefaDAO->consultarJson($usuario); 
+        $tarefas = $tarefaDAO->consultarJson($usuario,1); 
     }
 
     if($ordenar == "S"){        

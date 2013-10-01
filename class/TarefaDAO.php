@@ -165,7 +165,7 @@
         }
 
         //retorna as tarefas para tela de monitoramento
-        public function consultarJson($_usuario){
+        public function consultarJson($_usuario, $_mostra_conc){
             $_vetor = array();
 
             $stmt = $this->_conn->prepare("select t.*, l.latitude, l.longitude, l.nome as local "
@@ -181,9 +181,11 @@
                                         . "and m.status = 'G' "
                                         . "and m.data = curdate() "
                                         . "and (:usuario = 0 or m.id_usuario = :usuario) "
+                                        . "and (:mostra_conc = 0 or not exists (select 1 from ge_tarefa_movto where id_tarefa = m.id_tarefa and status = 'T'))"
                                         . "order by m.ordem ");
 
             $stmt->bindValue(":usuario", $_usuario, PDO::PARAM_INT);
+            $stmt->bindValue(":mostra_conc", $_mostra_conc, PDO::PARAM_INT);
             $stmt->execute();
             //retornar para cada linha na tabela ge_tarefa, um objeto tarefa e insere em um array de tarefa
             $result = $stmt->fetchAll();

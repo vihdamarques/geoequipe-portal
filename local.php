@@ -308,13 +308,13 @@
                     <div class="controls">
                         <button type="submit" class="btn btn-primary">Salvar</button>
                         <button type="button" class="btn" onclick="window.location='local.php'">Cancelar</button>
-                        <?php
-                        if ($id != null) {
-                            ?>
+                        <!--<?php
+                        //if ($id != null) {
+                          //  ?>
                             <button type="button" class="btn btn-danger" onclick="if(confirm('Deseja realmente excluir?')) window.location='local.php?operacao=D&id=<?php echo $auth->encripta($id); ?>'">Excluir</button>
                             <?php
-                        }
-                        ?>
+                        //}
+                        ?>-->
                     </div>
                 </div>
                 <!--Busca-->
