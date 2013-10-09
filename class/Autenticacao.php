@@ -1,6 +1,7 @@
 <?php   
-    include_once 'class/Usuario.php';
     session_start();
+
+    include_once 'class/Usuario.php';
     class Autenticacao{
         private $_conn;
         //construtor

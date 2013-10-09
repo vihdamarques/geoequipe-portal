@@ -1,6 +1,6 @@
- <?php
-    include_once 'class/Conexao.php';
+<?php
     include_once 'class/Autenticacao.php';
+    include_once 'class/Conexao.php';
     include_once 'class/Tarefa.php';    
     include_once 'class/TarefaDAO.php';
     include_once 'class/Movimento.php';    

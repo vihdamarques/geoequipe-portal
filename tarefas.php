@@ -1,6 +1,6 @@
 <?php    
-    include_once 'class/Conexao.php';    
     include_once 'class/Autenticacao.php';
+    include_once 'class/Conexao.php';    
     include_once 'class/Tarefa.php';    
     include_once 'class/TarefaDAO.php';
     include_once 'class/Usuario.php';    
@@ -120,7 +120,7 @@
                 <label class="control-label" for="data">Data Criação</label>
                 <div class="controls">           
                     <div id="data_container" class="input-append date">
-                      <input data-format="dd/MM/yyyy" type="text" class="input-small" id="data" name="data" placeholder="dd/mm/yyyy" value="<?php echo $data; ?>"></input>
+                      <input data-format="dd/MM/yyyy" type="text" class="input-small" id="data" name="data" placeholder="dd/mm/aaaa" value="<?php echo $data; ?>"></input>
                       <span class="add-on">
                         <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
                       </span>
