@@ -1,4 +1,4 @@
- <?php 
+ <?php
     include_once 'class/Conexao.php';
     include_once 'class/Autenticacao.php';
     include_once 'class/Tarefa.php';    
@@ -37,7 +37,7 @@
         $id = $auth->decripta($_GET["id"]); //decripta id passado por GET
     } else {
         $id = null;
-    }    
+    }
 
     	//ações
 	    if(!empty($id)){
