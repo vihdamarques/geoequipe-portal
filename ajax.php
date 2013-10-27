@@ -48,6 +48,18 @@ switch ($processo) {
     if (isset($_GET['sinal'])) $id_sinal = $_GET['sinal'];
     jsonSinal($id_sinal);
     break;
+  case "TMACliente":
+    jsonGraficoTMACliente();
+    break;
+  case "TAPUsuario":
+    jsonGraficoTAPUsuario();
+    break;
+  case "TPLocal":
+    jsonGraficoTPLocal();
+    break;
+  case "TPLocalAdiado":
+    jsonGraficoTPLocalAdiado();
+    break;
   default:
     break;
 }
@@ -197,6 +209,104 @@ function jsonRastro($usuario, $data_ini, $data_fim) {
     httpPrint(json_encode($json), $MIME_JSON, false);
   } else
     noDataFound("Nenhum sinal encontrado no período");
+}
+
+function jsonGraficoTMACliente() {
+  global $MIME_JSON;
+  $conn = new conexao();
+  $stmt = $conn->prepare("select avg(t.dias_conclusao) media_dias, l.nome \n"
+                       . "  from (select datediff ( \n"
+                       . "                 (select data from ge_tarefa_movto where id_tarefa = t.id_tarefa and status = 'T') \n"
+                       . "                ,(select data from ge_tarefa_movto where id_tarefa = t.id_tarefa and status = 'A') \n"
+                       . "               ) dias_conclusao \n"
+                       . "              ,id_local \n"
+                       . "          from ge_tarefa t \n"
+                       . "         where exists (select 1 from ge_tarefa_movto m where m.id_tarefa = t.id_tarefa and m.status = 'T') \n"
+                       . "       ) t \n"
+                       . "      ,ge_local l \n"
+                       . " where l.id_local = t.id_local \n"
+                       . " group by l.nome \n"
+                       . "having avg(t.dias_conclusao) is not null \n"
+                       . " order by media_dias desc \n"
+                       . " limit 0, 9 ");
+  $stmt->execute();
+  $result = $stmt->fetchAll();
+
+  $json = array(array("Local", "Média dias"));
+  foreach ($result as $dado) { array_push($json, array($dado["nome"],(int) $dado["media_dias"])); }
+
+  $conn->__destruct();
+
+  httpPrint(json_encode($json), $MIME_JSON, false);
+}
+
+function jsonGraficoTAPUsuario() {
+  global $MIME_JSON;
+  $conn = new conexao();
+  $stmt = $conn->prepare("select u.usuario, count(1) qtd \n"
+                       . "  from ge_tarefa t \n"
+                       . "      ,ge_usuario u \n"
+                       . "      ,ge_tarefa_movto m \n"
+                       . " where t.id_usuario = u.id_usuario \n"
+                       . "   and t.id_tarefa  = m.id_tarefa \n"
+                       . "   and m.status     = 'G' \n"
+                       . " group by u.usuario \n"
+                       . " order by qtd desc \n"
+                       . " limit 0, 9 ");
+  $stmt->execute();
+  $result = $stmt->fetchAll();
+
+  $json = array(array("Usuário", "Quantidade"));
+  foreach ($result as $dado) { array_push($json, array($dado["usuario"],(int) $dado["qtd"])); }
+
+  $conn->__destruct();
+
+  httpPrint(json_encode($json), $MIME_JSON, false);
+}
+
+function jsonGraficoTPLocal() {
+  global $MIME_JSON;
+  $conn = new conexao();
+  $stmt = $conn->prepare("select l.nome, count(1) qtd \n"
+                       . "  from ge_tarefa t \n"
+                       . "      ,ge_local l \n"
+                       . " where t.id_local = l.id_local \n"
+                       . " group by l.nome \n"
+                       . " order by qtd desc \n"
+                       . " limit 0, 9");
+  $stmt->execute();
+  $result = $stmt->fetchAll();
+
+  $json = array(array("Local", "Quantidade"));
+  foreach ($result as $dado) { array_push($json, array($dado["nome"],(int) $dado["qtd"])); }
+
+  $conn->__destruct();
+
+  httpPrint(json_encode($json), $MIME_JSON, false);
+}
+
+function jsonGraficoTPLocalAdiado() {
+  global $MIME_JSON;
+  $conn = new conexao();
+  $stmt = $conn->prepare("select l.nome, count(1) qtd \n"
+                       . "  from ge_tarefa t \n"
+                       . "      ,ge_local l \n"
+                       . "      ,ge_tarefa_movto m \n"
+                       . " where t.id_local = l.id_local \n"
+                       . "   and t.id_tarefa  = m.id_tarefa \n"
+                       . "   and m.status     = 'N' \n"
+                       . " group by l.nome \n"
+                       . " order by qtd desc \n"
+                       . " limit 0, 9");
+  $stmt->execute();
+  $result = $stmt->fetchAll();
+
+  $json = array(array("Local", "Quantidade"));
+  foreach ($result as $dado) { array_push($json, array($dado["nome"],(int) $dado["qtd"])); }
+
+  $conn->__destruct();
+
+  httpPrint(json_encode($json), $MIME_JSON, false);
 }
 
 function tracarTrajeto($coords) {

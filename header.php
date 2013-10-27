@@ -55,7 +55,7 @@
               <li class="dropdown">
                 <a href="#contact" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-file icon-white"></i> Relatórios <b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                    <li><a href="#">Gráficos</a></li>                    
+                    <li><a href="grafico.php">Gráficos</a></li>                    
                 </ul>
               </li>        
               <li class="dropdown">
