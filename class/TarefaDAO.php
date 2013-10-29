@@ -181,7 +181,8 @@
                                         . "and m.status = 'G' "
                                         . "and m.data = curdate() "
                                         . "and (:usuario = 0 or m.id_usuario = :usuario) "
-                                        . "and (:mostra_conc = 0 or not exists (select 1 from ge_tarefa_movto where id_tarefa = m.id_tarefa and status = 'T'))"
+                                        . "and (:mostra_conc = 0 or not exists (select 1 from ge_tarefa_movto where id_tarefa = m.id_tarefa and status = 'T')) "
+                                        . "and m.id_tarefa_movto = (select max(mm.id_tarefa_movto) from ge_tarefa_movto mm where mm.id_tarefa = m.id_tarefa) "
                                         . "order by m.ordem ");
 
             $stmt->bindValue(":usuario", $_usuario, PDO::PARAM_INT);
