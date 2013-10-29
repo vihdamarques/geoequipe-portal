@@ -23,8 +23,8 @@
                 <option value="0" selected>- Todos os usuários -</option>
                 <?php
                 foreach ($usuarioDAO->consultarTodos(0, 1000) as $usuario)
-                    echo "<option value=\"" . $usuario->getId() . "\">" . $usuario->getNome() . "</option>";
-
+                    if ($usuario->getAtivo() == "S")
+                        echo "<option value=\"" . $usuario->getId() . "\">" . $usuario->getNome() . "</option>";
                 $conn->__destruct();
                 ?>
             </select>
