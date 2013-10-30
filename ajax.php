@@ -247,7 +247,7 @@ function jsonGraficoTAPUsuario() {
                        . "  from ge_tarefa t \n"
                        . "      ,ge_usuario u \n"
                        . "      ,ge_tarefa_movto m \n"
-                       . " where t.id_usuario = u.id_usuario \n"
+                       . " where m.id_usuario = u.id_usuario \n"
                        . "   and t.id_tarefa  = m.id_tarefa \n"
                        . "   and m.status     = 'G' \n"
                        . " group by u.usuario \n"
